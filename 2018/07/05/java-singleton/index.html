@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="NIO，IO," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="我认为同步、异步、阻塞、非阻塞，是分3个层次的：  CPU层次； 线程层次； 程序员感知层次。  这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。 CPU层次在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和C">
-<meta name="keywords" content="NIO，IO">
+<meta name="description" content="前言  在GoF的23种设计模式中，单例模式是比较简单的一种。然而，有时候越是简单的东西越容易出现问题。下面就单例设计模式详细的探讨一下。 所谓单例模式，简单来说，就是在整个应用中保证类只有一个实例存在。这个类的实例只提供了一个全局变量，用处相当广泛，比如保存全局数据，实现全局性的操作等。 最简单的实现首先，能够想到的最简单的实现是，把类的构造函数写成private的，从而保证别的类不能实例化此类">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阻塞非阻塞与同步异步的区别">
-<meta property="og:url" content="http://yoursite.com/2018/07/04/阻塞非阻塞与同步异步的区别/index.html">
+<meta property="og:title" content="单例模式">
+<meta property="og:url" content="http://yoursite.com/2018/07/05/java-singleton/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="我认为同步、异步、阻塞、非阻塞，是分3个层次的：  CPU层次； 线程层次； 程序员感知层次。  这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。 CPU层次在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和C">
+<meta property="og:description" content="前言  在GoF的23种设计模式中，单例模式是比较简单的一种。然而，有时候越是简单的东西越容易出现问题。下面就单例设计模式详细的探讨一下。 所谓单例模式，简单来说，就是在整个应用中保证类只有一个实例存在。这个类的实例只提供了一个全局变量，用处相当广泛，比如保存全局数据，实现全局性的操作等。 最简单的实现首先，能够想到的最简单的实现是，把类的构造函数写成private的，从而保证别的类不能实例化此类">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-04T06:54:05.812Z">
+<meta property="og:updated_time" content="2018-07-04T10:50:40.634Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阻塞非阻塞与同步异步的区别">
-<meta name="twitter:description" content="我认为同步、异步、阻塞、非阻塞，是分3个层次的：  CPU层次； 线程层次； 程序员感知层次。  这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。 CPU层次在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和C">
+<meta name="twitter:title" content="单例模式">
+<meta name="twitter:description" content="前言  在GoF的23种设计模式中，单例模式是比较简单的一种。然而，有时候越是简单的东西越容易出现问题。下面就单例设计模式详细的探讨一下。 所谓单例模式，简单来说，就是在整个应用中保证类只有一个实例存在。这个类的实例只提供了一个全局变量，用处相当广泛，比如保存全局数据，实现全局性的操作等。 最简单的实现首先，能够想到的最简单的实现是，把类的构造函数写成private的，从而保证别的类不能实例化此类">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/04/阻塞非阻塞与同步异步的区别/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/05/java-singleton/"/>
 
 
 
 
 
-  <title>阻塞非阻塞与同步异步的区别 | Hexo</title>
+  <title>单例模式 | Hexo</title>
   
 
 
@@ -307,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/04/阻塞非阻塞与同步异步的区别/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/05/java-singleton/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">阻塞非阻塞与同步异步的区别</h1>
+          <h1 class="post-title" itemprop="name headline">单例模式</h1>
         
 
         <div class="post-meta">
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T00:00:00+08:00">
-                2018-07-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-05T00:00:00+08:00">
+                2018-07-05
               </time>
             
 
@@ -359,8 +359,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络/" itemprop="url" rel="index">
-                    <span itemprop="name">网络</span>
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
                   </a>
                 </span>
 
@@ -396,22 +396,29 @@
       
 
       
-        <p>我认为同步、异步、阻塞、非阻塞，是分3个层次的：</p>
-<ol>
-<li>CPU层次；</li>
-<li>线程层次；</li>
-<li>程序员感知层次。</li>
-</ol>
-<p>这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。</p>
-<h3 id="CPU层次"><a href="#CPU层次" class="headerlink" title="CPU层次"></a>CPU层次</h3><p>在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和CPU指令互不干扰（异步），最后通过中断的方式来通知IO操作完成结果。</p>
-<h3 id="线程层次"><a href="#线程层次" class="headerlink" title="线程层次"></a>线程层次</h3><p>在线程层次，或者说操作系统调度单元的层次，操作系统为了减轻程序员的思考负担，将底层的异步非阻塞的IO方式进行封装，把相关系统调用（如read，write等）以同步的方式展现出来。然而，同步阻塞的IO会使线程挂起，同步非阻塞的IO会消耗CPU资源在轮询上。为了解决这一问题，就有3种思路：</p>
-<ol>
-<li>多线程（同步阻塞）；</li>
-<li>IO多路复用（select，poll，epoll）（同步非阻塞，严格地来讲，是把阻塞点改变了位置）；</li>
-<li>直接暴露出异步的IO接口，如kernel-aio和IOCP（异步非阻塞）。</li>
-</ol>
-<h3 id="程序员感知层次"><a href="#程序员感知层次" class="headerlink" title="程序员感知层次"></a>程序员感知层次</h3><p>在Linux中，上面提到的第2种思路用得比较广泛，也是比较理想的解决方案。然而，直接使用select之类的接口，依然比较复杂，所以各种库和框架百花齐放，都试图对IO多路复用进行封装。此时，库和框架提供的API又可以选择是以同步的方式还是异步的方式来展现。如python的asyncio库中，就通过协程，提供了同步阻塞式的API；如node.js中，就通过回调函数，提供了异步非阻塞式的API。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>因此，我们在讨论同步、异步、阻塞、非阻塞时，必须先明确是在哪个层次进行讨论。比如node.js，我们可以说她在程序员感知层次提供了异步非阻塞的API，也可以说在Linux下，她在线程层次以同步非阻塞的epoll来实现。</p>
+        <p>前言</p>
+<hr>
+<p>在GoF的23种设计模式中，单例模式是比较简单的一种。然而，有时候越是简单的东西越容易出现问题。下面就单例设计模式详细的探讨一下。</p>
+<p>所谓单例模式，简单来说，就是在整个应用中保证类只有一个实例存在。这个类的实例只提供了一个全局变量，用处相当广泛，比如保存全局数据，实现全局性的操作等。</p>
+<h3 id="最简单的实现"><a href="#最简单的实现" class="headerlink" title="最简单的实现"></a>最简单的实现</h3><p>首先，能够想到的最简单的实现是，把类的构造函数写成private的，从而保证别的类不能实例化此类，然后在类中提供一个静态的实例并能够返回给使用者。这样，使用者就可以通过这个引用使用到这个类的实例了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> SingletonClass instance = <span class="keyword">new</span> SingletonClass();</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonClass <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">SingletonClass</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>外部使用者如果需要使用SingletonClass的实例，只能通过getInstance()方法，并且它的构造方法是private的，这样就保证了只能有一个对象存在。</p>
+<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><p>上面的代码虽然简单，但是有一个问题—-无论这个类是否被使用，都会创建一个instance对象。如果这个创建过程很耗时，比如需要连接10000次jdbc实例连接或者10000多个模版实例，并且这个类还并不一定会被使用，那么这个创建过程就是无用的。</p>
+<p>为了解决这个问题，我们想到了新的解决方案：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> SingletonClass instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonClass <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">      instance = <span class="keyword">new</span> SingletonClass();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">SingletonClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代码的变化有一处—-把instance初始化为null，直到第一次使用的时候通过判断是否为null来创建对象。</p>
+<p>我们来想象一下这个过程。要使用SingletonClass，调用getInstance()方法。第一次的时候发现instance是null，然后就新建一个对象，返回出去；第二次再使用的时候，因为这个instance是static的，所以已经不是null了，因此不会再创建对象，直接将其返回。</p>
+<p>这个过程就称为lazy loaded，也就是延迟加载—-直到使用的时候才进行加载。</p>
+<h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>上面的代码很清楚，也很简单。然而就像那句名言：”80%的错误都是由20%代码优化引起的”。单线程下，这段代码没有什么问题，可是如果是多线程，麻烦就来了。我们来分析一下： 线程1希望使用SingletonClass，调用getInstance()方法。因为是第一次调用，1就发现instance是null的，于是它开始创建实例，就在这个时候，CPU发生时间片切换(或者被抢夺执行)，线程2开始执行，它要使用SingletonClass，调用getInstance()方法，同样检测到instance是null—-注意，这是在1检测完之后切换的，也就是说1并没有来得及创建对象—-因此2开始创建。2创建完成后，cpu切换到1继续执行，因为它已经检测完了，所以1不会再检测一遍，它会直接创建对象。这样，线程1和2各自拥有一个SingletonClass的对象—-单例失败！解决的方法也很简单，那就是加锁：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> SingletonClass instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">static</span> SingletonClass <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">      instance = <span class="keyword">new</span> SingletonClass();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">SingletonClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="又是性能问题"><a href="#又是性能问题" class="headerlink" title="又是性能问题"></a>又是性能问题</h3><p>上面的代码又是很清楚很简单的，然而，简单的东西往往不够理想。理想的东西往往不够简单，这就是生活。这段代码毫无疑问存在性能的问题—-synchronized修饰的同步块可是要比一般的代码段慢上几倍的！如果存在很多次getInstance()的调用，那性能问题就不得不考虑了！</p>
+<p>让我们来分析一下，究竟是整个方法都必须加锁，还是仅仅其中某一句加锁就足够了？我们为什么要加锁呢？分析一下出现lazy loaded的那种情形的原因。原因就是检测null的操作和创建对象的操作分离了。如果这两个操作能够原子地进行，那么单例就已经保证了。于是，我们开始修改代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> SingletonClass instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonClass <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (SingletonClass.class) &#123;</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">          instance = <span class="keyword">new</span> SingletonClass();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">SingletonClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>还有问题吗？首先判断instance是不是为null，如果为null，加锁初始化；如果不为null，直接返回instance。</p>
+<p>这就是double-checked locking设计实现单例模式。但是还有问题。</p>
+<p>在Java虚拟机规范中试图定义一种Java内存模型（Java Memory Model，JMM）来屏蔽各个硬件平台和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。那么Java内存模型规定了哪些东西呢，它定义了程序中变量的访问规则，往大一点说是定义了程序执行的次序。注意，为了获得较好的执行性能，Java内存模型并没有限制执行引擎使用处理器的寄存器或者高速缓存来提升指令执行速度，也没有限制编译器对指令进行重排序。也就是说，在java内存模型中，也会存在缓存一致性问题和指令重排序的问题。 下面来想一下，创建一个变量需要哪些步骤呢？一个是申请一块内存，调用构造方法进行初始化操作，另一个是分配一个指针指向这块内存。这两个操作谁在前谁在后呢？JMM规范并没有规定。（可能重排序）那么就存在这么一种情况，JVM是先开辟出一块内存，然后把指针指向这块内存，最后调用构造方法进行初始化。 线程1开始创建SingletonClass的实例，此时线程B调用了getInstance()方法，首先判断instance是否为null。按照我们上面所说的内存模型，1已经把instance指向了那块内存，只是还没有调用构造方法，因此2检测到instance不为null，于是直接把instance返回了—-问题出现了，尽管instance不为null，但它并没有构造完成，就像一套房子已经给了你钥匙，但你并不能住进去，因为里面还是毛坯房。此时，如果2在1将instance构造完成之前就是用了这个实例，程序就会出现错误了！</p>
+<h3 id="最终解决方案"><a href="#最终解决方案" class="headerlink" title="最终解决方案"></a>最终解决方案</h3><p>在JDK 5之后，Java使用了新的内存模型。volatile关键字有了明确的语义—-在JDK1.5之前，volatile是个关键字，但是并没有明确的规定其用途—-被volatile修饰的写变量不能和之前的读写代码调整，读变量不能和之后的读写代码调整！因此，只要我们简单的把instance加上volatile关键字就可以了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonClass</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> SingletonClass instance = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> SingletonClass <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">      <span class="keyword">synchronized</span> (SingletonClass.class) &#123;</span><br><span class="line">        <span class="keyword">if</span>(instance == <span class="keyword">null</span>) &#123;</span><br><span class="line">          instance = <span class="keyword">new</span> SingletonClass();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> instance;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">SingletonClass</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -429,7 +436,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/NIO，IO/" rel="tag"><i class="fa fa-tag"></i> NIO，IO</a>
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
           
         </div>
       
@@ -442,14 +449,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/07/04/mac-install-jekyll/" rel="next" title="Mac 下安装 jekyll">
+                <i class="fa fa-chevron-left"></i> Mac 下安装 jekyll
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/04/mac安装jekyll/" rel="prev" title="Mac 下安装 jekyll">
-                Mac 下安装 jekyll <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/05/git-operation/" rel="prev" title="Git常用操作记录">
+                Git常用操作记录 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -531,7 +542,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -542,7 +553,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -553,7 +564,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -586,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU层次"><span class="nav-number">1.</span> <span class="nav-text">CPU层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程层次"><span class="nav-number">2.</span> <span class="nav-text">线程层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程序员感知层次"><span class="nav-number">3.</span> <span class="nav-text">程序员感知层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#最简单的实现"><span class="nav-number">1.</span> <span class="nav-text">最简单的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能优化"><span class="nav-number">2.</span> <span class="nav-text">性能优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#同步"><span class="nav-number">3.</span> <span class="nav-text">同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#又是性能问题"><span class="nav-number">4.</span> <span class="nav-text">又是性能问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终解决方案"><span class="nav-number">5.</span> <span class="nav-text">最终解决方案</span></a></li></ol></div>
             
 
           </div>

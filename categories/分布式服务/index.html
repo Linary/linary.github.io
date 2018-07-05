@@ -79,17 +79,16 @@
 
 
 
-<meta name="description" content="Mac 下安装 jekyll1sudo gem install jekyll 输入密码，但还是会提示没有写权限 12ERROR:  While executing gem ... (Gem::FilePermissionError)    You don&amp;apos;t have write permissions for the /usr/bin directory. 原因是 Apple在OS X">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Mac 下安装 jekyll">
-<meta property="og:url" content="http://yoursite.com/2018/07/04/mac安装jekyll/index.html">
+<meta name="description" content="但行好事，莫问前程">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/categories/分布式服务/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Mac 下安装 jekyll1sudo gem install jekyll 输入密码，但还是会提示没有写权限 12ERROR:  While executing gem ... (Gem::FilePermissionError)    You don&amp;apos;t have write permissions for the /usr/bin directory. 原因是 Apple在OS X">
+<meta property="og:description" content="但行好事，莫问前程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-04T06:15:14.085Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac 下安装 jekyll">
-<meta name="twitter:description" content="Mac 下安装 jekyll1sudo gem install jekyll 输入密码，但还是会提示没有写权限 12ERROR:  While executing gem ... (Gem::FilePermissionError)    You don&amp;apos;t have write permissions for the /usr/bin directory. 原因是 Apple在OS X">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="但行好事，莫问前程">
 
 
 
@@ -119,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/04/mac安装jekyll/"/>
+  <link rel="canonical" href="http://yoursite.com/categories/分布式服务/"/>
 
 
 
 
 
-  <title>Mac 下安装 jekyll | Hexo</title>
+  <title>分类: 分布式服务 | Hexo</title>
   
 
 
@@ -154,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -292,181 +291,55 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block category">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>分布式服务<small>分类</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/04/mac安装jekyll/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Linary">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
-        
-          <h1 class="post-title" itemprop="name headline">Mac 下安装 jekyll</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+            <a class="post-title-link" href="/2018/07/05/epoch-rpc-1/" itemprop="url">
               
-                <span class="post-meta-item-text">发表于</span>
+                <span itemprop="name">自己动手实现RPC框架</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T14:15:14+08:00">
-                2018-07-04
-              </time>
-            
+            </a>
+        
+      </h2>
 
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-07-05T00:00:00+08:00"
+              content="2018-07-05" >
+          07-05
+        </time>
+      </div>
 
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="Mac-下安装-jekyll"><a href="#Mac-下安装-jekyll" class="headerlink" title="Mac 下安装 jekyll"></a>Mac 下安装 jekyll</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install jekyll</span><br></pre></td></tr></table></figure>
-<p>输入密码，但还是会提示没有写权限</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ERROR:  While executing gem ... (Gem::FilePermissionError)</span><br><span class="line">    You don&apos;t have write permissions for the /usr/bin directory.</span><br></pre></td></tr></table></figure>
-<p>原因是 Apple在OS X El Capitan中全面启用了名为System Integrity Protection (SIP)的系统完整性保护技术。受此影响，大部分系统文件即使在root用户下也无法直接进行修改。</p>
-<ol>
-<li>升级ruby（推荐）</li>
-</ol>
-<ul>
-<li>安装RVM<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -L get.rvm.io | bash -s stable</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>出现异常</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">gpg: Signature made 一  7/ 2 03:41:26 2018 CST</span><br><span class="line">gpg:                using RSA key 62C9E5F4DA300D94AC36166BE206C29FBF04FF17</span><br><span class="line">gpg: Can&apos;t check signature: No public key</span><br><span class="line">Warning, RVM 1.26.0 introduces signed releases and automated check of signatures when GPG software found. Assuming you trust Michal Papis import the mpapis public key (downloading the signatures).</span><br><span class="line"></span><br><span class="line">GPG signature verification failed for &apos;/Users/liningrui/.rvm/archives/rvm-1.29.4.tgz&apos; - &apos;https://github.com/rvm/rvm/releases/download/1.29.4/1.29.4.tar.gz.asc&apos;! Try to install GPG v2 and then fetch the public key:</span><br><span class="line"></span><br><span class="line">    gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3</span><br><span class="line"></span><br><span class="line">or if it fails:</span><br><span class="line"></span><br><span class="line">    command curl -sSL https://rvm.io/mpapis.asc | gpg2 --import -</span><br><span class="line"></span><br><span class="line">the key can be compared with:</span><br><span class="line"></span><br><span class="line">    https://rvm.io/mpapis.asc</span><br><span class="line">    https://keybase.io/mpapis</span><br><span class="line"></span><br><span class="line">NOTE: GPG version 2.1.17 have a bug which cause failures during fetching keys from remote server. Please downgrade or upgrade to newer version (if available) or use the second method described above.</span><br></pre></td></tr></table></figure>
-<p>你是因为我本地安装了gpg，但是却没有它的公钥，所以我们需要先接受公钥到本地。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3</span><br></pre></td></tr></table></figure>
-<p>然后再执行上述命令，就应该Ok了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">gpg: Signature made 一  7/ 2 03:41:26 2018 CST</span><br><span class="line">gpg:                using RSA key 62C9E5F4DA300D94AC36166BE206C29FBF04FF17</span><br><span class="line">gpg: Good signature from &quot;Michal Papis (RVM signing) &lt;mpapis@gmail.com&gt;&quot; [unknown]</span><br><span class="line">gpg:                 aka &quot;Michal Papis &lt;michal.papis@toptal.com&gt;&quot; [unknown]</span><br><span class="line">gpg:                 aka &quot;[jpeg image of size 5015]&quot; [unknown]</span><br><span class="line">gpg: WARNING: This key is not certified with a trusted signature!</span><br><span class="line">gpg:          There is no indication that the signature belongs to the owner.</span><br><span class="line">Primary key fingerprint: 409B 6B17 96C2 7546 2A17  0311 3804 BB82 D39D C0E3</span><br><span class="line">     Subkey fingerprint: 62C9 E5F4 DA30 0D94 AC36  166B E206 C29F BF04 FF17</span><br><span class="line">GPG verified &apos;/Users/liningrui/.rvm/archives/rvm-1.29.4.tgz&apos;</span><br><span class="line">Installing RVM to /Users/liningrui/.rvm/</span><br><span class="line">    Adding rvm PATH line to /Users/liningrui/.profile /Users/liningrui/.mkshrc /Users/liningrui/.bashrc /Users/liningrui/.zshrc.</span><br><span class="line">    Adding rvm loading line to /Users/liningrui/.profile /Users/liningrui/.bash_profile /Users/liningrui/.zlogin.</span><br><span class="line">Installation of RVM in /Users/liningrui/.rvm/ is almost complete:</span><br><span class="line"></span><br><span class="line">  * To start using RVM you need to run `source /Users/liningrui/.rvm/scripts/rvm`</span><br><span class="line">    in all your open shell windows, in rare cases you need to reopen all shell windows.</span><br></pre></td></tr></table></figure>
-<p>它提示说要使用RVM需要将rvm添加到环境变量中。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> /Users/liningrui/.rvm/scripts/rvm</span><br><span class="line">rvm -v</span><br></pre></td></tr></table></figure>
-<p>列出所有可用的ruby版本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rvm list known</span><br></pre></td></tr></table></figure>
-<p>安装最新版本的ruby（以2.5.1为例）</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rvm install 2.5.1</span><br></pre></td></tr></table></figure>
-<h2 id="安装jekyll"><a href="#安装jekyll" class="headerlink" title="安装jekyll"></a>安装jekyll</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install jekyll</span><br></pre></td></tr></table></figure>
-<p>安装完成后，cd到项目根目录，使用以下命令即可运行jekyll环境，通过 localhost:4000 即可访问。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jekyll serve</span><br></pre></td></tr></table></figure>
-<p>提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Dependency Error: Yikes! It looks like you don&apos;t have jekyll-paginate or one of its dependencies installed. In order to use Jekyll as currently configured, you&apos;ll need to install this gem. The full error message from Ruby is: &apos;cannot load such file -- jekyll-paginate&apos; If you run into trouble, you can find helpful resources at https://jekyllrb.com/help/!</span><br></pre></td></tr></table></figure></p>
-<p>安装即可</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install jekyll-paginate</span><br></pre></td></tr></table></figure>
-<p>接下来就可以开始github pages之路了～</p>
-<p>参考：</p>
-<ul>
-<li><p><a href="https://www.cnblogs.com/kaiye/archive/2013/04/24/3039345.html" target="_blank" rel="noopener">https://www.cnblogs.com/kaiye/archive/2013/04/24/3039345.html</a></p>
-</li>
-<li><p><a href="https://blog.csdn.net/andanlan/article/details/50061775" target="_blank" rel="noopener">https://blog.csdn.net/andanlan/article/details/50061775</a></p>
-</li>
-</ul>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/07/04/阻塞非阻塞与同步异步的区别/" rel="next" title="阻塞非阻塞与同步异步的区别">
-                <i class="fa fa-chevron-left"></i> 阻塞非阻塞与同步异步的区别
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/05/git常用操作/" rel="prev" title="Git常用操作记录">
-                Git常用操作记录 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -474,10 +347,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -498,17 +367,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -527,7 +387,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -538,7 +398,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -549,7 +409,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -572,22 +432,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mac-下安装-jekyll"><span class="nav-number">1.</span> <span class="nav-text">Mac 下安装 jekyll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装jekyll"><span class="nav-number">2.</span> <span class="nav-text">安装jekyll</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -723,10 +567,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
