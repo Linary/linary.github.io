@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="rpc," />
 
 
 
@@ -79,17 +79,18 @@
 
 
 
-<meta name="description" content="自我介绍曼联球迷 联系方式 E-mail: liningrui@vip.qq.com Github: https://github.com/Linary">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="http://yoursite.com/about/index.html">
+<meta name="description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-">
+<meta name="keywords" content="rpc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自己动手实现RPC框架">
+<meta property="og:url" content="http://yoursite.com/2018/07/05/epoch-rpc-0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="自我介绍曼联球迷 联系方式 E-mail: liningrui@vip.qq.com Github: https://github.com/Linary">
+<meta property="og:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-04T06:51:56.027Z">
+<meta property="og:updated_time" content="2018-07-05T15:07:15.462Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于">
-<meta name="twitter:description" content="自我介绍曼联球迷 联系方式 E-mail: liningrui@vip.qq.com Github: https://github.com/Linary">
+<meta name="twitter:title" content="自己动手实现RPC框架">
+<meta name="twitter:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-">
 
 
 
@@ -119,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/about/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/05/epoch-rpc-0/"/>
 
 
 
 
 
-  <title>关于 | Hexo</title>
+  <title>自己动手实现RPC框架 | Hexo</title>
   
 
 
@@ -294,38 +295,182 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/05/epoch-rpc-0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linary">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">关于</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <h3 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h3><p>曼联球迷</p>
-<h3 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h3><ul>
-<li>E-mail: <a href="mailto:liningrui@vip.qq.com" target="_blank" rel="noopener">liningrui@vip.qq.com</a></li>
-<li>Github: <a href="https://github.com/Linary" target="_blank" rel="noopener">https://github.com/Linary</a></li>
+          <h1 class="post-title" itemprop="name headline">自己动手实现RPC框架</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-05T00:00:00+08:00">
+                2018-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/分布式服务/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式服务</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前言</p>
+<hr>
+<p>RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。<br>所以我希望通过一个真正的项目，来加深对RPC的认识。</p>
+<p>这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。</p>
+<h3 id="计划（暂定）"><a href="#计划（暂定）" class="headerlink" title="计划（暂定）"></a>计划（暂定）</h3><ul>
+<li>2018-07-08 架构设计，功能（细节）设计</li>
+<li>2018-07-15 网络传输模型，序列化部分</li>
+<li>2018-07-22 服务端框架</li>
+<li>2018-07-29 客户端框架 </li>
+<li>2018-08-06 负载均衡</li>
+<li>2018-08-13 服务降级</li>
+<li>2018-08-20 测试与优化</li>
 </ul>
 
-        
-      </div>
-      
-      
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/rpc/" rel="tag"><i class="fa fa-tag"></i> rpc</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/05/git-operation/" rel="next" title="Git常用操作记录">
+                <i class="fa fa-chevron-left"></i> Git常用操作记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/10/epoch-rpc-1/" rel="prev" title="自己动手实现RPC框架（一）">
+                自己动手实现RPC框架（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -442,7 +587,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#自我介绍"><span class="nav-number">1.</span> <span class="nav-text">自我介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#联系方式"><span class="nav-number">2.</span> <span class="nav-text">联系方式</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#计划（暂定）"><span class="nav-number">1.</span> <span class="nav-text">计划（暂定）</span></a></li></ol></div>
             
 
           </div>
