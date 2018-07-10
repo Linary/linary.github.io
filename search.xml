@@ -12,6 +12,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[自己动手实现RPC框架（二）之项目结构]]></title>
+    <url>%2F2018%2F07%2F10%2Fepoch-rpc-2%2F</url>
+    <content type="text"><![CDATA[前言 暂时还没法确定到底是什么样的包结构，等写完的时候再来填充这里。]]></content>
+      <categories>
+        <category>分布式服务</category>
+      </categories>
+      <tags>
+        <tag>rpc</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[自己动手实现RPC框架]]></title>
     <url>%2F2018%2F07%2F05%2Fepoch-rpc-0%2F</url>
     <content type="text"><![CDATA[前言 RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-29 客户端框架 2018-08-06 负载均衡 2018-08-13 服务降级 2018-08-20 测试与优化]]></content>
