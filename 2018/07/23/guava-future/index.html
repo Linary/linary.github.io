@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="async," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言  最近本人在实现一个异步任务调度框架，不打算依赖于任何第三方包。在实现任务状态监听时遇到了一些困惑，于是想了解一下Guava中的ListenableFuture的实现方式。ListenableFuture实现非阻塞的方式是其提供了回调机制(机制)，下面将阐述该回调机制的实现，主要对Futures的addCallback方法源码进行剖析。 Guava Futures简介Google Guava">
+<meta name="keywords" content="async">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Guava Futures异步回调机制源码解析">
+<meta property="og:url" content="http://yoursite.com/2018/07/23/guava-future/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="前言  最近本人在实现一个异步任务调度框架，不打算依赖于任何第三方包。在实现任务状态监听时遇到了一些困惑，于是想了解一下Guava中的ListenableFuture的实现方式。ListenableFuture实现非阻塞的方式是其提供了回调机制(机制)，下面将阐述该回调机制的实现，主要对Futures的addCallback方法源码进行剖析。 Guava Futures简介Google Guava">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-23T01:11:24.075Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Guava Futures异步回调机制源码解析">
+<meta name="twitter:description" content="前言  最近本人在实现一个异步任务调度框架，不打算依赖于任何第三方包。在实现任务状态监听时遇到了一些困惑，于是想了解一下Guava中的ListenableFuture的实现方式。ListenableFuture实现非阻塞的方式是其提供了回调机制(机制)，下面将阐述该回调机制的实现，主要对Futures的addCallback方法源码进行剖析。 Guava Futures简介Google Guava">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/23/guava-future/"/>
+
+
+
+
+
+  <title>Guava Futures异步回调机制源码解析 | Hexo</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?7f5fd30d7597af42f4f90beb849b8d5c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">man united</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/23/guava-future/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linary">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Guava Futures异步回调机制源码解析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-23T00:00:00+08:00">
+                2018-07-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络通信/" itemprop="url" rel="index">
+                    <span itemprop="name">网络通信</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前言</p>
+<hr>
+<p>最近本人在实现一个异步任务调度框架，不打算依赖于任何第三方包。在实现任务状态监听时遇到了一些困惑，<br>于是想了解一下Guava中的ListenableFuture的实现方式。ListenableFuture实现非阻塞的方式是其提<br>供了回调机制(机制)，下面将阐述该回调机制的实现，主要对Futures的addCallback方法源码进行剖析。</p>
+<h3 id="Guava-Futures简介"><a href="#Guava-Futures简介" class="headerlink" title="Guava Futures简介"></a>Guava Futures简介</h3><p>Google Guava框架的 com.google.common.util.concurrent包是并发相关的包，它是对JDK自带<br>concurrent包中Future和线程池相关类的扩展，从而衍生出一些新类，并提供了更为广泛的功能。<br>在项目中常用的该包中类如下所示：</p>
+<ul>
+<li>ListenableFuture：该接口扩展了Future接口，增加了addListener方法，该方法在给定的excutor上注册一个监听器，当计算完成时会马上调用该监听器。不能够确保监听器执行的顺序，但可以在计算完成时确保马上被调用。 </li>
+<li>FutureCallback：该接口提供了OnSuccess和onFailure方法。获取异步计算的结果并回调。 </li>
+<li>MoreExecutors：该类是final类型的工具类，提供了很多静态方法。例如listeningDecorator方法初始化ListeningExecutorService方法，使用此实例submit方法即可初始化ListenableFuture对象。 </li>
+<li>ListenableFutureTask：该类是一个适配器，可以将其它Future适配成ListenableFuture。 </li>
+<li>ListeningExecutorService：该类是对ExecutorService的扩展，重写了ExecutorService类中的submit方法，并返回ListenableFuture对象。 </li>
+<li>JdkFutureAdapters：该类扩展了FutureTask类并实现ListenableFuture接口，增加了addListener方法。 </li>
+<li>Futures：该类提供和很多实用的静态方法以供使用。</li>
+</ul>
+<h3 id="Futures-addCallback方法源码剖析"><a href="#Futures-addCallback方法源码剖析" class="headerlink" title="Futures.addCallback方法源码剖析"></a>Futures.addCallback方法源码剖析</h3><p>下面将模拟异步发送请求，并对请求结果进行(回调)监听。这里使用Spring框架提供的AsyncRestTemplate，<br>来发送http请求，并获取一个org.springframework.util.concurrent.ListenableFuture对象，<br>此时的对象是spring框架中的ListenableFuture对象。由于org.springframework.util.concurrent<br>包中只提供了最基本的监听功能，没有其它额外功能，这里将其转化成Guava中的ListenableFuture，<br>用到了JdkFutureAdapters这个适配器类。(以下源码来自guava-18.0.jar)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">AsyncRestTemplate tp = <span class="keyword">new</span> AsyncRestTemplate();</span><br><span class="line">org.springframework.util.concurrent.ListenableFuture&lt;ResponseEntity&lt;Object&gt;&gt; response = tp</span><br><span class="line">        .getForEntity(<span class="string">"http://blog.csdn.net/pistolove"</span>, Object.class);</span><br><span class="line">ListenableFuture&lt;ResponseEntity&lt;Object&gt;&gt; listenInPoolThread = JdkFutureAdapters.listenInPoolThread(response);</span><br><span class="line">Futures.addCallback(listenInPoolThread, <span class="keyword">new</span> FutureCallback&lt;Object&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">(Object result)</span> </span>&#123;</span><br><span class="line">        System.err.println(result.getClass());</span><br><span class="line">        System.err.printf(<span class="string">"success"</span>, result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Throwable t)</span> </span>&#123;</span><br><span class="line">        System.out.printf(<span class="string">"failure"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Futures的addCallback方法通过传入ListenableFuture和FutureCallback（一般情况FutureCallback实现为内部类）来实现回调机制。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//com.google.common.util.concurrent.Futures</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;V&gt; <span class="function"><span class="keyword">void</span> <span class="title">addCallback</span><span class="params">(ListenableFuture&lt;V&gt; future, FutureCallback&lt;? <span class="keyword">super</span> V&gt; callback)</span> </span>&#123;</span><br><span class="line">    addCallback(future, callback, directExecutor());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在addCallback方法中，我们发现多了一个 directExecutor()方法，这里的 directExecutor()方法<br>返回的是一个枚举类型的线程池，这样做的目的是提高性能，而线程池中的execute方法实质执行的是所的<br>传入参数Runnable 的run方法，可以把这里的线程池看作一个”架子”。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个单实例的线程 接口需要显著的性能开销 提高性能</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Executor <span class="title">directExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> DirectExecutor.INSTANCE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** See &#123;<span class="doctag">@link</span> #directExecutor&#125; for behavioral notes. */</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">enum</span> DirectExecutor implements Executor &#123;</span><br><span class="line">    INSTANCE;</span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;</span><br><span class="line">      command.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在具体的addCallback方法中，首先判断FutureCallback是否为空，然后创建一个线程，这个线程的run<br>方法中会获取到一个value值，这里的value值即为http请求的结果，然后将value值传入FutureCallback<br>的onSuccess方法，然后我们就可以在onSuccess方法中执行业务逻辑了。这个线程是如何执行的呢？继续<br>往下看，发现调用了ListenableFuture的addListener方法，将刚才创建的线程和上一步创建的枚举线程池传入。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//增加回调</span></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> &lt;V&gt; <span class="function"><span class="keyword">void</span> <span class="title">addCallback</span><span class="params">(<span class="keyword">final</span> ListenableFuture&lt;V&gt; future,</span></span></span><br><span class="line"><span class="function"><span class="params">      <span class="keyword">final</span> FutureCallback&lt;? <span class="keyword">super</span> V&gt; callback, Executor executor)</span> </span>&#123;</span><br><span class="line">    Preconditions.checkNotNull(callback);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//每一个future进来都会创建一个独立的线程运行</span></span><br><span class="line">    Runnable callbackListener = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">      <span class="meta">@Override</span></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> V value;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="comment">// TODO(user): (Before Guava release), validate that this</span></span><br><span class="line">          <span class="comment">// is the thing for IE.</span></span><br><span class="line">          <span class="comment">//这里是真正阻塞的地方，直到获取到请求结果</span></span><br><span class="line">          value = getUninterruptibly(future);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</span><br><span class="line">          callback.onFailure(e.getCause());</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">          callback.onFailure(e);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Error e) &#123;</span><br><span class="line">          callback.onFailure(e);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//调用callback的onSuccess方法返回结果</span></span><br><span class="line">        callback.onSuccess(value);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//增加监听，其中executor只提供了一个架子的线程池</span></span><br><span class="line">    future.addListener(callbackListener, executor);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>在addListener方法中，将待执行的任务和枚举型线程池加入ExecutionList中，ExecutionList的本质<br>是一个链表，将这些任务链接起来。具体可参考下方代码注释。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addListener</span><span class="params">(Runnable listener, Executor exec)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//将监听任务和线程池加入到执行列表中</span></span><br><span class="line">      executionList.add(listener, exec);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//This allows us to only start up a thread waiting on the delegate future when the first listener is added.</span></span><br><span class="line">    <span class="comment">//When a listener is first added, we run a task that will wait for the delegate to finish, and when it is done will run the listeners.</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//这允许我们启动一个线程来等待future当第一个监听器被加入的时候</span></span><br><span class="line">      <span class="comment">//当第一个监听器被加入，我们将启动一个任务等待future完成，一旦当前的future完成后将会执行监听器</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">//判断是否有监听器加入</span></span><br><span class="line">      <span class="keyword">if</span> (hasListeners.compareAndSet(<span class="keyword">false</span>, <span class="keyword">true</span>)) &#123;</span><br><span class="line">      <span class="comment">//如果当前的future完成则立即执行监听列表中的监听器,执行完成后返回</span></span><br><span class="line">        <span class="keyword">if</span> (delegate.isDone()) &#123;</span><br><span class="line">          <span class="comment">// If the delegate is already done, run the execution list</span></span><br><span class="line">          <span class="comment">// immediately on the current thread.</span></span><br><span class="line">          <span class="comment">//执行监听列表中的监听任务</span></span><br><span class="line">          executionList.execute();</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//如果当前的future没有完成，则启动线程池执行其中的任务，阻塞等待直到有一个future完成，然后执行监听器列表中的监听器</span></span><br><span class="line">        adapterExecutor.execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">              <span class="comment">/*</span></span><br><span class="line"><span class="comment">               * Threads from our private pool are never interrupted. Threads</span></span><br><span class="line"><span class="comment">               * from a user-supplied executor might be, but... what can we do?</span></span><br><span class="line"><span class="comment">               * This is another reason to return a proper ListenableFuture</span></span><br><span class="line"><span class="comment">               * instead of using listenInPoolThread.</span></span><br><span class="line"><span class="comment">               */</span></span><br><span class="line">              getUninterruptibly(delegate);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Error e) &#123;</span><br><span class="line">              <span class="keyword">throw</span> e;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">              <span class="comment">// ExecutionException / CancellationException / RuntimeException</span></span><br><span class="line">              <span class="comment">// The task is done, run the listeners.</span></span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//执行链表中的任务</span></span><br><span class="line">            executionList.execute();</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>在ExecutionList的add方法中，判断是否执行完成，如果没有执行完成，则放入待执行的链表中并返回，<br>否则调用executeListener方法执行任务，在executeListener方法中，我们发现执行的是线程池的execute<br>方法，而execute方法实质的是调用了任务线程的run方法，这样最终会调用OnSuccess方法获取到执行结果。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将任务放入ExecutionList中</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(Runnable runnable, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Fail fast on a null.  We throw NPE here because the contract of</span></span><br><span class="line">    <span class="comment">// Executor states that it throws NPE on null listener, so we propagate</span></span><br><span class="line">    <span class="comment">// that contract up into the add method as well.</span></span><br><span class="line">    Preconditions.checkNotNull(runnable, <span class="string">"Runnable was null."</span>);</span><br><span class="line">    Preconditions.checkNotNull(executor, <span class="string">"Executor was null."</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Lock while we check state.  We must maintain the lock while adding the</span></span><br><span class="line">    <span class="comment">// new pair so that another thread can't run the list out from under us.</span></span><br><span class="line">    <span class="comment">// We only add to the list if we have not yet started execution.</span></span><br><span class="line">    <span class="comment">//判断是否执行完成，如果没有执行完成，则放入待执行的链表中</span></span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!executed) &#123;</span><br><span class="line">        runnables = <span class="keyword">new</span> RunnableExecutorPair(runnable, executor, runnables);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Execute the runnable immediately. Because of scheduling this may end up</span></span><br><span class="line">    <span class="comment">// getting called before some of the previously added runnables, but we're</span></span><br><span class="line">    <span class="comment">// OK with that.  If we want to change the contract to guarantee ordering</span></span><br><span class="line">    <span class="comment">// among runnables we'd have to modify the logic here to allow it.</span></span><br><span class="line">    <span class="comment">//执行监听</span></span><br><span class="line">    executeListener(runnable, executor);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>execute方法是执行任务链表中的任务，由于先加入的任务会依次排列在链表的末尾，所以需要将链表翻转。<br>然后从链表头开始依次取出任务执行并放入枚举线程池中执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//执行监听链表中的任务</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// Lock while we update our state so the add method above will finish adding</span></span><br><span class="line">    <span class="comment">// any listeners before we start to run them.</span></span><br><span class="line">    <span class="comment">//创建临时变量保存列表，并将成员变量置空让垃圾回收</span></span><br><span class="line">    RunnableExecutorPair list;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (executed) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">      executed = <span class="keyword">true</span>;</span><br><span class="line">      list = runnables;</span><br><span class="line">      runnables = <span class="keyword">null</span>;  <span class="comment">// allow GC to free listeners even if this stays around for a while.</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// If we succeeded then list holds all the runnables we to execute.  The pairs in the stack are</span></span><br><span class="line">    <span class="comment">// in the opposite order from how they were added so we need to reverse the list to fulfill our</span></span><br><span class="line">    <span class="comment">// contract.</span></span><br><span class="line">    <span class="comment">// This is somewhat annoying, but turns out to be very fast in practice.  Alternatively, we </span></span><br><span class="line">    <span class="comment">// could drop the contract on the method that enforces this queue like behavior since depending</span></span><br><span class="line">    <span class="comment">// on it is likely to be a bug anyway.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// N.B. All writes to the list and the next pointers must have happened before the above </span></span><br><span class="line">    <span class="comment">// synchronized block, so we can iterate the list without the lock held here.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//因为先加入的监听任务会在连边的末尾，所以需要将链表翻转</span></span><br><span class="line">    RunnableExecutorPair reversedList = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">      RunnableExecutorPair tmp = list;</span><br><span class="line">      list = list.next;</span><br><span class="line">      tmp.next = reversedList;</span><br><span class="line">      reversedList = tmp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//从链表头中依次取出监听任务执行</span></span><br><span class="line">    <span class="keyword">while</span> (reversedList != <span class="keyword">null</span>) &#123;</span><br><span class="line">      executeListener(reversedList.runnable, reversedList.executor);</span><br><span class="line">      reversedList = reversedList.next;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>在上文中，可以发现每当对一个ListenerFuture增加回调时，都会创建一个线程，而这个线程的run方法中<br>会获取一个value值，这个value值就是通过下面的getUninterruptibly方法获取到的，我们可以发现在<br>方法中调用了while进行阻塞，一直等到future获取到结果，即发送的http请求获取到数据后才会终止并返回。<br>可以看出，回调机制将获取结果中的阻塞分散开来，即使现在有100个线程在并发地发送http请求，那么也只是<br>创建了100个独立的线程并行阻塞，那么运行的总时间则会是这100个线程中最长的时间，而不是100个线程的<br>时间相加，这样就实现了异步非阻塞机制。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//用while阻塞直到获取到结果</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;V&gt; <span class="function">V <span class="title">getUninterruptibly</span><span class="params">(Future&lt;V&gt; future)</span></span></span><br><span class="line"><span class="function">      <span class="keyword">throws</span> ExecutionException </span>&#123;</span><br><span class="line">    <span class="keyword">boolean</span> interrupted = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> future.get();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">          interrupted = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (interrupted) &#123;</span><br><span class="line">        Thread.currentThread().interrupt();</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>这里实质上执行了线程的run方法，并进行阻塞。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//执行监听器，调用线程池的execute方法，这里线程池并没有提供额外的功能，只提供了执行架子，实际上执行的是监听任务runnable的run方法</span></span><br><span class="line">  <span class="comment">//而在监听任务的run方法中，会阻塞获取请求结果，请求完成后回调，已达到异步执行的效果</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">executeListener</span><span class="params">(Runnable runnable, Executor executor)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      executor.execute(runnable);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (RuntimeException e) &#123;</span><br><span class="line">      <span class="comment">// Log it and keep going, bad runnable and/or executor.  Don't</span></span><br><span class="line">      <span class="comment">// punish the other runnables if we're given a bad one.  We only</span></span><br><span class="line">      <span class="comment">// catch RuntimeException because we want Errors to propagate up.</span></span><br><span class="line">      log.log(Level.SEVERE, <span class="string">"RuntimeException while executing runnable "</span></span><br><span class="line">          + runnable + <span class="string">" with executor "</span> + executor, e);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>使用JdkFutureAdaoter适配Spring中的ListenableFuture达到异步调用的结果。在future.get方法中到底阻塞在什么地方呢？<br>通过调试发现最后调用的是BasicFuture中的阻塞方法。详情见下方源码和中文注释，这里不累赘。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">FutureAdapter:</span><br><span class="line">    <span class="comment">//这里的get方法会调用BasicFuture中的get方法进行阻塞，直到获取到结果</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> adaptInternal(<span class="keyword">this</span>.adaptee.get());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">BasicFuture:</span><br><span class="line">    <span class="comment">//在这里会判断当前future是否执行完成，如果没有完成则会等待，一旦执行完成则返回结果。</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> T <span class="title">get</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (!<span class="keyword">this</span>.completed) &#123;</span><br><span class="line">            wait();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> getResult();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">FutureAdapter:</span><br><span class="line">    <span class="comment">//这里通过判断状态是否success，如果success则返回成功，如果new, 则阻塞等待结果直到返回，然后改变状态。</span></span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">final</span> T <span class="title">adaptInternal</span><span class="params">(S adapteeResult)</span> <span class="keyword">throws</span> ExecutionException </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>.mutex) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (<span class="keyword">this</span>.state) &#123;</span><br><span class="line">                <span class="keyword">case</span> SUCCESS:</span><br><span class="line">                    <span class="keyword">return</span> (T) <span class="keyword">this</span>.result;</span><br><span class="line">                <span class="keyword">case</span> FAILURE:</span><br><span class="line">                    <span class="keyword">throw</span> (ExecutionException) <span class="keyword">this</span>.result;</span><br><span class="line">                <span class="keyword">case</span> NEW:</span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        T adapted = adapt(adapteeResult);</span><br><span class="line">                        <span class="keyword">this</span>.result = adapted;</span><br><span class="line">                        <span class="keyword">this</span>.state = State.SUCCESS;</span><br><span class="line">                        <span class="keyword">return</span> adapted;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">catch</span> (ExecutionException ex) &#123;</span><br><span class="line">                        <span class="keyword">this</span>.result = ex;</span><br><span class="line">                        <span class="keyword">this</span>.state = State.FAILURE;</span><br><span class="line">                        <span class="keyword">throw</span> ex;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">                        ExecutionException execEx = <span class="keyword">new</span> ExecutionException(ex);</span><br><span class="line">                        <span class="keyword">this</span>.result = execEx;</span><br><span class="line">                        <span class="keyword">this</span>.state = State.FAILURE;</span><br><span class="line">                        <span class="keyword">throw</span> execEx;</span><br><span class="line">                    &#125;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这个方法判断</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">completed</span><span class="params">(<span class="keyword">final</span> T result)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span>(<span class="keyword">this</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.completed) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">this</span>.completed = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">this</span>.result = result;</span><br><span class="line">            notifyAll();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>.callback != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.callback.completed(result);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>本文主要剖析了Futures.callback方法的源码，我们只需要一个ListenableFuture的实例，就可以使用<br>该方法来实现回调机制。假设在我们的主线程中，有n个子方法要发送http请求，这时，我们可以创建n个<br>ListenableFuture，对这n个ListenableFuture增加监听，这n个请求就是异步且非阻塞的，这样不但<br>主线程不会阻塞，而且会大大减少总的响应时间。那Futures.callback是如何实现并发的呢？通过源码，<br>我们发现，对于每一个ListenableFuture，都会创建一个独立的线程对其进行监听，也就是这n个ListenableFuture<br>对应着n个独立的线程，而在每一个独立的线程中会各自调用Future.get方法阻塞。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/async/" rel="tag"><i class="fa fa-tag"></i> async</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/10/epoch-rpc-1/" rel="next" title="自己动手实现RPC框架（一）">
+                <i class="fa fa-chevron-left"></i> 自己动手实现RPC框架（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="Linary" />
+            
+              <p class="site-author-name" itemprop="name">Linary</p>
+              <p class="site-description motion-element" itemprop="description">但行好事，莫问前程</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Guava-Futures简介"><span class="nav-number">1.</span> <span class="nav-text">Guava Futures简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Futures-addCallback方法源码剖析"><span class="nav-number">2.</span> <span class="nav-text">Futures.addCallback方法源码剖析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Linary</span>
+
+  
+</div>
+
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+-->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

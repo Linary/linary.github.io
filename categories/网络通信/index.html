@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="rpc," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,20 +79,16 @@
 
 
 
-<meta name="description" content="前言  RPC的概念看过很多，我的理解是：调用端获取到服务（网络方法）提供者的网络地址，并把方法调用的参数通过网络传递给提供者，提供者监听并获取到参数后，调用自己的方法，再把执行结果通过网络回传给调用端。这样站在调用端的角度看，就像是调用自己的本地方法一样，只不过慢一些而已。 RPC经典的架构图如下：  RPC架构中可以认为有四个角色，消费者（Consumer），提供者（Provider），注册中">
-<meta name="keywords" content="rpc">
-<meta property="og:type" content="article">
-<meta property="og:title" content="自己动手实现RPC框架（一）">
-<meta property="og:url" content="http://yoursite.com/2018/07/10/epoch-rpc-1/index.html">
+<meta name="description" content="但行好事，莫问前程">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/categories/网络通信/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="前言  RPC的概念看过很多，我的理解是：调用端获取到服务（网络方法）提供者的网络地址，并把方法调用的参数通过网络传递给提供者，提供者监听并获取到参数后，调用自己的方法，再把执行结果通过网络回传给调用端。这样站在调用端的角度看，就像是调用自己的本地方法一样，只不过慢一些而已。 RPC经典的架构图如下：  RPC架构中可以认为有四个角色，消费者（Consumer），提供者（Provider），注册中">
+<meta property="og:description" content="但行好事，莫问前程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/rpc-architecture.svg">
-<meta property="og:updated_time" content="2018-07-10T01:40:07.410Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自己动手实现RPC框架（一）">
-<meta name="twitter:description" content="前言  RPC的概念看过很多，我的理解是：调用端获取到服务（网络方法）提供者的网络地址，并把方法调用的参数通过网络传递给提供者，提供者监听并获取到参数后，调用自己的方法，再把执行结果通过网络回传给调用端。这样站在调用端的角度看，就像是调用自己的本地方法一样，只不过慢一些而已。 RPC经典的架构图如下：  RPC架构中可以认为有四个角色，消费者（Consumer），提供者（Provider），注册中">
-<meta name="twitter:image" content="http://yoursite.com/images/rpc-architecture.svg">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="但行好事，莫问前程">
 
 
 
@@ -122,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/10/epoch-rpc-1/"/>
+  <link rel="canonical" href="http://yoursite.com/categories/网络通信/"/>
 
 
 
 
 
-  <title>自己动手实现RPC框架（一） | Hexo</title>
+  <title>分类: 网络通信 | Hexo</title>
   
 
 
@@ -157,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -295,218 +291,83 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block category">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>网络通信<small>分类</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/10/epoch-rpc-1/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Linary">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
+            <a class="post-title-link" href="/2018/07/23/guava-future/" itemprop="url">
+              
+                <span itemprop="name">Guava Futures异步回调机制源码解析</span>
+              
+            </a>
         
-          <h1 class="post-title" itemprop="name headline">自己动手实现RPC框架（一）</h1>
-        
+      </h2>
 
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-10T00:00:00+08:00">
-                2018-07-10
-              </time>
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-07-23T00:00:00+08:00"
+              content="2018-07-23" >
+          07-23
+        </time>
+      </div>
 
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式服务/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式服务</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>前言</p>
-<hr>
-<p>RPC的概念看过很多，我的理解是：调用端获取到服务（网络方法）提供者的网络地址，并把方法调用的参数<br>通过网络传递给提供者，提供者监听并获取到参数后，调用自己的方法，再把执行结果通过网络回传给调用端。<br>这样站在调用端的角度看，就像是调用自己的本地方法一样，只不过慢一些而已。</p>
-<p>RPC经典的架构图如下：</p>
-<p><img src="/images/rpc-architecture.svg" alt="RPC架构"></p>
-<p>RPC架构中可以认为有四个角色，消费者（Consumer），提供者（Provider），注册中心（Registry）和<br>监控中心（Monitor）。以前在同一系统里的方法调用者因为网络的存在，变成了消费者，被调的方法成为了<br>提供者。而所谓的注册中心，其实就是为了让消费者实时的去感知提供者的存在，去告诉消费者它对应的提供<br>者的地址。监控中心，其实在整个过程中，它并不是一定要存在，只是它可以做统计，做一些数据分析，提供<br>整个系统的可用性，健壮性。</p>
-<p>好了，我们先简单分析一下 Registry / Consumer / Provider / Monitor 这四个角色的定义和每个<br>角色如何各司其职，相互协作完成这整个过程的。</p>
-<p>下面从两个方面进行分析，一是每个角色在网络的定位，二是每个角色所要完成的职责。</p>
-<h3 id="Registry注册中心"><a href="#Registry注册中心" class="headerlink" title="Registry注册中心"></a>Registry注册中心</h3><p>简述：</p>
-<ul>
-<li>注册中心可以有多个，都是无状态的，每个注册中心之间信息不交互</li>
-<li>从网络的角度来说，它都是server端，它不需要主动地连接其他的任何实例，只需要像一个地主一样等待别人来连接</li>
-<li>消费者随机选择注册中心集群中的任何实例建立长连接，提供者与注册中心中的每一个实例都建立长连接</li>
-</ul>
-<p>职责(与其说职责，还不如说代码要实现的功能)：</p>
-<ul>
-<li>接收服务提供者的服务注册信息，接收到信息之后，发送ACK信息给服务提供者，否则服务提供者重新发送注册信息</li>
-<li>接收消费者的订阅信息，并把它订阅的结果返回给消费者</li>
-<li>如果注册信息变更，会主动通知订阅变更信息的消费者，注册信息的变更包括服务提供者下线，服务被人工降级，或者服务提供者的地址变更</li>
-<li>持久化一些服务信息，例如某些服务管理员审核过了，则该服务重新注册后则不需要再审核，再例如，某个服务负载均衡的策略被管理员设置为轮询，那么下次它在注册的时候，则就是轮询，而不是默认的负载策略</li>
-</ul>
-<h3 id="Provider提供者"><a href="#Provider提供者" class="headerlink" title="Provider提供者"></a>Provider提供者</h3><p>简述：</p>
-<p>提供者是一个精神分裂的病人，它在网络上（可以更加明确地说是站在Netty的角度上）饰演两个角色：</p>
-<ul>
-<li>它是客户端，需要去连接Registry，发送注册信息，它也需要去连接monitor端，去发送一些调用的统计信息</li>
-<li>它也是服务端，需要作为server端等待Consumer去连接，连接成功后调用服务</li>
-</ul>
-<p>职责：</p>
-<ul>
-<li>将自己的信息，提供的接口信息编织成注册信息发送给registry端</li>
-<li>能够动态去调自己的方法，可以通过反射，cglib等一些方法去调用自己提供的那些方法</li>
-<li>提供服务降级等服务，如果当某些服务调用的失败率高于限定值的时候，可以有一个对应的mock方法，提供降级服务</li>
-<li>限流服务，限流的方式有很多种，也有很多实现方式，最简单的就是控制调用次数，比如100w次，其实简单的就是控制单位时间的调用次数，防止业务洪流冲垮服务</li>
-<li>统计活动，将一些调用信息统计好发送给Monitor端</li>
-</ul>
-<h3 id="Consumer消费者"><a href="#Consumer消费者" class="headerlink" title="Consumer消费者"></a>Consumer消费者</h3><p>简述：</p>
-<p>它也是有两个网络角色，不过并不是精神分裂，它都是作为网络的客户端存在，一它需要去连接registry去获取到订阅信息，二是它需要主动去连接provider端去调用服务</p>
-<p>职责：</p>
-<ul>
-<li>去向Registry端订阅服务，拿到registry端返回的结果，这个结果也就是provider的网络地址，先建立TCP的长连接，可能是多个地址，因为提供某个服务的可能有多个提供者</li>
-<li>当开始系统主动调用该服务的时候，拿到刚才建立的连接的集合，根据某个方法，是随意还是轮询，获取到其中的一个连接，发送方法入参，等待响应</li>
-<li>当注册中心发送某个服务的调用的负载策略发生变化过，发送信息给consumer，consumer需要做相应的变更</li>
-</ul>
-<h3 id="Monitor监控者"><a href="#Monitor监控者" class="headerlink" title="Monitor监控者"></a>Monitor监控者</h3><p>简述：</p>
-<p>这个与整个系统是没有任何直接的关系的，实现方式也是多样的，可以与上面一样建立长连接，接收每个角色统计的信息，然后展示给用户，可以使用MQ,使用消息队列，每个角色把自己统计的信息放到队列中，Monitor去消费这些信息，这样做的好处就是解耦，如果monitor宕了，不影响服务</p>
-<p>大体的RPC的流程稍微理了一下，接下来我们就来一一去实现这些功能~</p>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/rpc/" rel="tag"><i class="fa fa-tag"></i> rpc</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/07/10/epoch-rpc-2/" rel="next" title="自己动手实现RPC框架（二）之项目结构">
-                <i class="fa fa-chevron-left"></i> 自己动手实现RPC框架（二）之项目结构
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/23/guava-future/" rel="prev" title="Guava Futures异步回调机制源码解析">
-                Guava Futures异步回调机制源码解析 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
+      
+        
 
-    <div class="post-spread">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2018/07/04/network-io/" itemprop="url">
+              
+                <span itemprop="name">阻塞非阻塞与同步异步的区别</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-07-04T00:00:00+08:00"
+              content="2018-07-04" >
+          07-04
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
       
     </div>
+
   </div>
+  
+  
+  
+
+  
+
 
 
           </div>
@@ -514,10 +375,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -538,17 +395,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -612,22 +460,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Registry注册中心"><span class="nav-number">1.</span> <span class="nav-text">Registry注册中心</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Provider提供者"><span class="nav-number">2.</span> <span class="nav-text">Provider提供者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consumer消费者"><span class="nav-number">3.</span> <span class="nav-text">Consumer消费者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Monitor监控者"><span class="nav-number">4.</span> <span class="nav-text">Monitor监控者</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -763,10 +595,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 
