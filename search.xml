@@ -58,7 +58,7 @@
   <entry>
     <title><![CDATA[Git常用操作记录]]></title>
     <url>%2F2018%2F07%2F05%2Fgit-operation%2F</url>
-    <content type="text"><![CDATA[将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av]]></content>
+    <content type="text"><![CDATA[将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av 删除github远端的分支 1git push github :travis 这样就删除了travis分支]]></content>
       <categories>
         <category>开发工具</category>
       </categories>

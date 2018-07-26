@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av">
+<meta name="description" content="将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av 删除github远端的分支 1git push github :travis 这样就删除了travis分支">
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git常用操作记录">
 <meta property="og:url" content="http://yoursite.com/2018/07/05/git-operation/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av">
+<meta property="og:description" content="将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av 删除github远端的分支 1git push github :travis 这样就删除了travis分支">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-04T10:51:37.876Z">
+<meta property="og:updated_time" content="2018-07-26T07:34:22.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git常用操作记录">
-<meta name="twitter:description" content="将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av">
+<meta name="twitter:description" content="将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av 删除github远端的分支 1git push github :travis 这样就删除了travis分支">
 
 
 
@@ -400,6 +400,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote add github git@github.com:liningrui/study-rpc.git</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
 <p>再查看所有分支就可以看到github远端分支的信息了</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -av</span><br></pre></td></tr></table></figure>
+<p>删除github远端的分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push github :travis</span><br></pre></td></tr></table></figure>
+<p>这样就删除了<code>travis</code>分支</p>
 
       
     </div>
