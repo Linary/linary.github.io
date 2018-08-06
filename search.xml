@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[内存数据库事务]]></title>
+    <url>%2F2018%2F08%2F06%2Fmemory-db%2F</url>
+    <content type="text"><![CDATA[前言 我们在使用数据库的时候，应该都体验过事务，我们对事务最直观的感受就是：一系列的操作要么全部生效，要么全部不生效，不会最后处于一种中间状态。其实这句话似乎只能体现事务的原子性，那其他几个特性呢？本文会先回顾一下事务的定义和ACID特性，再以一个具体的例子展示如何实现事务的四个特性。 事务定义所谓事务，它是一个操作序列，这些操作要么都执行，要么都不执行，它是一个不可分割的工作单位。 特性 原子性（Atomicity）：事务是一个不可再分割的工作单位，事务中的操作要么都发生，要么都不发生； 一致性（Consistency）：事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。这是说数据库事务不能破坏关系数据的完整性以及业务逻辑上的一致性。 隔离性（Isolation）：多个事务并发访问时，事务之间是隔离的，一个事务不应该影响其它事务运行效果。 持久性（Durability）：事务完成以后，该事务所对数据库所作的更改便持久的保存在数据库之中，并不会被回滚。]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>事务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[自己实现一个轻量级的任务（线程）管理器]]></title>
     <url>%2F2018%2F07%2F23%2Fepoch-scheduler%2F</url>
     <content type="text"><![CDATA[功能 允许自定义任务（继承任务基类），比如实时任务，延时任务，周期任务等，实时任务和延时任务都是执行一次，周期任务会反复执行。 允许定义任务链，依次顺序执行，上游任务失败了下游任务不会执行。但是不提供下游任务失败了上游任务回滚的能力。 允许提交，暂停（非必须），继续，重做和取消任务。 允许根据多种方式查询任务，比如查询根据任务Id查询，根据条件查询等，获取任务状态，进度等信息。 允许自定义任务的回调函数（成功、取消，超时，失败的响应）。 支持任务的持久化（非必须）。 类结构设计1、Task 保存任务的静态信息，包括执行体（Callable），名称，类型，描述，参数，超时时间（可不设置）。 2、TaskTracker 保存任务的动态信息，包括进度，状态，运行时间等。 3、MonitorTask 定时执行的后台线程，扫描所有的用户任务 首先检查任务是否完成，如果完成，再判断任务是成功还是失败。 如果任务是成功的， 如果任务设置过超时时间，且发现任务超时，则取消该任务，并将取消点时的任务信息持久化到后端，便于继续执行；如果没有超时，则更新任务的运行时间。 4、EpochFuture 实现Future接口，可参看Guava的ListenableFuture实现。每当添加一个监听器，其实是新增加一个线程，该线程阻塞等待，以等待的结果触发相应的回调函数。我要扩展的是加入处理timeout的逻辑，阻塞等待不是一直阻塞，而是有超时时间的阻塞。]]></content>
@@ -45,6 +56,17 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[单例模式]]></title>
+    <url>%2F2018%2F07%2F05%2Fjava-singleton%2F</url>
+    <content type="text"><![CDATA[前言 在GoF的23种设计模式中，单例模式是比较简单的一种。然而，有时候越是简单的东西越容易出现问题。下面就单例设计模式详细的探讨一下。 所谓单例模式，简单来说，就是在整个应用中保证类只有一个实例存在。这个类的实例只提供了一个全局变量，用处相当广泛，比如保存全局数据，实现全局性的操作等。 最简单的实现首先，能够想到的最简单的实现是，把类的构造函数写成private的，从而保证别的类不能实例化此类，然后在类中提供一个静态的实例并能够返回给使用者。这样，使用者就可以通过这个引用使用到这个类的实例了。 123456789101112public class SingletonClass &#123; private static SingletonClass instance = new SingletonClass(); public static SingletonClass getInstance() &#123; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 外部使用者如果需要使用SingletonClass的实例，只能通过getInstance()方法，并且它的构造方法是private的，这样就保证了只能有一个对象存在。 性能优化上面的代码虽然简单，但是有一个问题—-无论这个类是否被使用，都会创建一个instance对象。如果这个创建过程很耗时，比如需要连接10000次jdbc实例连接或者10000多个模版实例，并且这个类还并不一定会被使用，那么这个创建过程就是无用的。 为了解决这个问题，我们想到了新的解决方案： 123456789101112131415public class SingletonClass &#123; private static SingletonClass instance = null; public static SingletonClass getInstance() &#123; if (instance == null) &#123; instance = new SingletonClass(); &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 代码的变化有一处—-把instance初始化为null，直到第一次使用的时候通过判断是否为null来创建对象。 我们来想象一下这个过程。要使用SingletonClass，调用getInstance()方法。第一次的时候发现instance是null，然后就新建一个对象，返回出去；第二次再使用的时候，因为这个instance是static的，所以已经不是null了，因此不会再创建对象，直接将其返回。 这个过程就称为lazy loaded，也就是延迟加载—-直到使用的时候才进行加载。 同步上面的代码很清楚，也很简单。然而就像那句名言：”80%的错误都是由20%代码优化引起的”。单线程下，这段代码没有什么问题，可是如果是多线程，麻烦就来了。我们来分析一下： 线程1希望使用SingletonClass，调用getInstance()方法。因为是第一次调用，1就发现instance是null的，于是它开始创建实例，就在这个时候，CPU发生时间片切换(或者被抢夺执行)，线程2开始执行，它要使用SingletonClass，调用getInstance()方法，同样检测到instance是null—-注意，这是在1检测完之后切换的，也就是说1并没有来得及创建对象—-因此2开始创建。2创建完成后，cpu切换到1继续执行，因为它已经检测完了，所以1不会再检测一遍，它会直接创建对象。这样，线程1和2各自拥有一个SingletonClass的对象—-单例失败！解决的方法也很简单，那就是加锁： 12345678910111213141516public class SingletonClass &#123; private static SingletonClass instance = null; public synchronized static SingletonClass getInstance() &#123; if(instance == null) &#123; instance = new SingletonClass(); &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 又是性能问题上面的代码又是很清楚很简单的，然而，简单的东西往往不够理想。理想的东西往往不够简单，这就是生活。这段代码毫无疑问存在性能的问题—-synchronized修饰的同步块可是要比一般的代码段慢上几倍的！如果存在很多次getInstance()的调用，那性能问题就不得不考虑了！ 让我们来分析一下，究竟是整个方法都必须加锁，还是仅仅其中某一句加锁就足够了？我们为什么要加锁呢？分析一下出现lazy loaded的那种情形的原因。原因就是检测null的操作和创建对象的操作分离了。如果这两个操作能够原子地进行，那么单例就已经保证了。于是，我们开始修改代码： 1234567891011121314151617181920public class SingletonClass &#123; private static SingletonClass instance = null; public static SingletonClass getInstance() &#123; if (instance == null) &#123; synchronized (SingletonClass.class) &#123; if (instance == null) &#123; instance = new SingletonClass(); &#125; &#125; &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 还有问题吗？首先判断instance是不是为null，如果为null，加锁初始化；如果不为null，直接返回instance。 这就是double-checked locking设计实现单例模式。但是还有问题。 在Java虚拟机规范中试图定义一种Java内存模型（Java Memory Model，JMM）来屏蔽各个硬件平台和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。那么Java内存模型规定了哪些东西呢，它定义了程序中变量的访问规则，往大一点说是定义了程序执行的次序。注意，为了获得较好的执行性能，Java内存模型并没有限制执行引擎使用处理器的寄存器或者高速缓存来提升指令执行速度，也没有限制编译器对指令进行重排序。也就是说，在java内存模型中，也会存在缓存一致性问题和指令重排序的问题。 下面来想一下，创建一个变量需要哪些步骤呢？一个是申请一块内存，调用构造方法进行初始化操作，另一个是分配一个指针指向这块内存。这两个操作谁在前谁在后呢？JMM规范并没有规定。（可能重排序）那么就存在这么一种情况，JVM是先开辟出一块内存，然后把指针指向这块内存，最后调用构造方法进行初始化。 线程1开始创建SingletonClass的实例，此时线程B调用了getInstance()方法，首先判断instance是否为null。按照我们上面所说的内存模型，1已经把instance指向了那块内存，只是还没有调用构造方法，因此2检测到instance不为null，于是直接把instance返回了—-问题出现了，尽管instance不为null，但它并没有构造完成，就像一套房子已经给了你钥匙，但你并不能住进去，因为里面还是毛坯房。此时，如果2在1将instance构造完成之前就是用了这个实例，程序就会出现错误了！ 最终解决方案在JDK 5之后，Java使用了新的内存模型。volatile关键字有了明确的语义—-在JDK1.5之前，volatile是个关键字，但是并没有明确的规定其用途—-被volatile修饰的写变量不能和之前的读写代码调整，读变量不能和之后的读写代码调整！因此，只要我们简单的把instance加上volatile关键字就可以了。 1234567891011121314151617181920public class SingletonClass &#123; private volatile static SingletonClass instance = null; public static SingletonClass getInstance() &#123; if (instance == null) &#123; synchronized (SingletonClass.class) &#123; if(instance == null) &#123; instance = new SingletonClass(); &#125; &#125; &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125;]]></content>
+      <categories>
+        <category>编程语言</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[自己动手实现RPC框架]]></title>
     <url>%2F2018%2F07%2F05%2Fepoch-rpc-0%2F</url>
     <content type="text"><![CDATA[前言 RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-29 客户端框架 2018-08-06 负载均衡 2018-08-13 服务降级 2018-08-20 测试与优化]]></content>
@@ -64,17 +86,6 @@
       </categories>
       <tags>
         <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[单例模式]]></title>
-    <url>%2F2018%2F07%2F05%2Fjava-singleton%2F</url>
-    <content type="text"><![CDATA[前言 在GoF的23种设计模式中，单例模式是比较简单的一种。然而，有时候越是简单的东西越容易出现问题。下面就单例设计模式详细的探讨一下。 所谓单例模式，简单来说，就是在整个应用中保证类只有一个实例存在。这个类的实例只提供了一个全局变量，用处相当广泛，比如保存全局数据，实现全局性的操作等。 最简单的实现首先，能够想到的最简单的实现是，把类的构造函数写成private的，从而保证别的类不能实例化此类，然后在类中提供一个静态的实例并能够返回给使用者。这样，使用者就可以通过这个引用使用到这个类的实例了。 123456789101112public class SingletonClass &#123; private static SingletonClass instance = new SingletonClass(); public static SingletonClass getInstance() &#123; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 外部使用者如果需要使用SingletonClass的实例，只能通过getInstance()方法，并且它的构造方法是private的，这样就保证了只能有一个对象存在。 性能优化上面的代码虽然简单，但是有一个问题—-无论这个类是否被使用，都会创建一个instance对象。如果这个创建过程很耗时，比如需要连接10000次jdbc实例连接或者10000多个模版实例，并且这个类还并不一定会被使用，那么这个创建过程就是无用的。 为了解决这个问题，我们想到了新的解决方案： 123456789101112131415public class SingletonClass &#123; private static SingletonClass instance = null; public static SingletonClass getInstance() &#123; if (instance == null) &#123; instance = new SingletonClass(); &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 代码的变化有一处—-把instance初始化为null，直到第一次使用的时候通过判断是否为null来创建对象。 我们来想象一下这个过程。要使用SingletonClass，调用getInstance()方法。第一次的时候发现instance是null，然后就新建一个对象，返回出去；第二次再使用的时候，因为这个instance是static的，所以已经不是null了，因此不会再创建对象，直接将其返回。 这个过程就称为lazy loaded，也就是延迟加载—-直到使用的时候才进行加载。 同步上面的代码很清楚，也很简单。然而就像那句名言：”80%的错误都是由20%代码优化引起的”。单线程下，这段代码没有什么问题，可是如果是多线程，麻烦就来了。我们来分析一下： 线程1希望使用SingletonClass，调用getInstance()方法。因为是第一次调用，1就发现instance是null的，于是它开始创建实例，就在这个时候，CPU发生时间片切换(或者被抢夺执行)，线程2开始执行，它要使用SingletonClass，调用getInstance()方法，同样检测到instance是null—-注意，这是在1检测完之后切换的，也就是说1并没有来得及创建对象—-因此2开始创建。2创建完成后，cpu切换到1继续执行，因为它已经检测完了，所以1不会再检测一遍，它会直接创建对象。这样，线程1和2各自拥有一个SingletonClass的对象—-单例失败！解决的方法也很简单，那就是加锁： 12345678910111213141516public class SingletonClass &#123; private static SingletonClass instance = null; public synchronized static SingletonClass getInstance() &#123; if(instance == null) &#123; instance = new SingletonClass(); &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 又是性能问题上面的代码又是很清楚很简单的，然而，简单的东西往往不够理想。理想的东西往往不够简单，这就是生活。这段代码毫无疑问存在性能的问题—-synchronized修饰的同步块可是要比一般的代码段慢上几倍的！如果存在很多次getInstance()的调用，那性能问题就不得不考虑了！ 让我们来分析一下，究竟是整个方法都必须加锁，还是仅仅其中某一句加锁就足够了？我们为什么要加锁呢？分析一下出现lazy loaded的那种情形的原因。原因就是检测null的操作和创建对象的操作分离了。如果这两个操作能够原子地进行，那么单例就已经保证了。于是，我们开始修改代码： 1234567891011121314151617181920public class SingletonClass &#123; private static SingletonClass instance = null; public static SingletonClass getInstance() &#123; if (instance == null) &#123; synchronized (SingletonClass.class) &#123; if (instance == null) &#123; instance = new SingletonClass(); &#125; &#125; &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125; 还有问题吗？首先判断instance是不是为null，如果为null，加锁初始化；如果不为null，直接返回instance。 这就是double-checked locking设计实现单例模式。但是还有问题。 在Java虚拟机规范中试图定义一种Java内存模型（Java Memory Model，JMM）来屏蔽各个硬件平台和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。那么Java内存模型规定了哪些东西呢，它定义了程序中变量的访问规则，往大一点说是定义了程序执行的次序。注意，为了获得较好的执行性能，Java内存模型并没有限制执行引擎使用处理器的寄存器或者高速缓存来提升指令执行速度，也没有限制编译器对指令进行重排序。也就是说，在java内存模型中，也会存在缓存一致性问题和指令重排序的问题。 下面来想一下，创建一个变量需要哪些步骤呢？一个是申请一块内存，调用构造方法进行初始化操作，另一个是分配一个指针指向这块内存。这两个操作谁在前谁在后呢？JMM规范并没有规定。（可能重排序）那么就存在这么一种情况，JVM是先开辟出一块内存，然后把指针指向这块内存，最后调用构造方法进行初始化。 线程1开始创建SingletonClass的实例，此时线程B调用了getInstance()方法，首先判断instance是否为null。按照我们上面所说的内存模型，1已经把instance指向了那块内存，只是还没有调用构造方法，因此2检测到instance不为null，于是直接把instance返回了—-问题出现了，尽管instance不为null，但它并没有构造完成，就像一套房子已经给了你钥匙，但你并不能住进去，因为里面还是毛坯房。此时，如果2在1将instance构造完成之前就是用了这个实例，程序就会出现错误了！ 最终解决方案在JDK 5之后，Java使用了新的内存模型。volatile关键字有了明确的语义—-在JDK1.5之前，volatile是个关键字，但是并没有明确的规定其用途—-被volatile修饰的写变量不能和之前的读写代码调整，读变量不能和之后的读写代码调整！因此，只要我们简单的把instance加上volatile关键字就可以了。 1234567891011121314151617181920public class SingletonClass &#123; private volatile static SingletonClass instance = null; public static SingletonClass getInstance() &#123; if (instance == null) &#123; synchronized (SingletonClass.class) &#123; if(instance == null) &#123; instance = new SingletonClass(); &#125; &#125; &#125; return instance; &#125; private SingletonClass() &#123; &#125;&#125;]]></content>
-      <categories>
-        <category>编程语言</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
