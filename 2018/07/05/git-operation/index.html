@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-06T09:23:17.559Z">
+<meta property="og:updated_time" content="2018-08-07T13:47:12.425Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git常用操作记录">
 <meta name="twitter:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
@@ -416,6 +416,13 @@
 <blockquote>
 <p>注：如果不提交东西，这个分支实际上没有创建</p>
 </blockquote>
+<ul>
+<li>查看某个指定文件的提交历史记录</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log -p filePath</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这样就先显示指定文件的每一次提交及修改信息（diff），但是不能显示文件改名前的修改，要注意第一次提交是不是改文件名</p>
+</blockquote>
 
       
     </div>
@@ -456,8 +463,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/05/epoch-rpc-0/" rel="prev" title="自己动手实现RPC框架">
-                自己动手实现RPC框架 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/10/epoch-rpc-2/" rel="prev" title="自己动手实现RPC框架（二）之项目结构">
+                自己动手实现RPC框架（二）之项目结构 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
