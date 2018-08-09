@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-07T13:47:12.425Z">
+<meta property="og:updated_time" content="2018-08-09T06:48:04.156Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git常用操作记录">
 <meta name="twitter:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
@@ -422,6 +422,13 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log -p filePath</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>这样就先显示指定文件的每一次提交及修改信息（diff），但是不能显示文件改名前的修改，要注意第一次提交是不是改文件名</p>
+</blockquote>
+<ul>
+<li>查看某一个分支创建的时间</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reflog show --date=iso branch</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>最下面的应该就是该分支的创建时间</p>
 </blockquote>
 
       
