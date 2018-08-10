@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-09T06:48:04.156Z">
+<meta property="og:updated_time" content="2018-08-10T02:05:23.915Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git常用操作记录">
 <meta name="twitter:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
@@ -430,6 +430,16 @@
 <blockquote>
 <p>最下面的应该就是该分支的创建时间</p>
 </blockquote>
+<ul>
+<li>修改提交历史</li>
+</ul>
+<p>1、找到要修改的commit id及其前一个commit id</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i --before-commit-id</span><br></pre></td></tr></table></figure>
+<p>弹出来的一堆以 pick 开头的 commit id 和 commit message 的行，将第一行（也允许修改多行）的 pick 修改为 edit，<br>然后保存退出vim，git 会在标记的 commit 停下来，然后我们可以做相应的修改，再执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git commit -a --amend</span><br><span class="line">git rebase --continue</span><br></pre></td></tr></table></figure>
+<p>这时 git 会打印 rebasing(progress/total)，中间很有可能会产生冲突，解决好冲突后执行 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add file</span><br><span class="line">git rebase --continue</span><br></pre></td></tr></table></figure>
+<p>一直往下走，遇到冲突就重复这一步，直到走完全部的提交，这样就实现了修改历史。</p>
 
       
     </div>
@@ -460,8 +470,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/05/java-singleton/" rel="next" title="单例模式">
-                <i class="fa fa-chevron-left"></i> 单例模式
+              <a href="/2018/07/05/epoch-rpc-0/" rel="next" title="自己动手实现RPC框架">
+                <i class="fa fa-chevron-left"></i> 自己动手实现RPC框架
               </a>
             
           </div>
@@ -470,8 +480,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/10/epoch-rpc-2/" rel="prev" title="自己动手实现RPC框架（二）之项目结构">
-                自己动手实现RPC框架（二）之项目结构 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/10/epoch-rpc-1/" rel="prev" title="自己动手实现RPC框架（一）">
+                自己动手实现RPC框架（一） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
