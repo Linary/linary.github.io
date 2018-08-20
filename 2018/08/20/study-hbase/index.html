@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="NIO，IO," />
+  <meta name="keywords" content="HBase," />
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="我认为同步、异步、阻塞、非阻塞，是分3个层次的：  CPU层次； 线程层次； 程序员感知层次。  这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。 CPU层次在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和C">
-<meta name="keywords" content="NIO，IO">
+<meta name="description" content="HBase中为什么要有Column FamilyHBase本身的设计目标是支持稀疏表，而稀疏表通常会有很多列，但是每一行有值的列又比较少。如果不使用Column Family的概念，那么有两种设计方案： 1.把所有列的数据放在一个文件中（也就是传统的按行存储）。那么当我们想要访问少数几个列的数据时，需要遍历每一行，读取整个表的数据，这样子是很低效的。 2.把每个列的数据单独分开存在一个文件中（按列">
+<meta name="keywords" content="HBase">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阻塞非阻塞与同步异步的区别">
-<meta property="og:url" content="http://yoursite.com/2018/07/04/network-io/index.html">
+<meta property="og:title" content="HBase学习">
+<meta property="og:url" content="http://yoursite.com/2018/08/20/study-hbase/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="我认为同步、异步、阻塞、非阻塞，是分3个层次的：  CPU层次； 线程层次； 程序员感知层次。  这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。 CPU层次在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和C">
+<meta property="og:description" content="HBase中为什么要有Column FamilyHBase本身的设计目标是支持稀疏表，而稀疏表通常会有很多列，但是每一行有值的列又比较少。如果不使用Column Family的概念，那么有两种设计方案： 1.把所有列的数据放在一个文件中（也就是传统的按行存储）。那么当我们想要访问少数几个列的数据时，需要遍历每一行，读取整个表的数据，这样子是很低效的。 2.把每个列的数据单独分开存在一个文件中（按列">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-23T01:11:03.902Z">
+<meta property="og:updated_time" content="2018-08-20T12:19:08.547Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阻塞非阻塞与同步异步的区别">
-<meta name="twitter:description" content="我认为同步、异步、阻塞、非阻塞，是分3个层次的：  CPU层次； 线程层次； 程序员感知层次。  这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。 CPU层次在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和C">
+<meta name="twitter:title" content="HBase学习">
+<meta name="twitter:description" content="HBase中为什么要有Column FamilyHBase本身的设计目标是支持稀疏表，而稀疏表通常会有很多列，但是每一行有值的列又比较少。如果不使用Column Family的概念，那么有两种设计方案： 1.把所有列的数据放在一个文件中（也就是传统的按行存储）。那么当我们想要访问少数几个列的数据时，需要遍历每一行，读取整个表的数据，这样子是很低效的。 2.把每个列的数据单独分开存在一个文件中（按列">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/04/network-io/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/20/study-hbase/"/>
 
 
 
 
 
-  <title>阻塞非阻塞与同步异步的区别 | Hexo</title>
+  <title>HBase学习 | Hexo</title>
   
 
 
@@ -307,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/04/network-io/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/20/study-hbase/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">阻塞非阻塞与同步异步的区别</h1>
+          <h1 class="post-title" itemprop="name headline">HBase学习</h1>
         
 
         <div class="post-meta">
@@ -336,8 +336,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-04T00:00:00+08:00">
-                2018-07-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-20T00:00:00+08:00">
+                2018-08-20
               </time>
             
 
@@ -359,8 +359,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络通信/" itemprop="url" rel="index">
-                    <span itemprop="name">网络通信</span>
+                  <a href="/categories/NoSQL/" itemprop="url" rel="index">
+                    <span itemprop="name">NoSQL</span>
                   </a>
                 </span>
 
@@ -396,22 +396,10 @@
       
 
       
-        <p>我认为同步、异步、阻塞、非阻塞，是分3个层次的：</p>
-<ol>
-<li>CPU层次；</li>
-<li>线程层次；</li>
-<li>程序员感知层次。</li>
-</ol>
-<p>这几个概念之所以容易混淆，是因为没有分清楚是在哪个层次进行讨论。</p>
-<h3 id="CPU层次"><a href="#CPU层次" class="headerlink" title="CPU层次"></a>CPU层次</h3><p>在CPU层次，或者说操作系统进行IO和任务调度的层次，现代操作系统通常使用异步非阻塞方式进行IO（有少部分IO可能会使用同步非阻塞轮询），即发出IO请求之后，并不等待IO操作完成，而是继续执行下面的指令（非阻塞），IO操作和CPU指令互不干扰（异步），最后通过中断的方式来通知IO操作完成结果。</p>
-<h3 id="线程层次"><a href="#线程层次" class="headerlink" title="线程层次"></a>线程层次</h3><p>在线程层次，或者说操作系统调度单元的层次，操作系统为了减轻程序员的思考负担，将底层的异步非阻塞的IO方式进行封装，把相关系统调用（如read，write等）以同步的方式展现出来。然而，同步阻塞的IO会使线程挂起，同步非阻塞的IO会消耗CPU资源在轮询上。为了解决这一问题，就有3种思路：</p>
-<ol>
-<li>多线程（同步阻塞）；</li>
-<li>IO多路复用（select，poll，epoll）（同步非阻塞，严格地来讲，是把阻塞点改变了位置）；</li>
-<li>直接暴露出异步的IO接口，如kernel-aio和IOCP（异步非阻塞）。</li>
-</ol>
-<h3 id="程序员感知层次"><a href="#程序员感知层次" class="headerlink" title="程序员感知层次"></a>程序员感知层次</h3><p>在Linux中，上面提到的第2种思路用得比较广泛，也是比较理想的解决方案。然而，直接使用select之类的接口，依然比较复杂，所以各种库和框架百花齐放，都试图对IO多路复用进行封装。此时，库和框架提供的API又可以选择是以同步的方式还是异步的方式来展现。如python的asyncio库中，就通过协程，提供了同步阻塞式的API；如node.js中，就通过回调函数，提供了异步非阻塞式的API。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>因此，我们在讨论同步、异步、阻塞、非阻塞时，必须先明确是在哪个层次进行讨论。比如node.js，我们可以说她在程序员感知层次提供了异步非阻塞的API，也可以说在Linux下，她在线程层次以同步非阻塞的epoll来实现。</p>
+        <h3 id="HBase中为什么要有Column-Family"><a href="#HBase中为什么要有Column-Family" class="headerlink" title="HBase中为什么要有Column Family"></a>HBase中为什么要有Column Family</h3><p>HBase本身的设计目标是支持稀疏表，而稀疏表通常会有很多列，但是每一行有值的列又比较少。<br>如果不使用Column Family的概念，那么有两种设计方案：</p>
+<p>1.把所有列的数据放在一个文件中（也就是传统的按行存储）。那么当我们想要访问少数几个列的数据时，需要遍历每一行，读取整个表的数据，这样子是很低效的。</p>
+<p>2.把每个列的数据单独分开存在一个文件中（按列存储）。那么当我们想要访问少数几个列的数据时，只需要读取对应的文件，不用读取整个表的数据，读取效率很高。然而，由于稀疏表通常会有很多列，这会导致文件数量特别多，这本身会影响文件系统的效率。</p>
+<p>而Column Family的提出就是为了在上面两种方案中做一个折中。HBase中将一个Column Family中的列存在一起，而不同Column Family的数据则分开。<br>由于在HBase中Column Family的数量通常很小，同时HBase建议把经常一起访问的比较类似的列放在同一个Column Family中，这样就可以在访问少数几个列时，只读取尽量少的数据。</p>
 
       
     </div>
@@ -429,7 +417,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/NIO，IO/" rel="tag"><i class="fa fa-tag"></i> NIO，IO</a>
+            <a href="/tags/HBase/" rel="tag"><i class="fa fa-tag"></i> HBase</a>
           
         </div>
       
@@ -442,15 +430,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/08/19/study-vue/" rel="next" title="Vue入门">
+                <i class="fa fa-chevron-left"></i> Vue入门
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/04/mac-install-jekyll/" rel="prev" title="Mac 下安装 jekyll">
-                Mac 下安装 jekyll <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -586,7 +574,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU层次"><span class="nav-number">1.</span> <span class="nav-text">CPU层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程层次"><span class="nav-number">2.</span> <span class="nav-text">线程层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程序员感知层次"><span class="nav-number">3.</span> <span class="nav-text">程序员感知层次</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HBase中为什么要有Column-Family"><span class="nav-number">1.</span> <span class="nav-text">HBase中为什么要有Column Family</span></a></li></ol></div>
             
 
           </div>
