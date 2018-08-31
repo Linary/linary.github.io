@@ -79,17 +79,16 @@
 
 
 
-<meta name="description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
-<meta property="og:type" content="article">
+<meta name="description" content="但行好事，莫问前程">
+<meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/2018/08/31/concurrent/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/并发/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
+<meta property="og:description" content="但行好事，莫问前程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-31T00:58:40.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
+<meta name="twitter:description" content="但行好事，莫问前程">
 
 
 
@@ -119,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/31/concurrent/"/>
+  <link rel="canonical" href="http://yoursite.com/tags/并发/"/>
 
 
 
 
 
-  <title> | Hexo</title>
+  <title>标签: 并发 | Hexo</title>
   
 
 
@@ -154,7 +153,7 @@
     
   
 
-  <div class="container sidebar-position-left page-post-detail">
+  <div class="container sidebar-position-left ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -292,172 +291,54 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
-    
+  
+  
+  
+  <div class="post-block tag">
 
-  
+    <div id="posts" class="posts-collapse">
+      <div class="collection-title">
+        <h1>并发<small>标签</small>
+        </h1>
+      </div>
 
-  
-  
-  
+      
+        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/31/concurrent/">
+    <header class="post-header">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Linary">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
+      <h2 class="post-title">
         
-        
-          <h1 class="post-title" itemprop="name headline"></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
+            <a class="post-title-link" href="/2018/08/30/concurrent/" itemprop="url">
               
-                <span class="post-meta-item-text">发表于</span>
+                <span itemprop="name">并发与高并发</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-31T08:58:40+08:00">
-                2018-08-31
-              </time>
-            
+            </a>
+        
+      </h2>
 
-            
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-08-30T00:00:00+08:00"
+              content="2018-08-30" >
+          08-30
+        </time>
+      </div>
 
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h3 id="并发与高并发的关注点"><a href="#并发与高并发的关注点" class="headerlink" title="并发与高并发的关注点"></a>并发与高并发的关注点</h3><ul>
-<li>并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源</li>
-<li>高并发：服务能同时处理很多请求，提高程序性能</li>
-</ul>
-<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><h4 id="CPU多级缓存"><a href="#CPU多级缓存" class="headerlink" title="CPU多级缓存"></a>CPU多级缓存</h4><ul>
-<li>为什么需要CPU缓存：</li>
-<li>缓存存在的意义：时间一致性，空间一致性</li>
-<li>缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂）</li>
-<li>乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化</li>
-</ul>
-<h3 id="J-U-C-之-AQS-组件"><a href="#J-U-C-之-AQS-组件" class="headerlink" title="J.U.C 之 AQS 组件"></a>J.U.C 之 AQS 组件</h3><h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><p>计数器，能阻塞（await）某些线程直到 CountDownLatch 的值变为 0，其他线程负责将 CountDownLatch 减 1（countDown）。</p>
-<p>计数器只能使用一次。</p>
-<h4 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h4><p>信号量，能控制一定数量线程的并发执行。</p>
-<p>在执行业务代码前，调用<code>acquire()</code>获取一个许可，执行完之后，调用<code>release()</code>释放一个许可。</p>
-<p>还允许尝试获取许可，尝试获取多个许可以及它们的超时版。</p>
-<h4 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h4><p>允许多个线程互相等待，到达全部准备好的状态。就像赛跑时所有人都要在起跑线上准备好，然后再一起开跑。</p>
-<p>可以重置。</p>
-<h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>可重入锁，一个线程进去过一次后还可以再进去一次。</p>
-<p>其实 synchronized 也是可重入锁。</p>
-<p>自从 synchronized 引入了偏向锁，自旋锁之后，性能与 synchronized 差不多了。</p>
-<h3 id="多线程并发最佳实践"><a href="#多线程并发最佳实践" class="headerlink" title="多线程并发最佳实践"></a>多线程并发最佳实践</h3><ul>
-<li>使用本地变量</li>
-<li>使用不可变类</li>
-<li>最小化锁的作用域范围：S=1/(1-a + a/n)</li>
-<li>使用线程池的 Executor，而不是直接 new Thread 执行</li>
-<li>宁可使用同步也不要使用线程 wait 和 notify</li>
-<li>使用 BlockingQueue 实现生产消费模式</li>
-<li>使用并发集合而不是加了锁的同步集合</li>
-<li>使用 Semaphore 创建有界的访问</li>
-<li>宁可使用同步代码块，也不使用同步的方法</li>
-<li>避免使用静态变量</li>
-</ul>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/08/22/JVM-0/" rel="next" title="基于JDK命令行工具的监控">
-                <i class="fa fa-chevron-left"></i> 基于JDK命令行工具的监控
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
+    </header>
   </article>
 
 
-
-    <div class="post-spread">
       
     </div>
+
   </div>
+  
+  
+  
+
+  
 
 
           </div>
@@ -465,10 +346,6 @@
 
 
           
-
-  
-
-
 
         </div>
         
@@ -489,17 +366,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -529,7 +397,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -540,7 +408,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -563,22 +431,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发与高并发的关注点"><span class="nav-number">1.</span> <span class="nav-text">并发与高并发的关注点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU多级缓存"><span class="nav-number">2.1.</span> <span class="nav-text">CPU多级缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#J-U-C-之-AQS-组件"><span class="nav-number">3.</span> <span class="nav-text">J.U.C 之 AQS 组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">3.1.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Semaphore"><span class="nav-number">3.2.</span> <span class="nav-text">Semaphore</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CyclicBarrier"><span class="nav-number">3.3.</span> <span class="nav-text">CyclicBarrier</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized"><span class="nav-number">3.4.</span> <span class="nav-text">synchronized</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程并发最佳实践"><span class="nav-number">4.</span> <span class="nav-text">多线程并发最佳实践</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -714,10 +566,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
 
   
 

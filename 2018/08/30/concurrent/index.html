@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="并发," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="但行好事，莫问前程">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/categories/前端/index.html">
+<meta name="description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
+<meta name="keywords" content="并发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="并发与高并发">
+<meta property="og:url" content="http://yoursite.com/2018/08/30/concurrent/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="但行好事，莫问前程">
+<meta property="og:description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-31T01:35:27.381Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="但行好事，莫问前程">
+<meta name="twitter:title" content="并发与高并发">
+<meta name="twitter:description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/前端/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/30/concurrent/"/>
 
 
 
 
 
-  <title>分类: 前端 | Hexo</title>
+  <title>并发与高并发 | Hexo</title>
   
 
 
@@ -153,7 +155,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -291,55 +293,214 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block category">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>前端<small>分类</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/30/concurrent/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linary">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/08/19/study-vue/" itemprop="url">
-              
-                <span itemprop="name">Vue入门</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">并发与高并发</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-08-19T00:00:00+08:00"
-              content="2018-08-19" >
-          08-19
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T00:00:00+08:00">
+                2018-08-30
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发/" itemprop="url" rel="index">
+                    <span itemprop="name">并发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="并发与高并发的关注点"><a href="#并发与高并发的关注点" class="headerlink" title="并发与高并发的关注点"></a>并发与高并发的关注点</h3><ul>
+<li>并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源</li>
+<li>高并发：服务能同时处理很多请求，提高程序性能</li>
+</ul>
+<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><h4 id="CPU多级缓存"><a href="#CPU多级缓存" class="headerlink" title="CPU多级缓存"></a>CPU多级缓存</h4><ul>
+<li>为什么需要CPU缓存：</li>
+<li>缓存存在的意义：时间一致性，空间一致性</li>
+<li>缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂）</li>
+<li>乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化</li>
+</ul>
+<h3 id="J-U-C-之-AQS-组件"><a href="#J-U-C-之-AQS-组件" class="headerlink" title="J.U.C 之 AQS 组件"></a>J.U.C 之 AQS 组件</h3><h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><p>计数器，能阻塞（await）某些线程直到 CountDownLatch 的值变为 0，其他线程负责将 CountDownLatch 减 1（countDown）。</p>
+<p>计数器只能使用一次。</p>
+<h4 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h4><p>信号量，能控制一定数量线程的并发执行。</p>
+<p>在执行业务代码前，调用<code>acquire()</code>获取一个许可，执行完之后，调用<code>release()</code>释放一个许可。</p>
+<p>还允许尝试获取许可，尝试获取多个许可以及它们的超时版。</p>
+<h4 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h4><p>允许多个线程互相等待，到达全部准备好的状态。就像赛跑时所有人都要在起跑线上准备好，然后再一起开跑。</p>
+<p>可以重置。</p>
+<h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>可重入锁，一个线程进去过一次后还可以再进去一次。</p>
+<p>其实 synchronized 也是可重入锁。</p>
+<p>自从 synchronized 引入了偏向锁，自旋锁之后，性能与 synchronized 差不多了。</p>
+<h4 id="StampedLock"><a href="#StampedLock" class="headerlink" title="StampedLock"></a>StampedLock</h4><p>StampedLock 是 Java8 引入的一种新的所机制，简单的理解，可以认为它是读写锁的一个改进版本。<br>读写锁虽然分离了读和写的功能，使得读与读之间可以完全并发，但是读和写之间依然是冲突的，读锁会完全阻塞写锁，<br>它使用的依然是悲观的锁策略。如果有大量的读线程，他也有可能引起写线程的饥饿。<br>而StampedLock 则提供了一种乐观的读策略，这种乐观策略的锁非常类似于无锁的操作，使得乐观锁完全不会阻塞写线程。</p>
+<h4 id="Fork-Join-框架"><a href="#Fork-Join-框架" class="headerlink" title="Fork/Join 框架"></a>Fork/Join 框架</h4><p>并行流就是把一个内容分成多个数据块，并用不同的线程分别处理每个数据块的流。并行流的底层其实就是ForkJoin框架的一个实现。</p>
+<p>Fork/Join框架：在必要的情况下，将一个大任务，进行拆分（fork） 成若干个子任务（拆到不能再拆，这里就是指我们制定的拆分的临界值），再将一个个小任务的结果进行join汇总。</p>
+<p>Fork/Join采用“工作窃取模式”，当执行新的任务时他可以将其拆分成更小的任务执行，并将小任务加到线程队列中，然后再从一个随即线程中偷一个并把它加入自己的队列中。</p>
+<p>就比如两个CPU上有不同的任务，这时候A已经执行完，B还有任务等待执行，这时候A就会将B队尾的任务偷过来，加入自己的队列中，对于传统的线程，ForkJoin更有效的利用的CPU资源！</p>
+<h4 id="BlockingQueue"><a href="#BlockingQueue" class="headerlink" title="BlockingQueue"></a>BlockingQueue</h4><p>BlockingQueue 通常用于一个线程生产对象，而另外一个线程消费这些对象的场景。一个线程往里边放，另外一个线程从里边取。<br>一个线程将会持续生产新对象并将其插入到队列之中，直到队列达到它所能容纳的临界点。也就是说，它是有限的。<br>如果该阻塞队列到达了其临界点，负责生产的线程将会在往里边插入新对象时发生阻塞。它会一直处于阻塞之中，直到负责消费的线程从队列中拿走一个对象。<br>负责消费的线程将会一直从该阻塞队列中拿出对象。如果消费线程尝试去从一个空的队列中提取对象的话，<br>这个消费线程将会处于阻塞之中，直到一个生产线程把一个对象丢进队列。</p>
+<ul>
+<li>直接提交队列：SynchronousQueue，没有容量，所以提交的任务不能保存，总是将任务交给空闲线程,如果没有空闲线程，就创建线程，一旦达到maximumPoolSize就执行拒绝策略</li>
+<li>有界任务队列：ArrayBlockingQueue,当线程池的数量小于corePoolSize时，当有新的任务时，创建线程，达到corePoolSize后，则将任务存到ArrayBlockingQueue中，直到有界队列容量已满时，才可能会将线程数提升到corePoolSize之上。</li>
+<li>无界队列：LinkedBlockingQueue,除非系统资源耗尽，否则不存在任务队列入队失败的情况，因此当线程数达到corePoolSize之后，就不会增加，有新的任务到来时，都会放到无界队列中。</li>
+<li>优先任务队列：PriorityBlockingQueue是带有优先级的队列，特殊的无界队列,理论上来说不是先入先出的，是根据任务的优先级来确定执行顺序</li>
+<li>DelayQueue：执行定时任务，将任务按延迟时间长短放入队列中，延迟时间最短的最先被执行，存放在队列头部的是延迟期满后保存时间最长的任务</li>
+<li>LinkedTransferQueue：其实和SynchronousQueue类似，当生产者生产出产品后，当先去找是否有消费者，如果有消费者在等待资源，则直接调用transfer()方法将资源给消费者消费，而不会放入队列中。如果没有消费者等待，则当生产者调用transfer()方法时会阻塞，而调用其他的方法，如aput()则不会阻塞，会把资源放到队列中，因为put()方法只有在队列满的时候才会阻塞。适用于游戏服务器中，可以是并发时消息传递的效率更高</li>
+</ul>
+<h3 id="多线程并发最佳实践"><a href="#多线程并发最佳实践" class="headerlink" title="多线程并发最佳实践"></a>多线程并发最佳实践</h3><ul>
+<li>使用本地变量</li>
+<li>使用不可变类</li>
+<li>最小化锁的作用域范围：S=1/(1-a + a/n)</li>
+<li>使用线程池的 Executor，而不是直接 new Thread 执行</li>
+<li>宁可使用同步也不要使用线程 wait 和 notify</li>
+<li>使用 BlockingQueue 实现生产消费模式</li>
+<li>使用并发集合而不是加了锁的同步集合</li>
+<li>使用 Semaphore 创建有界的访问</li>
+<li>宁可使用同步代码块，也不使用同步的方法</li>
+<li>避免使用静态变量</li>
+</ul>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/并发/" rel="tag"><i class="fa fa-tag"></i> 并发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/22/JVM-0/" rel="next" title="基于JDK命令行工具的监控">
+                <i class="fa fa-chevron-left"></i> 基于JDK命令行工具的监控
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -347,6 +508,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -367,8 +532,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -432,6 +606,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发与高并发的关注点"><span class="nav-number">1.</span> <span class="nav-text">并发与高并发的关注点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU多级缓存"><span class="nav-number">2.1.</span> <span class="nav-text">CPU多级缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#J-U-C-之-AQS-组件"><span class="nav-number">3.</span> <span class="nav-text">J.U.C 之 AQS 组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">3.1.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Semaphore"><span class="nav-number">3.2.</span> <span class="nav-text">Semaphore</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CyclicBarrier"><span class="nav-number">3.3.</span> <span class="nav-text">CyclicBarrier</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized"><span class="nav-number">3.4.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#StampedLock"><span class="nav-number">3.5.</span> <span class="nav-text">StampedLock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fork-Join-框架"><span class="nav-number">3.6.</span> <span class="nav-text">Fork/Join 框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">3.7.</span> <span class="nav-text">BlockingQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程并发最佳实践"><span class="nav-number">4.</span> <span class="nav-text">多线程并发最佳实践</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -567,6 +757,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
