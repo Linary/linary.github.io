@@ -306,7 +306,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/06/memory-db/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/06/distributed-storage/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -325,7 +325,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/06/memory-db/" itemprop="url">内存数据库事务</a></h1>
+                <a class="post-title-link" href="/2018/08/06/distributed-storage/" itemprop="url">分布式存储系统</a></h1>
         
 
         <div class="post-meta">
@@ -360,8 +360,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库</span>
+                  <a href="/categories/分布式存储系统/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式存储系统</span>
                   </a>
                 </span>
 
@@ -399,14 +399,13 @@
       
         
           
-          前言
+          需要调研的分布式存储系统包括但不限于：
+谷歌的GFS、BigTable、MegaStore和Spanner，阿里的TFS、Tair和OceanBase，Facebook的Haystack，亚马逊的Dynamo，Oracle的Mysql Sharding，PingCap 的TiDB等。
 
-我们在使用数据库的时候，应该都体验过事务，我们对事务最直观的感受就是：一系列的操作要么全部生效，要么全部不生效，不会最后处于一种中间状态。其实这句话似乎只能体现事务的原子性，那其他几个特性呢？本文会先回顾一下事务的定义和ACID特性，再以一个具体的例子展示如何实现事务的四个特性。
-事务定义所
-          ...
+          
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/08/06/memory-db/#more" rel="contents">
+            <a class="btn" href="/2018/08/06/distributed-storage/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-">
+<meta name="description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 2018-09-03续，果不其然，还是因为诸多事情耽搁了。 今天又看了一些RPC的文章，发现黄勇老师的轻量级分布式 RPC 框架写的非常清晰易懂。于是整理出一些关">
 <meta name="keywords" content="rpc">
 <meta property="og:type" content="article">
 <meta property="og:title" content="自己动手实现RPC框架">
 <meta property="og:url" content="http://yoursite.com/2018/07/05/epoch-rpc-0/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-">
+<meta property="og:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 2018-09-03续，果不其然，还是因为诸多事情耽搁了。 今天又看了一些RPC的文章，发现黄勇老师的轻量级分布式 RPC 框架写的非常清晰易懂。于是整理出一些关">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-05T15:07:15.462Z">
+<meta property="og:updated_time" content="2018-09-03T09:17:00.802Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自己动手实现RPC框架">
-<meta name="twitter:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-">
+<meta name="twitter:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 2018-09-03续，果不其然，还是因为诸多事情耽搁了。 今天又看了一些RPC的文章，发现黄勇老师的轻量级分布式 RPC 框架写的非常清晰易懂。于是整理出一些关">
 
 
 
@@ -400,6 +400,21 @@
 <hr>
 <p>RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。<br>所以我希望通过一个真正的项目，来加深对RPC的认识。</p>
 <p>这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。</p>
+<p>2018-09-03续，果不其然，还是因为诸多事情耽搁了。</p>
+<p>今天又看了一些RPC的文章，发现黄勇老师的<a href="https://my.oschina.net/huangyong/blog/361751" target="_blank" rel="noopener">轻量级分布式 RPC 框架</a><br>写的非常清晰易懂。于是整理出一些关键点出来，方便自己实现。</p>
+<p>编写RPC框架的步骤如下：</p>
+<ol>
+<li>编写服务接口</li>
+<li>编写服务接口的实现类</li>
+<li>配置服务端</li>
+<li>启动服务器并发布服务</li>
+<li>实现服务注册</li>
+<li>实现 RPC 服务器</li>
+<li>配置客户端</li>
+<li>实现服务发现</li>
+<li>实现 RPC 代理</li>
+<li>发送 RPC 请求</li>
+</ol>
 <h3 id="计划（暂定）"><a href="#计划（暂定）" class="headerlink" title="计划（暂定）"></a>计划（暂定）</h3><ul>
 <li>2018-07-08 架构设计，功能（细节）设计</li>
 <li>2018-07-15 网络传输模型，序列化部分</li>
@@ -449,8 +464,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/05/java-singleton/" rel="prev" title="单例模式">
-                单例模式 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/05/git-operation/" rel="prev" title="Git常用操作记录">
+                Git常用操作记录 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
