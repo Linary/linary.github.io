@@ -87,10 +87,12 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 主要参考CSDN博客一起写RPC框架开篇说明 2018-09-03续，果不其然，还是因为诸多事情耽搁了。 今天又看了一些RPC的文章，发现黄勇老师的轻量级分布式">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-04T02:52:43.249Z">
+<meta property="og:image" content="http://yoursite.com/2018/07/05/images/服务注册中心ZK节点树.svg">
+<meta property="og:updated_time" content="2018-09-04T15:52:41.331Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自己动手实现RPC框架">
 <meta name="twitter:description" content="前言  RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 主要参考CSDN博客一起写RPC框架开篇说明 2018-09-03续，果不其然，还是因为诸多事情耽搁了。 今天又看了一些RPC的文章，发现黄勇老师的轻量级分布式">
+<meta name="twitter:image" content="http://yoursite.com/2018/07/05/images/服务注册中心ZK节点树.svg">
 
 
 
@@ -429,6 +431,8 @@
 <li>手动改变某个服务的访问权重，比如某个服务默认负重是50，（最大100）的时候，但是此时这个服务实例所在的机器压力不大的时候，而其他该服务实例压力很大的时候，可以适当的增加该服务的访问权重，所以我们可以在注册中心修改它的负重，然后通知服务消费者，这样就可以动态的修改负重了</li>
 <li>一些持久化的操作，因为注册中心是无状态的，假如某个注册中心实例重启之后，以前的一些审核信息，修改的访问策略信息就会消失，这样就会需要用户重新一一审核，这是很麻烦的，所以需要将这些信息落地，持久化到硬盘，然后每次重启注册中心实例的时候，去读取这些信息</li>
 </ul>
+<p>基于ZooKeeper的注册中心节点树结构如下：</p>
+<p><img src="../images/服务注册中心ZK节点树.svg" alt="服务注册中心ZK节点树"></p>
 <h3 id="计划（暂定）"><a href="#计划（暂定）" class="headerlink" title="计划（暂定）"></a>计划（暂定）</h3><ul>
 <li>2018-07-08 架构设计，功能（细节）设计</li>
 <li>2018-07-15 网络传输模型，序列化部分</li>
@@ -468,8 +472,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/04/mac-install-jekyll/" rel="next" title="Mac 下安装 jekyll">
-                <i class="fa fa-chevron-left"></i> Mac 下安装 jekyll
+              <a href="/2018/07/05/java-singleton/" rel="next" title="单例模式">
+                <i class="fa fa-chevron-left"></i> 单例模式
               </a>
             
           </div>
