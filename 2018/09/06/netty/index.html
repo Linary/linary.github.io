@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Netty，NIO," />
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="但行好事，莫问前程">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/categories/分布式服务/index.html">
+<meta name="description" content="Thread -&amp;gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。 while(true) -&amp;gt; run() Socket -&amp;gt; Channel IOBytes -&amp;gt; ByteBuf // 就是一个供读写的数据链Logic Chain -&amp;gt; Pipeline Logic -&amp;gt; ChannelHandler  Q">
+<meta name="keywords" content="Netty，NIO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty源码剖析">
+<meta property="og:url" content="http://yoursite.com/2018/09/06/netty/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="但行好事，莫问前程">
+<meta property="og:description" content="Thread -&amp;gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。 while(true) -&amp;gt; run() Socket -&amp;gt; Channel IOBytes -&amp;gt; ByteBuf // 就是一个供读写的数据链Logic Chain -&amp;gt; Pipeline Logic -&amp;gt; ChannelHandler  Q">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-09-09T15:07:09.150Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description" content="但行好事，莫问前程">
+<meta name="twitter:title" content="Netty源码剖析">
+<meta name="twitter:description" content="Thread -&amp;gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。 while(true) -&amp;gt; run() Socket -&amp;gt; Channel IOBytes -&amp;gt; ByteBuf // 就是一个供读写的数据链Logic Chain -&amp;gt; Pipeline Logic -&amp;gt; ChannelHandler  Q">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/分布式服务/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/06/netty/"/>
 
 
 
 
 
-  <title>分类: 分布式服务 | Hexo</title>
+  <title>Netty源码剖析 | Hexo</title>
   
 
 
@@ -153,7 +155,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -291,111 +293,209 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block category">
-
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>分布式服务<small>分类</small>
-        </h1>
-      </div>
-
-      
-        
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/netty/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linary">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/07/10/epoch-rpc-2/" itemprop="url">
-              
-                <span itemprop="name">自己动手实现RPC框架（二）之项目结构</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Netty源码剖析</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-10T00:00:00+08:00"
-              content="2018-07-10" >
-          07-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-06T00:00:00+08:00">
+                2018-09-06
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/网络通信/" itemprop="url" rel="index">
+                    <span itemprop="name">网络通信</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/10/epoch-rpc-1/" itemprop="url">
-              
-                <span itemprop="name">自己动手实现RPC框架（一）</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-10T00:00:00+08:00"
-              content="2018-07-10" >
-          07-10
-        </time>
-      </div>
-
-    </header>
-  </article>
-
+      
 
       
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/05/epoch-rpc-0/" itemprop="url">
-              
-                <span itemprop="name">自己动手实现RPC框架</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-05T00:00:00+08:00"
-              content="2018-07-05" >
-          07-05
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
+        <p>Thread -&gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。</p>
+<p>while(true) -&gt; run()</p>
+<p>Socket -&gt; Channel</p>
+<p>IOBytes -&gt; ByteBuf</p>
+<p>// 就是一个供读写的数据链<br>Logic Chain -&gt; Pipeline</p>
+<p>Logic -&gt; ChannelHandler</p>
+<hr>
+<p>Question:</p>
+<p>1、socket在哪里创建</p>
+<h3 id="Netty服务端启动"><a href="#Netty服务端启动" class="headerlink" title="Netty服务端启动"></a>Netty服务端启动</h3><p>1、创建服务端Channel</p>
+<p>bind -&gt; initAndRegister -&gt; newChannel</p>
+<p>channelFactory.newChannel()通过反射创建Channel</p>
+<pre><code>1、newSocket通过JDK创建底层channel
+2、NioServerScoektSocketChannelCOnfig（TCP参数配置）
+3、AbstractNioChannel.configureBlocking(false)
+</code></pre><p>channelFactory 的clazz是在bootStrap的.channel(Class)传入的</p>
+<p>2、初始化服务端Channel</p>
+<p>init</p>
+<pre><code>1、init()
+2、setchannelOptions, ChannelAttrs
+3、setChildOptions、ChildAttrs
+4、config Handler
+5、add ServerBootstrapAcceptor(一个特殊的Handler)
+</code></pre><p>3、注册Selector</p>
+<pre><code>1、AbstractChannel.register(channel)
+</code></pre><p>channelAdded<br>channelRegistered    </p>
+<p>4、端口绑定</p>
+<pre><code>1、AbstractUnsafe.bind()
+</code></pre><p>服务端启动核心路径总结</p>
+<p>newChannel() -&gt; init() -&gt; register() -&gt; doBind()    </p>
+<h3 id="NioEventLoop"><a href="#NioEventLoop" class="headerlink" title="NioEventLoop"></a>NioEventLoop</h3><p>三个问题：</p>
+<ul>
+<li>默认Netty服务端起多少个线程？何时启动</li>
+<li>Netty是如何解决jdk空轮询bug的</li>
+<li>Netty如何保</li>
+</ul>
+<h4 id="NioEventLoop的创建"><a href="#NioEventLoop的创建" class="headerlink" title="NioEventLoop的创建"></a>NioEventLoop的创建</h4><p>new NioEventLoopGroup()</p>
+<h4 id="NioEventLoop的启动"><a href="#NioEventLoop的启动" class="headerlink" title="NioEventLoop的启动"></a>NioEventLoop的启动</h4><h4 id="NioEventLoop的执行逻辑"><a href="#NioEventLoop的执行逻辑" class="headerlink" title="NioEventLoop的执行逻辑"></a>NioEventLoop的执行逻辑</h4>
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Netty，NIO/" rel="tag"><i class="fa fa-tag"></i> Netty，NIO</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/30/concurrent/" rel="next" title="并发与高并发">
+                <i class="fa fa-chevron-left"></i> 并发与高并发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/07/hugegraph/0.准备执行Gremlin的图形化环境/" rel="prev" title="图数据库">
+                图数据库 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -403,6 +503,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -423,8 +527,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -488,6 +601,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Netty服务端启动"><span class="nav-number">1.</span> <span class="nav-text">Netty服务端启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NioEventLoop"><span class="nav-number">2.</span> <span class="nav-text">NioEventLoop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NioEventLoop的创建"><span class="nav-number">2.1.</span> <span class="nav-text">NioEventLoop的创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NioEventLoop的启动"><span class="nav-number">2.2.</span> <span class="nav-text">NioEventLoop的启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NioEventLoop的执行逻辑"><span class="nav-number">2.3.</span> <span class="nav-text">NioEventLoop的执行逻辑</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -623,6 +752,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
