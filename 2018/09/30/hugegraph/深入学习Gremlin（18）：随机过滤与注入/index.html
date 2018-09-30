@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Netty，NIO," />
+  <meta name="keywords" content="gremlin," />
 
 
 
@@ -79,18 +79,35 @@
 
 
 
-<meta name="description" content="Thread -&amp;gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。 while(true) -&amp;gt; run() Socket -&amp;gt; Channel IOBytes -&amp;gt; ByteBuf // 就是一个供读写的数据链Logic Chain -&amp;gt; Pipeline Logic -&amp;gt; ChannelHandler  Q">
-<meta name="keywords" content="Netty，NIO">
+<meta name="description" content="第18期 Gremlin Steps： sample()、coin()、constant()、inject() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。  上一期：深入学习Gremlin（17）：待添加 随机过滤说明Gremlin支持对遍历器（traversal）上的结果">
+<meta name="keywords" content="gremlin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Netty源码剖析">
-<meta property="og:url" content="http://yoursite.com/2018/09/06/netty/index.html">
+<meta property="og:title" content="深入学习Gremlin（18）：随机过滤与注入">
+<meta property="og:url" content="http://yoursite.com/2018/09/30/hugegraph/深入学习Gremlin（18）：随机过滤与注入/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="Thread -&amp;gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。 while(true) -&amp;gt; run() Socket -&amp;gt; Channel IOBytes -&amp;gt; ByteBuf // 就是一个供读写的数据链Logic Chain -&amp;gt; Pipeline Logic -&amp;gt; ChannelHandler  Q">
+<meta property="og:description" content="第18期 Gremlin Steps： sample()、coin()、constant()、inject() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。  上一期：深入学习Gremlin（17）：待添加 随机过滤说明Gremlin支持对遍历器（traversal）上的结果">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-09T15:07:09.150Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-44061dcb39dd18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-5f9bd2cefa01bd14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-4332ce1c0c853669.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-31b571e738c2582c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-ae1b98c420d3e0ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-d1c8ff184a430719.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-ad3b9de1840fb326.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-5cfd960e51d0caba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-fbe9e4c00b872d15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-a21b9a931438bf2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-693e6c574de41b5e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-d787a6ef0dd39e30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-eda5c8c17ba1fe57.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-32507e01ebdd8334.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-70fc704b735647c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-b9e742e8e4d6d2b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-09-30T02:21:01.986Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Netty源码剖析">
-<meta name="twitter:description" content="Thread -&amp;gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。 while(true) -&amp;gt; run() Socket -&amp;gt; Channel IOBytes -&amp;gt; ByteBuf // 就是一个供读写的数据链Logic Chain -&amp;gt; Pipeline Logic -&amp;gt; ChannelHandler  Q">
+<meta name="twitter:title" content="深入学习Gremlin（18）：随机过滤与注入">
+<meta name="twitter:description" content="第18期 Gremlin Steps： sample()、coin()、constant()、inject() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。  上一期：深入学习Gremlin（17）：待添加 随机过滤说明Gremlin支持对遍历器（traversal）上的结果">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/2968959-44061dcb39dd18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/06/netty/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/09/30/hugegraph/深入学习Gremlin（18）：随机过滤与注入/"/>
 
 
 
 
 
-  <title>Netty源码剖析 | Hexo</title>
+  <title>深入学习Gremlin（18）：随机过滤与注入 | Hexo</title>
   
 
 
@@ -307,7 +324,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/netty/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/30/hugegraph/深入学习Gremlin（18）：随机过滤与注入/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +341,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Netty源码剖析</h1>
+          <h1 class="post-title" itemprop="name headline">深入学习Gremlin（18）：随机过滤与注入</h1>
         
 
         <div class="post-meta">
@@ -336,8 +353,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-06T00:00:00+08:00">
-                2018-09-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-30T00:00:00+08:00">
+                2018-09-30
               </time>
             
 
@@ -359,8 +376,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络通信/" itemprop="url" rel="index">
-                    <span itemprop="name">网络通信</span>
+                  <a href="/categories/hugegraph/" itemprop="url" rel="index">
+                    <span itemprop="name">hugegraph</span>
                   </a>
                 </span>
 
@@ -396,44 +413,102 @@
       
 
       
-        <p>Thread -&gt; NioEventLoop, Netty的发送机，主要包含两种线程，一种处理连接，一种发送接收数据。</p>
-<p>while(true) -&gt; run()</p>
-<p>Socket -&gt; Channel</p>
-<p>IOBytes -&gt; ByteBuf</p>
-<p>// 就是一个供读写的数据链<br>Logic Chain -&gt; Pipeline</p>
-<p>Logic -&gt; ChannelHandler</p>
-<hr>
-<p>Question:</p>
-<p>1、socket在哪里创建</p>
-<h3 id="Netty服务端启动"><a href="#Netty服务端启动" class="headerlink" title="Netty服务端启动"></a>Netty服务端启动</h3><p>1、创建服务端Channel</p>
-<p>bind -&gt; initAndRegister -&gt; newChannel</p>
-<p>channelFactory.newChannel()通过反射创建Channel</p>
-<pre><code>1、newSocket通过JDK创建底层channel
-2、NioServerScoektSocketChannelCOnfig（TCP参数配置）
-3、AbstractNioChannel.configureBlocking(false)
-</code></pre><p>channelFactory 的clazz是在bootStrap的.channel(Class)传入的</p>
-<p>2、初始化服务端Channel</p>
-<p>init</p>
-<pre><code>1、init()
-2、setchannelOptions, ChannelAttrs
-3、setChildOptions、ChildAttrs
-4、config Handler
-5、add ServerBootstrapAcceptor(一个特殊的Handler)
-</code></pre><p>3、注册Selector</p>
-<pre><code>1、AbstractChannel.register(channel)
-</code></pre><p>channelAdded<br>channelRegistered    </p>
-<p>4、端口绑定</p>
-<pre><code>1、AbstractUnsafe.bind()
-</code></pre><p>服务端启动核心路径总结</p>
-<p>newChannel() -&gt; init() -&gt; register() -&gt; doBind()    </p>
-<h3 id="NioEventLoop"><a href="#NioEventLoop" class="headerlink" title="NioEventLoop"></a>NioEventLoop</h3><p>三个问题：</p>
+        <p>第18期 Gremlin Steps：</p>
+<p><code>sample()</code>、<code>coin()</code>、<code>constant()</code>、<code>inject()</code></p>
+<p>本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考<a href="https://blog.csdn.net/u010260089/article/details/82594336" target="_blank" rel="noopener">准备Gremlin执行环境</a>，本文示例均以其中的“TinkerPop关系图”为初始数据。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-44061dcb39dd18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tinkerpop关系图"></p>
+<p>上一期：<a href="">深入学习Gremlin（17）：待添加</a></p>
+<h4 id="随机过滤说明"><a href="#随机过滤说明" class="headerlink" title="随机过滤说明"></a>随机过滤说明</h4><p>Gremlin支持对遍历器（traversal）上的结果进行采样或者做随机过滤。</p>
 <ul>
-<li>默认Netty服务端起多少个线程？何时启动</li>
-<li>Netty是如何解决jdk空轮询bug的</li>
-<li>Netty如何保</li>
+<li><code>sample</code>: 接受一个整数值，从前一步的遍历器中采样（随机）出最多指定数目的结果；</li>
+<li><code>coin</code>: 字面意思是抛硬币过滤，接受一个浮点值，该浮点值表示硬币出现正面的概率。<code>coin</code> Step 对前一步的遍历器中的每个元素都抛一次硬币，出现正面则可以通过，反面则被拦截。</li>
 </ul>
-<h4 id="NioEventLoop的创建"><a href="#NioEventLoop的创建" class="headerlink" title="NioEventLoop的创建"></a>NioEventLoop的创建</h4><p>new NioEventLoopGroup()</p>
-<h4 id="NioEventLoop的启动"><a href="#NioEventLoop的启动" class="headerlink" title="NioEventLoop的启动"></a>NioEventLoop的启动</h4><h4 id="NioEventLoop的执行逻辑"><a href="#NioEventLoop的执行逻辑" class="headerlink" title="NioEventLoop的执行逻辑"></a>NioEventLoop的执行逻辑</h4>
+<blockquote>
+<p><code>sample</code>Step后能接上<code>by</code>Step，能以指定的属性为判断依据进行随机过滤。</p>
+</blockquote>
+<h4 id="注入说明"><a href="#注入说明" class="headerlink" title="注入说明"></a>注入说明</h4><p>Gremlin允许在遍历器中注入一些默认值或自定义值，比如在分支 Step 中给 <code>else</code> 路径的元素一个默认值，又或者在遍历器过程中人为地加上一些额外的元素。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-5f9bd2cefa01bd14.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Inject Step"></p>
+<ul>
+<li><code>constant</code>: 通常用在<code>choose</code>或<code>coalesce</code>Step中做辅助输出，为那些不满足条件的元素提供一个默认值；</li>
+<li><code>inject</code>: 能够在流（遍历器）的任何位置注入与当前遍历器同输出类型的对象，当然，也可以作为流的起始 Step 产生数据；</li>
+</ul>
+<blockquote>
+<p><code>inject</code>只是在查询过程中添加一些额外的元素，并没有把数据真正地插入到图中</p>
+</blockquote>
+<h4 id="实例讲解"><a href="#实例讲解" class="headerlink" title="实例讲解"></a>实例讲解</h4><p>下面通过实例来深入理解每一个操作。</p>
+<ol>
+<li><p>Step <code>sample()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从所有顶点的出边中随机选择2条</span></span><br><span class="line">g.V().outE().sample(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-4332ce1c0c853669.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>由于<code>sample</code>是随机采样，所以运行结果每次都可能不一样。另外，<code>sample(n)</code>表示最多采样<code>n</code>个，如果上一步不够<code>n</code>个元素自然结果是会小于<code>n</code>的。</p>
+</blockquote>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从所以顶点的“name”属性中随机选取3个</span></span><br><span class="line">g.V().values(<span class="string">'name'</span>).sample(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-31b571e738c2582c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例3：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从所有的“person”中根据“age”随机选择3个</span></span><br><span class="line">g.V().hasLabel(<span class="string">'person'</span>).sample(<span class="number">3</span>).by(<span class="string">'age'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-ae1b98c420d3e0ce.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例4：与<code>local</code>联合使用做随机漫游（从某个顶点出发，随机选一条边，走到边上的邻接点；再以该点为起点，继续随机选择边，走到邻接点…）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  从顶点“HugeGraph”出发做3次随机漫游</span></span><br><span class="line">g.V(<span class="string">'3:HugeGraph'</span>)</span><br><span class="line"> .repeat(local(bothE().sample(<span class="number">1</span>).otherV()))</span><br><span class="line"> .times(<span class="number">3</span>)</span><br><span class="line"> .path()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-d1c8ff184a430719.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+</ol>
+<blockquote>
+<p>第1次：从“HugeGraph”沿着“Szhoney&gt;2&gt;&gt;S3:HugeGraph”走到“zhoney”<br>   第2次：从“zhoney”沿着“Sjaveme&gt;1&gt;&gt;Szhoney”走到“javeme”<br>   第3次：从“javeme”沿着“Sjaveme&gt;1&gt;&gt;Slinary”走到“linary”</p>
+</blockquote>
+<ol start="2">
+<li><p>Step <code>coin()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 每个顶点按0.5的概率过滤</span></span><br><span class="line">g.V().coin(<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-ad3b9de1840fb326.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>这一次输出了5个顶点，而总共是有12个顶点的，为什么不是输出6个呢？学过概率论的应该都知道，不解释。我又多执行了两次，输出顶点数分别是5和7。</p>
+</blockquote>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 每个顶点按0.0的概率过滤</span></span><br><span class="line">g.V().coin(<span class="number">0.0</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-5cfd960e51d0caba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例3：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 每个顶点按1.0的概率过滤</span></span><br><span class="line">g.V().coin(<span class="number">1.0</span>).count()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-fbe9e4c00b872d15.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>避免输出太长，加上<code>count</code>。</p>
+</blockquote>
+</li>
+<li><p>Step <code>constant()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 输出所有“person”类顶点的“name”属性，否则输出“inhuman”（非人类）</span></span><br><span class="line">g.V().choose(hasLabel(<span class="string">'person'</span>),</span><br><span class="line">             values(<span class="string">'name'</span>),</span><br><span class="line">             constant(<span class="string">'inhuman'</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-a21b9a931438bf2a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 与示例1功能相同，使用“coalesce”Step 实现</span></span><br><span class="line">g.V().coalesce(hasLabel(<span class="string">'person'</span>).values(<span class="string">'name'</span>),</span><br><span class="line">               constant(<span class="string">'inhuman'</span>))</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-693e6c574de41b5e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>Step <code>inject()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 给顶点“HugeGraph”的作者添加一个叫“Tom”的人</span></span><br><span class="line">g.V(<span class="string">'3:HugeGraph'</span>).in(<span class="string">'created'</span>).values(<span class="string">'name'</span>).inject(<span class="string">'Tom'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-d787a6ef0dd39e30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在示例1的基础上计算每个元素的长度（“name”属性值的长度）</span></span><br><span class="line">g.V(<span class="string">'3:HugeGraph'</span>).in(<span class="string">'created'</span>).values(<span class="string">'name'</span>).inject(<span class="string">'Tom'</span>)</span><br><span class="line"> .map &#123;it.get().length()&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-eda5c8c17ba1fe57.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>可以看到，注入的元素“Tom”与原生的元素一样参与了计算</p>
+</blockquote>
+<p>示例3：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在示例2的基础上计算走过的路径</span></span><br><span class="line">g.V(<span class="string">'3:HugeGraph'</span>).in(<span class="string">'created'</span>).values(<span class="string">'name'</span>).inject(<span class="string">'Tom'</span>)</span><br><span class="line"> .map &#123;it.get().length()&#125;.path()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-32507e01ebdd8334.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>这里又能看出注入元素“Tom”与原生的元素的区别，由于“Tom”是在获取“name”属性这一步时才注入的，所以之前的从顶点“HugeGraph”出发，获取其“created”的入顶点这两步“Tom”是没有的。</p>
+</blockquote>
+<p>示例4：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用inject创建出两个元素（顶点的id），并使用该元素作为id获取顶点及其属性“name”</span></span><br><span class="line">inject(<span class="string">'javeme'</span>, <span class="string">'linary'</span>, <span class="string">'zhoney'</span>).map &#123;g.V(it.get()).next()&#125;.values(<span class="string">'name'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-70fc704b735647c6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用inject创建出一个“person”（顶点label），并使用该元素作为label获取顶点及其属性“name”</span></span><br><span class="line">inject(<span class="string">'person'</span>).flatMap &#123;g.V().hasLabel(it.get())&#125;.values(<span class="string">'name'</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-b9e742e8e4d6d2b6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+</ol>
+<p>下一期：<a href="">深入学习Gremlin（19）：待添加</a></p>
+
       
     </div>
     
@@ -450,7 +525,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Netty，NIO/" rel="tag"><i class="fa fa-tag"></i> Netty，NIO</a>
+            <a href="/tags/gremlin/" rel="tag"><i class="fa fa-tag"></i> gremlin</a>
           
         </div>
       
@@ -463,8 +538,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/30/concurrent/" rel="next" title="并发与高并发">
-                <i class="fa fa-chevron-left"></i> 并发与高并发
+              <a href="/2018/09/28/study-netty/Buffer解析/" rel="next" title="JAVA NIO 之 Buffer">
+                <i class="fa fa-chevron-left"></i> JAVA NIO 之 Buffer
               </a>
             
           </div>
@@ -472,10 +547,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/07/hugegraph/准备执行Gremlin的图形化环境/" rel="prev" title="准备执行Gremlin的图形化环境">
-                准备执行Gremlin的图形化环境 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -611,7 +682,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Netty服务端启动"><span class="nav-number">1.</span> <span class="nav-text">Netty服务端启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NioEventLoop"><span class="nav-number">2.</span> <span class="nav-text">NioEventLoop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NioEventLoop的创建"><span class="nav-number">2.1.</span> <span class="nav-text">NioEventLoop的创建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NioEventLoop的启动"><span class="nav-number">2.2.</span> <span class="nav-text">NioEventLoop的启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NioEventLoop的执行逻辑"><span class="nav-number">2.3.</span> <span class="nav-text">NioEventLoop的执行逻辑</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#随机过滤说明"><span class="nav-number">1.</span> <span class="nav-text">随机过滤说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注入说明"><span class="nav-number">2.</span> <span class="nav-text">注入说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例讲解"><span class="nav-number">3.</span> <span class="nav-text">实例讲解</span></a></li></ol></div>
             
 
           </div>
