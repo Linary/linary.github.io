@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="rpc," />
+  <meta name="keywords" content="gremlin," />
 
 
 
@@ -79,18 +79,34 @@
 
 
 
-<meta name="description" content="前言  暂时还没法确定到底是什么样的包结构，等写完的时候再来填充这里。">
-<meta name="keywords" content="rpc">
+<meta name="description" content="第22期 Gremlin Steps： hasNext()、next()、tryNext()、toList()、toSet()、toBulkSet()、fill()、iterate() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。  上一期：深入学习Gremlin（21）：待">
+<meta name="keywords" content="gremlin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="自己动手实现RPC框架（二）之项目结构">
-<meta property="og:url" content="http://yoursite.com/2018/07/10/epoch-rpc/epoch-rpc-2/index.html">
+<meta property="og:title" content="深入学习Gremlin（12）：遍历终止操作">
+<meta property="og:url" content="http://yoursite.com/2018/10/08/hugegraph/深入学习Gremlin（22）：遍历终止操作/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="前言  暂时还没法确定到底是什么样的包结构，等写完的时候再来填充这里。">
+<meta property="og:description" content="第22期 Gremlin Steps： hasNext()、next()、tryNext()、toList()、toSet()、toBulkSet()、fill()、iterate() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。  上一期：深入学习Gremlin（21）：待">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-10T01:58:22.561Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-44061dcb39dd18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-fa8913d7980f659c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-5499b5eaaefd784b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-a629e7cab08754af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-b551615fbf0c2f22.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-6d23d9929159e64b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-17307ccdba07191a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-ccf49913b7aa3fdb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-2d87860f20b8a4f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-8993bd2e17208324.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-43853c28660e6c4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-659386ccc30ecfdd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-48f55d5065d420cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-68cc8b65d9e6bd37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/2968959-25399ed94b64a366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-10-08T09:06:01.040Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="自己动手实现RPC框架（二）之项目结构">
-<meta name="twitter:description" content="前言  暂时还没法确定到底是什么样的包结构，等写完的时候再来填充这里。">
+<meta name="twitter:title" content="深入学习Gremlin（12）：遍历终止操作">
+<meta name="twitter:description" content="第22期 Gremlin Steps： hasNext()、next()、tryNext()、toList()、toSet()、toBulkSet()、fill()、iterate() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。  上一期：深入学习Gremlin（21）：待">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/2968959-44061dcb39dd18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -120,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/10/epoch-rpc/epoch-rpc-2/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/08/hugegraph/深入学习Gremlin（22）：遍历终止操作/"/>
 
 
 
 
 
-  <title>自己动手实现RPC框架（二）之项目结构 | Hexo</title>
+  <title>深入学习Gremlin（12）：遍历终止操作 | Hexo</title>
   
 
 
@@ -307,7 +323,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/10/epoch-rpc/epoch-rpc-2/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/hugegraph/深入学习Gremlin（22）：遍历终止操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +340,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">自己动手实现RPC框架（二）之项目结构</h1>
+          <h1 class="post-title" itemprop="name headline">深入学习Gremlin（12）：遍历终止操作</h1>
         
 
         <div class="post-meta">
@@ -336,8 +352,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-10T00:00:00+08:00">
-                2018-07-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T00:00:00+08:00">
+                2018-10-08
               </time>
             
 
@@ -359,8 +375,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式服务/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式服务</span>
+                  <a href="/categories/hugegraph/" itemprop="url" rel="index">
+                    <span itemprop="name">hugegraph</span>
                   </a>
                 </span>
 
@@ -396,9 +412,111 @@
       
 
       
-        <p>前言</p>
-<hr>
-<p>暂时还没法确定到底是什么样的包结构，等写完的时候再来填充这里。</p>
+        <p>第22期 Gremlin Steps：</p>
+<p><code>hasNext()</code>、<code>next()</code>、<code>tryNext()</code>、<code>toList()</code>、<code>toSet()</code>、<code>toBulkSet()</code>、<code>fill()</code>、<code>iterate()</code></p>
+<p>本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考<a href="https://blog.csdn.net/u010260089/article/details/82594336" target="_blank" rel="noopener">准备Gremlin执行环境</a>，本文示例均以其中的“TinkerPop关系图”为初始数据。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-44061dcb39dd18cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="tinkerpop关系图"></p>
+<p>上一期：<a href="">深入学习Gremlin（21）：待添加</a></p>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>Gremlin 中有一类特殊的操作，它能够终止遍历器的“遍历”行为，使其执行并返回结果。在这里要强调的一点：原生的 Gremlin 语句通常都是用遍历器连接起来的，但其实这些连接的过程并不会执行 Gremlin 语句，只有走到了<code>terminal</code>Step 时才会执行。这个模式类似于 Spark 中对<code>RDD</code>的<code>map</code>和<code>action</code>操作。</p>
+<ul>
+<li><code>hasNext</code>: 判断遍历器是否含有元素（结果），返回布尔值；</li>
+<li><code>next</code>: 不传参数时获取遍历器的下一个元素，也可以传入一个整数 n，则获取后面 n 个元素；</li>
+<li><code>tryNext</code>: <code>hasNext</code>和<code>next</code>的结合版，返回一个<code>Optional</code>对象，如果有结果还需要调用<code>get()</code>方法才能拿到；</li>
+<li><code>toList</code>: 将所有的元素放到一个<code>List</code>中返回；</li>
+<li><code>toSet</code>: 将所有的元素放到一个<code>Set</code>中返回，会去除重复元素；</li>
+<li><code>toBulkSet</code>: 将所有的元素放到一个能排序的<code>List</code>中返回，重复元素也会保留；</li>
+<li><code>fill</code>: 传入一个集合对象，将所有的元素放入该集合并返回，其实<code>toList</code>、<code>toSet</code>和<code>toBulkSet</code>就是通过<code>fill</code>Step实现的；</li>
+<li><code>iterate</code>:  这个 Step 在终止操作里面有点特殊，它并不完全符合终止操作的定义。它会在内部迭代完整个遍历器但是不返回结果。</li>
+</ul>
+<p>那肯定有细心的同学要问了，前面我们介绍了那么多的 Step 很多都没有加<code>terminal</code>Step 啊，为什么也能返回结果呢？其实这是 Tinkerpop 的 Gremlin 解析引擎对遍历器对象调用了一个<code>IteratorUtils.asList()</code>方法，又调用了它内部的<code>fill()</code>方法（注意：不是上面讲到的<code>fill()</code>Step）。</p>
+<h4 id="实例讲解"><a href="#实例讲解" class="headerlink" title="实例讲解"></a>实例讲解</h4><p>下面通过实例来深入理解每一个操作。</p>
+<ol>
+<li><p>Step <code>hasNext()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断顶点“linary”是否包含“created”出顶点</span></span><br><span class="line">g.V(<span class="string">'linary'</span>).out(<span class="string">'created'</span>).hasNext()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-fa8913d7980f659c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断顶点“linary”是否包含“knows”出顶点</span></span><br><span class="line">g.V(<span class="string">'linary'</span>).out(<span class="string">'knows'</span>).hasNext()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-5499b5eaaefd784b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>Step <code>next()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取顶点“javeme”的“knows”出顶点集合的下一个（第1个）</span></span><br><span class="line">g.V(<span class="string">'javeme'</span>).out(<span class="string">'knows'</span>).next()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-a629e7cab08754af.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p><code>g.V(&#39;javeme&#39;).out(&#39;knows&#39;)</code>返回的是一个遍历器（迭代器），每次执行这句话实际上都是获取的迭代器的第一个元素，那如果想获取第二个元素该怎么写呢？很简单，执行两次<code>next()</code>即可，但是这里的前提条件是遍历器中确实存在多个元素。</p>
+</blockquote>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取顶点“javeme”的“knows”出顶点集合的下一个（第2个）</span></span><br><span class="line">it = g.V(<span class="string">'javeme'</span>).out(<span class="string">'knows'</span>)</span><br><span class="line">it.next()</span><br><span class="line">it.next()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-b551615fbf0c2f22.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例3：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取顶点“javeme”的“knows”出顶点集合的前两个</span></span><br><span class="line">g.V(<span class="string">'javeme'</span>).out(<span class="string">'knows'</span>).next(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-6d23d9929159e64b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p><code>next()</code>与<code>next(n)</code>使用中有一点小小的区别，就是当没有元素或者没有足够多的元素时，执行<code>next()</code>会报错，但是执行<code>next(n)</code>则是返回一个空集合（List）。</p>
+</blockquote>
+</li>
+<li><p>Step <code>tryNext()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 试图获取顶点“javeme”的“created”出顶点集合中的下一个</span></span><br><span class="line">g.V(<span class="string">'javeme'</span>).out(<span class="string">'created'</span>).tryNext()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-17307ccdba07191a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>这里细心的读者会发现结果与前面概述中说的有些不同。概述中说的是返回一个<code>Optional</code>对象，要获取<code>Optional</code>对象里的值是需要调用它的<code>get()</code>方法的，怎么这里直接就把值给返回了呢？大家先别着急，我们再看一个例子。</p>
+</blockquote>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 试图获取顶点“javeme”的“created”入顶点集合中的下一个</span></span><br><span class="line">g.V(<span class="string">'javeme'</span>).in(<span class="string">'created'</span>).tryNext()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-ccf49913b7aa3fdb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>这里更加令人费解，没有“created”入顶点时竟然直接报错了，其实这是<code>HugeGraph</code>的实现中关于Optional的序列化所致。<code>HugeGraph</code>序列化<code>Optional</code>对象时会判断该对象内的值是否存在，如果存在则取出来序列化该值，否则填入一个<code>null</code>。详细代码见<a href="https://github.com/hugegraph/hugegraph/blob/master/hugegraph-core/src/main/java/com/baidu/hugegraph/io/HugeGraphSONModule.java" target="_blank" rel="noopener">HugeGraphSONModule.java</a>中关于<code>OptionalSerializer</code>的实现。</p>
+</blockquote>
+<p>本文的重点在于学习<code>Gremlin</code>语法本身，下面给出上述两个示例的预期结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Optional[v[<span class="number">3</span>:HugeGraph]]</span><br><span class="line">Optional.empty</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Step <code>toList()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取所有“person”顶点的“created”出顶点集合，放入List中，允许包含重复结果</span></span><br><span class="line">g.V().hasLabel(<span class="string">'person'</span>).out(<span class="string">'created'</span>).toList()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-2d87860f20b8a4f0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取所有“person”顶点的“created”入顶点集合，放入List中，允许包含重复结果</span></span><br><span class="line">g.V().hasLabel(<span class="string">'person'</span>).in(<span class="string">'created'</span>).toList()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-8993bd2e17208324.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>结果与<code>next(n)</code>有些类似。</p>
+</blockquote>
+</li>
+<li><p>Step <code>toSet()</code></p>
+<p> 示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取所有“person”顶点的“created”出顶点集合，放入Set中，不允许包含重复结果</span></span><br><span class="line">g.V().hasLabel(<span class="string">'person'</span>).out(<span class="string">'created'</span>).toSet()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-43853c28660e6c4a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>相比于<code>toList</code>，<code>toSet</code>去除了重复元素。</p>
+</blockquote>
+<p>示例2：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取所有“person”顶点的“created”入顶点集合，放入Set中，不允许包含重复结果</span></span><br><span class="line">g.V().hasLabel(<span class="string">'person'</span>).in(<span class="string">'created'</span>).toSet()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-659386ccc30ecfdd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>Step <code>toBulkSet()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取所有“person”顶点的“created”出顶点集合，放入BulkSet中，允许包含重复结果，排序</span></span><br><span class="line">g.V().hasLabel(<span class="string">'person'</span>).out(<span class="string">'created'</span>).toBulkSet()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-48f55d5065d420cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>所谓的<code>BulkSet</code>虽然名字上带有”Set”，但还是更像一个List，对比<code>toList</code>的结果，它实际上是把所有元素排了个序。</p>
+</blockquote>
+</li>
+<li><p>Step <code>fill()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建一个List，获取所有“person”顶点的“created”出顶点，并放入该List中</span></span><br><span class="line">results = []</span><br><span class="line">g.V().hasLabel(<span class="string">'person'</span>).out(<span class="string">'created'</span>).fill(results)</span><br><span class="line">results</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-68cc8b65d9e6bd37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>Step <code>iterate()</code></p>
+<p>示例1：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 迭代所有“person”顶点</span></span><br><span class="line">it = g.V().hasLabel(<span class="string">'person'</span>).iterate()</span><br><span class="line">it.hasNext()</span><br></pre></td></tr></table></figure>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-25399ed94b64a366.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<blockquote>
+<p>调用了<code>iterate()</code>后遍历器内部的元素就已经全部迭代过了，所以再调用<code>hasNext()</code>返回false。</p>
+</blockquote>
+</li>
+</ol>
+<p>下一期：<a href="">深入学习Gremlin（23）：待添加</a></p>
 
       
     </div>
@@ -416,7 +534,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/rpc/" rel="tag"><i class="fa fa-tag"></i> rpc</a>
+            <a href="/tags/gremlin/" rel="tag"><i class="fa fa-tag"></i> gremlin</a>
           
         </div>
       
@@ -429,8 +547,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/10/epoch-rpc/epoch-rpc-1/" rel="next" title="自己动手实现RPC框架（一）">
-                <i class="fa fa-chevron-left"></i> 自己动手实现RPC框架（一）
+              <a href="/2018/10/08/hugegraph/深入学习Gremlin（23）：转换操作/" rel="next" title="深入学习Gremlin（23）：转换操作">
+                <i class="fa fa-chevron-left"></i> 深入学习Gremlin（23）：转换操作
               </a>
             
           </div>
@@ -438,10 +556,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/23/epoch-taskmanager/" rel="prev" title="自己实现一个轻量级的任务（线程）管理器">
-                自己实现一个轻量级的任务（线程）管理器 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -493,8 +607,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -558,6 +681,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#说明"><span class="nav-number">1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#实例讲解"><span class="nav-number">2.</span> <span class="nav-text">实例讲解</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
