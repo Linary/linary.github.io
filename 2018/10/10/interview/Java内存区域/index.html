@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Git," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,19 @@
 
 
 
-<meta name="description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
-<meta name="keywords" content="Git">
+<meta name="description" content="前言常见面试题基本问题 介绍下 Java 内存区域（运行时数据区） Java 对象的创建过程（五步，建议能默写出来并且要知道每一步虚拟机做了什么） 对象的访问定位的两种方式（句柄和直接指针两种方式）  拓展问题 String 类和常量池 8 种基本类型的包装类和常量池  概述对于 Java 程序员来说，在虚拟机自动内存管理机制下，不需要像 C/C++ 程序开发程序员这样为每一个 new操作去写对应">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git常用操作记录">
-<meta property="og:url" content="http://yoursite.com/2018/07/05/git-operation/index.html">
+<meta property="og:title" content="Jvm内存区域">
+<meta property="og:url" content="http://yoursite.com/2018/10/10/interview/Java内存区域/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
+<meta property="og:description" content="前言常见面试题基本问题 介绍下 Java 内存区域（运行时数据区） Java 对象的创建过程（五步，建议能默写出来并且要知道每一步虚拟机做了什么） 对象的访问定位的两种方式（句柄和直接指针两种方式）  拓展问题 String 类和常量池 8 种基本类型的包装类和常量池  概述对于 Java 程序员来说，在虚拟机自动内存管理机制下，不需要像 C/C++ 程序开发程序员这样为每一个 new操作去写对应">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-08-10T02:05:23.915Z">
+<meta property="og:image" content="http://yoursite.com/2018/10/10/images/运行时常量池.jpeg">
+<meta property="og:updated_time" content="2018-10-10T08:22:33.664Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Git常用操作记录">
-<meta name="twitter:description" content="将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git push github :travis  这样就删除了travis分支   创建orph">
+<meta name="twitter:title" content="Jvm内存区域">
+<meta name="twitter:description" content="前言常见面试题基本问题 介绍下 Java 内存区域（运行时数据区） Java 对象的创建过程（五步，建议能默写出来并且要知道每一步虚拟机做了什么） 对象的访问定位的两种方式（句柄和直接指针两种方式）  拓展问题 String 类和常量池 8 种基本类型的包装类和常量池  概述对于 Java 程序员来说，在虚拟机自动内存管理机制下，不需要像 C/C++ 程序开发程序员这样为每一个 new操作去写对应">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/10/images/运行时常量池.jpeg">
 
 
 
@@ -120,13 +121,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/05/git-operation/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/10/interview/Java内存区域/"/>
 
 
 
 
 
-  <title>Git常用操作记录 | Hexo</title>
+  <title>Jvm内存区域 | Hexo</title>
   
 
 
@@ -307,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/05/git-operation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/10/interview/Java内存区域/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +325,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Git常用操作记录</h1>
+          <h1 class="post-title" itemprop="name headline">Jvm内存区域</h1>
         
 
         <div class="post-meta">
@@ -336,8 +337,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-05T00:00:00+08:00">
-                2018-07-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-10T00:00:00+08:00">
+                2018-10-10
               </time>
             
 
@@ -359,8 +360,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发工具/" itemprop="url" rel="index">
-                    <span itemprop="name">开发工具</span>
+                  <a href="/categories/JVM/" itemprop="url" rel="index">
+                    <span itemprop="name">JVM</span>
                   </a>
                 </span>
 
@@ -396,50 +397,77 @@
       
 
       
-        <ul>
-<li>将本地仓库和github仓库关联起来</li>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="常见面试题"><a href="#常见面试题" class="headerlink" title="常见面试题"></a>常见面试题</h3><h4 id="基本问题"><a href="#基本问题" class="headerlink" title="基本问题"></a>基本问题</h4><ul>
+<li>介绍下 Java 内存区域（运行时数据区）</li>
+<li>Java 对象的创建过程（五步，建议能默写出来并且要知道每一步虚拟机做了什么）</li>
+<li>对象的访问定位的两种方式（句柄和直接指针两种方式）</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git remote add github git@github.com:liningrui/study-rpc.git</span><br><span class="line">git pull</span><br></pre></td></tr></table></figure>
-<p>再查看所有分支就可以看到github远端分支的信息了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -av</span><br></pre></td></tr></table></figure>
+<h4 id="拓展问题"><a href="#拓展问题" class="headerlink" title="拓展问题"></a>拓展问题</h4><ul>
+<li>String 类和常量池</li>
+<li>8 种基本类型的包装类和常量池</li>
+</ul>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>对于 Java 程序员来说，在虚拟机自动内存管理机制下，不需要像 C/C++ 程序开发程序员这样为每一个 new<br>操作去写对应的 delete/free 操作，不容易出现内存泄漏和内存溢出问题。正是因为 Java 程序员把内存<br>控制权利交给了 Java 虚拟机，一旦出现内存泄漏和溢出方面的问题，如果不了解虚拟机是怎样使用内存的，<br>那么排查错误将会是一个非常艰巨的任务。</p>
+<h3 id="运行时的数据区域"><a href="#运行时的数据区域" class="headerlink" title="运行时的数据区域"></a>运行时的数据区域</h3><p>Java 虚拟机在执行 Java 程序的过程中会把它管理的内存划分成若干个不同的数据区域。</p>
+<p>这些组成部分一些事线程私有的，其他的则是线程共享的。</p>
+<p><strong>线程私有的：</strong></p>
 <ul>
-<li>删除github远端的分支</li>
+<li>程序计数器</li>
+<li>虚拟机栈</li>
+<li>本地方法栈</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push github :travis</span><br></pre></td></tr></table></figure>
+<p><strong>线程共享的：</strong></p>
+<ul>
+<li>堆</li>
+<li>方法区</li>
+<li>直接内存</li>
+</ul>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>程序计数器是一块较小的内存空间，可以看作是当前线程所执行的字节码的行号指示器。字节码解释器工作时<br>通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等功<br>能都需要依赖这个计数器来完成。</p>
+<p>为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各线程之间计数器互不<br>影响，独立存储，我们称这类内存区域为“线程私有”的内存。</p>
+<p>从上面的介绍中我们知道程序计数器主要有两个作用：</p>
+<ul>
+<li>字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。</li>
+<li>在多线程的情况下，程序计数器用于记录当前线程执行的位置，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。</li>
+</ul>
 <blockquote>
-<p>这样就删除了<code>travis</code>分支</p>
+<p>注意：程序计数器是唯一一个不会出现 OutOfMemoryError 的内存区域，它的生命周期随着线程的创建<br>而创建，随着线程的结束而死亡。</p>
 </blockquote>
+<h4 id="Java-虚拟机栈"><a href="#Java-虚拟机栈" class="headerlink" title="Java 虚拟机栈"></a>Java 虚拟机栈</h4><p>与程序计数器一样，Java 虚拟机栈也是线程私有的，它的生命周期和线程相同，描述的是 Java 方法执行的内存模型。</p>
+<p>Java 内存可以粗糙的区分为堆内存（Heap）和栈内存(Stack)，其中栈就是现在说的虚拟机栈，或者说是<br>虚拟机栈中局部变量表部分。实际上，Java 虚拟机栈是由一个个栈帧组成，而每个栈帧中都拥有：局部变量表、<br>操作数栈、动态链接、方法出口信息。</p>
+<p>局部变量表主要存放了编译器可知的各种数据类型（boolean、byte、char、short、int、float、long、double）、<br>对象引用（reference 类型，它不同于对象本身，可能是一个指向对象起始地址的引用指针，也可能是指向<br>一个代表对象的句柄或其他与此对象相关的位置）。</p>
+<p>Java 虚拟机栈会出现两种异常：StackOverFlowError 和 OutOfMemoryError。</p>
 <ul>
-<li>创建orphan分支，名为source</li>
+<li>StackOverFlowError： 如果 Java 虚拟机栈的内存大小不允许动态扩展，那么当线程请求栈的深度超过<br>当前 Java 虚拟机栈的最大深度的时候，就会抛出 StackOverFlowError 异常，比如在递归调用时。</li>
+<li>OutOfMemoryError： 如果 Java 虚拟机栈的内存大小允许动态扩展，且当线程请求栈时内存用完了，<br>无法再动态扩展了，此时抛出OutOfMemoryError异常。</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout --orphan source</span><br></pre></td></tr></table></figure>
+<p>Java 虚拟机栈也是线程私有的，每个线程都有各自的Java虚拟机栈，而且随着线程的创建而创建，随着线程的死亡而死亡。</p>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>和虚拟机栈所发挥的作用非常相似，区别是：虚拟机栈为虚拟机执行 Java 方法（也就是字节码）服务，<br>而本地方法栈则为虚拟机使用到的 Native 方法服务。在 HotSpot 虚拟机中和 Java 虚拟机栈合二为一。</p>
+<p>本地方法被执行的时候，在本地方法栈也会创建一个栈帧，用于存放该本地方法的局部变量表、操作数栈、动态链接、出口信息。</p>
+<p>方法执行完毕后相应的栈帧也会出栈并释放内存空间，也会出现 StackOverFlowError 和 OutOfMemoryError 两种异常。</p>
+<h4 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h4><p>Java 虚拟机所管理的内存中最大的一块，Java 堆是所有线程共享的一块内存区域，在虚拟机启动时创建。<br>此内存区域的唯一目的就是存放对象实例，几乎所有的对象实例以及数组都在这里分配内存。</p>
+<p>Java 堆是垃圾收集器管理的主要区域，因此也被称作GC堆（Garbage Collected Heap）。从垃圾回收的<br>角度，由于现在的收集器基本都采用分代垃圾收集算法，所以 Java 堆还可以细分为：新生代和老年代。<br>再细致一点有：Eden 空间、From Survivor、To Survivor 空间等。</p>
+<p>进一步划分的目的是更好地回收内存，或者更快地分配内存。</p>
 <blockquote>
-<p>注：如果不提交东西，这个分支实际上没有创建</p>
+<p>在 JDK 1.8 中移除整个永久代，取而代之的是一个叫元空间（Metaspace）的区域（永久代使用的是<br>JVM 的堆内存空间，而元空间使用的是物理内存，直接受到本机的物理内存限制）。</p>
 </blockquote>
+<p>推荐阅读：</p>
 <ul>
-<li>查看某个指定文件的提交历史记录</li>
+<li>《Java 8 内存模型—永久代(PermGen)和元空间(Metaspace)》：<a href="http://www.cnblogs.com/paddix/p/5309550.html" target="_blank" rel="noopener">http://www.cnblogs.com/paddix/p/5309550.html</a></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git log -p filePath</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>这样就先显示指定文件的每一次提交及修改信息（diff），但是不能显示文件改名前的修改，要注意第一次提交是不是改文件名</p>
-</blockquote>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><p>方法区与 Java 堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、<br>即时编译器编译后的代码等数据。虽然 Java 虚拟机规范把方法区描述为堆的一个逻辑部分，但是它却有一个<br>别名叫做 Non-Heap（非堆），目的应该是与 Java 堆区分开来的。</p>
+<p>HotSpot 虚拟机中方法区也常被称为“永久代”，本质上两者并不等价。仅仅是因为 HotSpot 虚拟机设计团队<br>用永久代来实现方法区而已，这样 HotSpot 虚拟机的垃圾收集器就可以像管理 Java 堆一样管理这部分内存了。<br>但是这并不是一个好主意，因为这样更容易遇到内存溢出问题。</p>
+<p>相对而言，垃圾收集行为在这个区域是比较少出现的，但并非数据进入方法区后就“永久存在”了。</p>
+<h4 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h4><p>运行时常量池是方法区的一部分。Class 文件中除了有类的版本、字段、方法、接口等描述信息外，<br>还有常量池信息（用于存放编译期生成的各种字面量和符号引用）。</p>
+<p>既然运行时常量池是方法区的一部分，自然受到方法区内存的限制，当常量池无法再申请到内存时会抛出<br>OutOfMemoryError 异常。</p>
+<p>JDK 1.7 及之后版本的 JVM 已经将运行时常量池从方法区中移了出来，在 Java 堆（Heap）中开辟了一块<br>区域存放运行时常量池。</p>
+<p><img src="../../images/运行时常量池.jpeg" alt=""></p>
+<p>推荐阅读：</p>
 <ul>
-<li>查看某一个分支创建的时间</li>
+<li>《Java 中几种常量池的区分》： <a href="https://blog.csdn.net/qq_26222859/article/details/73135660" target="_blank" rel="noopener">https://blog.csdn.net/qq_26222859/article/details/73135660</a></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git reflog show --date=iso branch</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>最下面的应该就是该分支的创建时间</p>
-</blockquote>
-<ul>
-<li>修改提交历史</li>
-</ul>
-<p>1、找到要修改的commit id及其前一个commit id</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git rebase -i --before-commit-id</span><br></pre></td></tr></table></figure>
-<p>弹出来的一堆以 pick 开头的 commit id 和 commit message 的行，将第一行（也允许修改多行）的 pick 修改为 edit，<br>然后保存退出vim，git 会在标记的 commit 停下来，然后我们可以做相应的修改，再执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git commit -a --amend</span><br><span class="line">git rebase --continue</span><br></pre></td></tr></table></figure>
-<p>这时 git 会打印 rebasing(progress/total)，中间很有可能会产生冲突，解决好冲突后执行 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add file</span><br><span class="line">git rebase --continue</span><br></pre></td></tr></table></figure>
-<p>一直往下走，遇到冲突就重复这一步，直到走完全部的提交，这样就实现了修改历史。</p>
+<h4 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h4><p>直接内存并不是虚拟机运行时数据区的一部分，也不是虚拟机规范中定义的内存区域，但是这部分内存也被频繁<br>地使用。而且也可能导致OutOfMemoryError异常出现。</p>
+<p>JDK 1.4 中新加入的 NIO(New Input/Output) 类，引入了一种基于通道（Channel）与缓存区（Buffer）<br>的 I/O 方式，它可以直接使用 Native 函数库直接分配堆外内存，然后通过一个存储在 Java 堆中的<br>DirectByteBuffer 对象作为这块内存的引用进行操作。这样就能在一些场景中显著提高性能，因为避免了<br>在 Java 堆和 Native 堆之间来回复制数据（Netty 中有大量使用）。</p>
+<p>本机直接内存的分配不会收到 Java 堆的限制，但是，既然是内存就会受到本机总内存大小以及处理器寻址空间的限制。</p>
+<h3 id="HotSpot-虚拟机对象探秘"><a href="#HotSpot-虚拟机对象探秘" class="headerlink" title="HotSpot 虚拟机对象探秘"></a>HotSpot 虚拟机对象探秘</h3><p>TODO：未完待续</p>
 
       
     </div>
@@ -455,12 +483,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i> Git</a>
-          
-        </div>
-      
 
       
       
@@ -470,8 +492,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/05/epoch-rpc/epoch-rpc-0/" rel="next" title="自己动手实现RPC框架">
-                <i class="fa fa-chevron-left"></i> 自己动手实现RPC框架
+              <a href="/2018/10/08/hugegraph/深入学习Gremlin（22）：遍历终止操作/" rel="next" title="深入学习Gremlin（22）：遍历终止操作">
+                <i class="fa fa-chevron-left"></i> 深入学习Gremlin（22）：遍历终止操作
               </a>
             
           </div>
@@ -479,10 +501,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/05/java-singleton/" rel="prev" title="单例模式">
-                单例模式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -534,8 +552,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -554,7 +581,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -599,6 +626,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见面试题"><span class="nav-number">1.1.</span> <span class="nav-text">常见面试题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本问题"><span class="nav-number">1.1.1.</span> <span class="nav-text">基本问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#拓展问题"><span class="nav-number">1.1.2.</span> <span class="nav-text">拓展问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#运行时的数据区域"><span class="nav-number">1.3.</span> <span class="nav-text">运行时的数据区域</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#程序计数器"><span class="nav-number">1.3.1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-虚拟机栈"><span class="nav-number">1.3.2.</span> <span class="nav-text">Java 虚拟机栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本地方法栈"><span class="nav-number">1.3.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#堆"><span class="nav-number">1.3.4.</span> <span class="nav-text">堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#方法区"><span class="nav-number">1.3.5.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.3.6.</span> <span class="nav-text">运行时常量池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#直接内存"><span class="nav-number">1.3.7.</span> <span class="nav-text">直接内存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HotSpot-虚拟机对象探秘"><span class="nav-number">1.4.</span> <span class="nav-text">HotSpot 虚拟机对象探秘</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
