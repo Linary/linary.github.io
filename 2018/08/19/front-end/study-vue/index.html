@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="React," />
+  <meta name="keywords" content="Vue.js," />
 
 
 
@@ -79,23 +79,20 @@
 
 
 
-<meta name="description" content="React 高级内容React 的数据视图更新原理 state 数据 JSX 模版 数据 + 模版 生成虚拟 DOM（虚拟 DOM 就是一个 JS 对象，用它来描述真实 DOM ）（损耗了性能） 用虚拟 DOM 的结构生成真实的 DOM 来显示 state 发生变化 数据 + 模版 生成新的虚拟 DOM（极大地提升了性能） 比较原始虚拟 DOM 和新的虚拟 DOM 的区别（极大地提升了性能） 直接">
-<meta name="keywords" content="React">
+<meta name="description" content="Vue 生命周期 动画 可以使用animate.css这个库添加很多炫酷的动画； 使用velocity.js库也可以添加动画（依靠js的钩子实现的动画）；  其他注意要点 子组件的data必须是一个函数 子组件不应该修改父组件传递进来的值">
+<meta name="keywords" content="Vue.js">
 <meta property="og:type" content="article">
-<meta property="og:title" content="React学习笔记">
-<meta property="og:url" content="http://yoursite.com/2018/12/28/react/index.html">
+<meta property="og:title" content="Vue入门">
+<meta property="og:url" content="http://yoursite.com/2018/08/19/front-end/study-vue/index.html">
 <meta property="og:site_name" content="Linary blog">
-<meta property="og:description" content="React 高级内容React 的数据视图更新原理 state 数据 JSX 模版 数据 + 模版 生成虚拟 DOM（虚拟 DOM 就是一个 JS 对象，用它来描述真实 DOM ）（损耗了性能） 用虚拟 DOM 的结构生成真实的 DOM 来显示 state 发生变化 数据 + 模版 生成新的虚拟 DOM（极大地提升了性能） 比较原始虚拟 DOM 和新的虚拟 DOM 的区别（极大地提升了性能） 直接">
+<meta property="og:description" content="Vue 生命周期 动画 可以使用animate.css这个库添加很多炫酷的动画； 使用velocity.js库也可以添加动画（依靠js的钩子实现的动画）；  其他注意要点 子组件的data必须是一个函数 子组件不应该修改父组件传递进来的值">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/12/28/images/虚拟DOM比对.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/12/28/images/redux.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/12/28/images/redux%20flow.jpg">
-<meta property="og:image" content="http://yoursite.com/2018/12/28/images/redux%20data%20flow.jpg">
-<meta property="og:updated_time" content="2019-01-08T04:49:02.932Z">
+<meta property="og:image" content="http://yoursite.com/2018/08/19/images/vue-lifecycle.png">
+<meta property="og:updated_time" content="2019-01-11T01:05:15.854Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="React学习笔记">
-<meta name="twitter:description" content="React 高级内容React 的数据视图更新原理 state 数据 JSX 模版 数据 + 模版 生成虚拟 DOM（虚拟 DOM 就是一个 JS 对象，用它来描述真实 DOM ）（损耗了性能） 用虚拟 DOM 的结构生成真实的 DOM 来显示 state 发生变化 数据 + 模版 生成新的虚拟 DOM（极大地提升了性能） 比较原始虚拟 DOM 和新的虚拟 DOM 的区别（极大地提升了性能） 直接">
-<meta name="twitter:image" content="http://yoursite.com/2018/12/28/images/虚拟DOM比对.jpg">
+<meta name="twitter:title" content="Vue入门">
+<meta name="twitter:description" content="Vue 生命周期 动画 可以使用animate.css这个库添加很多炫酷的动画； 使用velocity.js库也可以添加动画（依靠js的钩子实现的动画）；  其他注意要点 子组件的data必须是一个函数 子组件不应该修改父组件传递进来的值">
+<meta name="twitter:image" content="http://yoursite.com/2018/08/19/images/vue-lifecycle.png">
 
 
 
@@ -125,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/28/react/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/08/19/front-end/study-vue/"/>
 
 
 
 
 
-  <title>React学习笔记 | Linary blog</title>
+  <title>Vue入门 | Linary blog</title>
   
 
 
@@ -312,7 +309,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/28/react/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/19/front-end/study-vue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -329,7 +326,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">React学习笔记</h1>
+          <h1 class="post-title" itemprop="name headline">Vue入门</h1>
         
 
         <div class="post-meta">
@@ -341,8 +338,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-28T00:00:00+08:00">
-                2018-12-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-19T00:00:00+08:00">
+                2018-08-19
               </time>
             
 
@@ -364,8 +361,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端-JS-框架/" itemprop="url" rel="index">
-                    <span itemprop="name">前端 JS 框架</span>
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
                   </a>
                 </span>
 
@@ -401,148 +398,15 @@
       
 
       
-        <h2 id="React-高级内容"><a href="#React-高级内容" class="headerlink" title="React 高级内容"></a>React 高级内容</h2><h3 id="React-的数据视图更新原理"><a href="#React-的数据视图更新原理" class="headerlink" title="React 的数据视图更新原理"></a>React 的数据视图更新原理</h3><ol>
-<li>state 数据</li>
-<li>JSX 模版</li>
-<li>数据 + 模版 生成虚拟 DOM（虚拟 DOM 就是一个 JS 对象，用它来描述真实 DOM ）（损耗了性能）</li>
-<li>用虚拟 DOM 的结构生成真实的 DOM 来显示</li>
-<li>state 发生变化</li>
-<li>数据 + 模版 生成新的虚拟 DOM（极大地提升了性能）</li>
-<li>比较原始虚拟 DOM 和新的虚拟 DOM 的区别（极大地提升了性能）</li>
-<li>直接操作 DOM，改变上一步中被修改了的的内容</li>
-</ol>
-<p>优点：</p>
-<ol>
-<li>性能提升</li>
-<li>它使得跨端应用得以实现，React Native。</li>
-</ol>
-<h3 id="虚拟-DOM-中的-Diff-算法"><a href="#虚拟-DOM-中的-Diff-算法" class="headerlink" title="虚拟 DOM 中的 Diff 算法"></a>虚拟 DOM 中的 Diff 算法</h3><p>问：什么时候会需要比对？<br>答：数据发生变化的时候，其实就是调用 setState 方法的时候</p>
-<ol>
-<li>setState 方法是异步的，可以把多次 setState 统一到一起，减少 DOM 比对的次数</li>
-<li>虚拟 DOM 是同级比对的，如果比对有差异，下面级别的就不用比对了，直接把替换下面所有的级别</li>
-</ol>
-<p><img src="../images/虚拟DOM比对.jpg" alt="虚拟DOM比对"></p>
-<ol start="3">
-<li>虚拟 DOM 循环的时候，要给定一个唯一的 Key（最好是唯一标识 ID 之类的，不能重复的），不要使用索引作为 Key</li>
-</ol>
-<h3 id="Ref-的使用"><a href="#Ref-的使用" class="headerlink" title="Ref 的使用"></a>Ref 的使用</h3><ol>
-<li>ref 可以帮助我们获取 DOM 元素</li>
-<li>setState 是异步函数，它接收的第二个参数是 setState 完成后的回调函数 setState(() =&gt; ({}), () =&gt; {})</li>
-</ol>
-<h3 id="React-的生命周期函数"><a href="#React-的生命周期函数" class="headerlink" title="React 的生命周期函数"></a>React 的生命周期函数</h3><p>生命周期函数指在某一时刻组件会自动调用执行的函数，前面讲到的 render 函数就是一个生命周期函数。</p>
-<p><strong>Mounting</strong></p>
-<ul>
-<li>componentwillMount 函数在组件即将被挂载到页面的时刻执行，只有第一次挂载才会执行</li>
-<li>render 可以认为就是所谓的组件挂载函数</li>
-<li>componentDidMount 函数在组件挂载到页面之后，自动被执行，只有第一次挂载才会执行</li>
+        <h3 id="Vue-生命周期"><a href="#Vue-生命周期" class="headerlink" title="Vue 生命周期"></a>Vue 生命周期</h3><p><img src="../../images/vue-lifecycle.png" alt="Vue的生命周期"></p>
+<h3 id="动画"><a href="#动画" class="headerlink" title="动画"></a>动画</h3><ul>
+<li>可以使用animate.css这个库添加很多炫酷的动画；</li>
+<li>使用velocity.js库也可以添加动画（依靠js的钩子实现的动画）；</li>
 </ul>
-<p><strong>Updation</strong></p>
-<ul>
-<li>组件被更新之前，shouldComponentUpdate(nextProps, nextState) 函数就会被自动执行。shouldComponentUpdate(nextProps, nextState) 函数返回 true 或 false。<br>如果返回值为 false，组件和数据就不会更新，它之后的生命周期函数都不会被执行</li>
-<li>组件被更新之前，shouldComponentUpdate 函数之后，componentWillUpdate 函数会被自动执行</li>
-<li>组件更新完成之后，componentDidUpdate 函数会被自动执行</li>
-<li>一个组件从父组件接受参数，只要父组件的render函数被重新执行了，子组件的 componentWillReceiveProps 就会被执行，或者用下面的两条描述<ul>
-<li>如果子组件第一次存在于父组件中，子组件的 componentWillReceiveProps 函数不会执行</li>
-<li>如果子组件之前存在于父组件中，子组件的 componentWillReceiveProps 函数才会执行</li>
+<h3 id="其他注意要点"><a href="#其他注意要点" class="headerlink" title="其他注意要点"></a>其他注意要点</h3><ul>
+<li>子组件的data必须是一个函数</li>
+<li>子组件不应该修改父组件传递进来的值</li>
 </ul>
-</li>
-</ul>
-<p><strong>Unmounting</strong></p>
-<ul>
-<li>当这个组件即将被从页面中剔除的时候，componentWillUnmount 函数会被自动执行</li>
-</ul>
-<p>每一个组件都有这样的生命周期函数，不是只有父组件才有。</p>
-<h3 id="React-生命周期函数的使用场景"><a href="#React-生命周期函数的使用场景" class="headerlink" title="React 生命周期函数的使用场景"></a>React 生命周期函数的使用场景</h3><p>Component 默认内置了其他所有的生命周期函数，但唯独没有内置render这个生命周期函数</p>
-<ol>
-<li>借助 shouldComponentUpdate 可以避免无谓组件render函数的运行，提高性能</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// nextProps是新的属性值</span><br><span class="line">shouldComponentUpdate(nextProps, nextState) &#123;</span><br><span class="line">  return nextProps.content !== this.propscontent</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ol start="2">
-<li>ajax 请求，因为只请求一次，所以不放在render()函数里面执行，建议放在componentDidMount执行；放在 componentwillMount 可能会和 rn 开发有冲突。</li>
-</ol>
-<p><strong>性能优化：</strong></p>
-<ul>
-<li>周期函数：shouldComponentUpdate(nextProps, nextState)，提高组件性能</li>
-<li>作用域的修改：放在constructor里面。比如：this.handleClick.bind(this)，只会执行一次，避免子组件无谓渲染</li>
-<li>react 的底层setState，内置性能提升机制，异步函数，把多次数据改变结合一一次来做，降低虚拟 DOM 比对频率</li>
-<li>react 底层用的是虚拟DOM的概念，同层比对，还有 key 值这样的概念，提升虚拟 DOM 比对速度</li>
-</ul>
-<h3 id="使用-Charles-实现本地数据-mock"><a href="#使用-Charles-实现本地数据-mock" class="headerlink" title="使用 Charles 实现本地数据 mock"></a>使用 Charles 实现本地数据 mock</h3><p>Charles 可以抓取到浏览器的请求，然后返回指定数据文件的结果。</p>
-<h3 id="React-中实现-CSS-过渡动画"><a href="#React-中实现-CSS-过渡动画" class="headerlink" title="React 中实现 CSS 过渡动画"></a>React 中实现 CSS 过渡动画</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">handleToggle() &#123;</span><br><span class="line">    <span class="keyword">this</span>.setState(&#123;</span><br><span class="line">        show: !<span class="keyword">this</span>.state.show <span class="comment">//可以这样写</span></span><br><span class="line">    &#125;)  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>animation 的最后一个参数填写 forwards，它能够在动画结束之后保存最后一帧 css 的样式</p>
-<h3 id="使用-react-transition-group-实现动画"><a href="#使用-react-transition-group-实现动画" class="headerlink" title="使用 react-transition-group 实现动画"></a>使用 react-transition-group 实现动画</h3><p>安装 react 动画库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install react-transition-group --save</span><br></pre></td></tr></table></figure>
-<p>第一次展示到页面上的时候也要动画效果，用 appear={true}</p>
-<h2 id="Redux-入门"><a href="#Redux-入门" class="headerlink" title="Redux 入门"></a>Redux 入门</h2><p>react只是一个轻量级的视图层框架，如果要做大型应用就要搭配视图层框架redux一起使用</p>
-<p>redux = reducer + flux，flux升级成了redux</p>
-<p>redux组件之间的传值非常简单，redux里面要求我们把数据都放在一个公共的存储区域store里面，组件之中尽量少放数据，也就是<br>所有数据都不放在组件自身了，都把它放到一个公用的存储空间里面，然后组件改变数据就不需要传递了，改变store里面的数据之后<br>其它的组件会感知到里面的数据发生改变。这样的话不管组件的层次有多深，但是走的流程都是一样的，会把数据的传递简化很多。</p>
-<p><img src="../images/redux.jpg" alt="redux传值"></p>
-<h3 id="Redux-的工作流程"><a href="#Redux-的工作流程" class="headerlink" title="Redux 的工作流程"></a>Redux 的工作流程</h3><p>redux是视图层框架，把所有数据都放在store之中，每个组件都要从store里拿数据，然后每个组件也要去改store里面的数据，</p>
-<p><img src="../images/redux%20flow.jpg" alt="redux 的工作流程"></p>
-<p>举例：把这个流程理解成一个图书馆的流程<br>react compontents: 借书的人<br>action creators: “要借什么书”这句话（语句的表达，数据的传递）<br>store: 图书馆管理员（没办法记住所有书籍的存储情况）<br>reducers: 图书馆管理员的记录本（要借什么书，先查有没有，要还的书查一下放到某个位置）；<br>借书的人~我要借一本书~图书管理员听见~查阅reducers手册~去store找书~把对应的书给借书人；</p>
-<h3 id="创建-Redux-的-Store"><a href="#创建-Redux-的-Store" class="headerlink" title="创建 Redux 的 Store"></a>创建 Redux 的 Store</h3><ol>
-<li>npm安装Redux</li>
-<li>在store文件夹下创建index.js，import { createStore } from ‘redux’</li>
-<li><p>在store文件夹下创建reducer.js</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> defaultState = &#123;</span><br><span class="line">    inputValue:<span class="string">'123'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> (state = defaultState,action) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> state;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>index.js中const store = createStore(reducer);</p>
-</li>
-<li>在组件中引入，this.state = store.getState()</li>
-</ol>
-<h3 id="Action-和-Reducer-的编写"><a href="#Action-和-Reducer-的编写" class="headerlink" title="Action 和 Reducer 的编写"></a>Action 和 Reducer 的编写</h3><ol>
-<li>react首先要改变stroe里的数据，先要派发一个action， action通过dispatch（action）方法传给store</li>
-<li>stroe 把之前的数据和action（previousState，action）传给reducer</li>
-<li>reducer是个函数，它接收了state和action以后做些处理会返回一个新的newState给到store</li>
-<li>stroe用这个新的state替换到原来的数据，stroe数据改变了以后，react组件感受到了数据变化，它会从store里面重新取数据，更新组件的内容，页面就会跟着发生变化了</li>
-</ol>
-<p>Reducer 可以接收 state，但是不能修改 state。</p>
-<p>如果常量或变量在代码里写错的时候，是会报出异常的，就可以迅速定位到问题，但是如果写一个字符串的话就不会报出异常，那样的话<br>出了bug非常难调，所以才要进行ActionTypes的拆分。</p>
-<p>store文件夹下创建一个actionCreators.js，把action都集中写在一个文件中，方便后期维护和自动化测试</p>
-<h3 id="Redux-知识点复习补充"><a href="#Redux-知识点复习补充" class="headerlink" title="Redux 知识点复习补充"></a>Redux 知识点复习补充</h3><ul>
-<li>redux三个基本原则： <ul>
-<li>store必须是惟一的。</li>
-<li>只有store能够改变自己的内容。</li>
-<li>Reducer必须是纯函数。</li>
-</ul>
-</li>
-<li>纯函数：给定固定输入，就一定会有固定的输出，而且不会有任何副作用。</li>
-<li>redux 核心 api： <ul>
-<li>createStore：创建store；</li>
-<li>store.dispatch：派发action，action会传递给store。</li>
-<li>store.getState：获取到store里面所有的数据。</li>
-<li>store.subscribe：订阅store的改变，store改变会触发store.subscribe接受的回调函数执行。</li>
-</ul>
-</li>
-</ul>
-<h2 id="Redux-进阶"><a href="#Redux-进阶" class="headerlink" title="Redux 进阶"></a>Redux 进阶</h2><h3 id="UI组件和容器组件"><a href="#UI组件和容器组件" class="headerlink" title="UI组件和容器组件"></a>UI组件和容器组件</h3><ul>
-<li>UI 组件负责页面的渲染（傻瓜组件）</li>
-<li>容器组件负责页面的逻辑（聪明组件）   </li>
-</ul>
-<h3 id="无状态组件"><a href="#无状态组件" class="headerlink" title="无状态组件"></a>无状态组件</h3><p>当一个组件只有 render 函数时，可以用无状态组件代替。无状态组建性能比较高，没有生命周期函数。UI 组件一般可以作为无状态组件。</p>
-<h3 id="使用-Redux-thunk-中间件实现-ajax-数据请求"><a href="#使用-Redux-thunk-中间件实现-ajax-数据请求" class="headerlink" title="使用 Redux-thunk 中间件实现 ajax 数据请求"></a>使用 Redux-thunk 中间件实现 ajax 数据请求</h3><p>redux中使用redux-thunk之后可以在action中做异步请求，action可以是一个函数，dispatch接受的action是函数的时候会<br>自动执行这个action，action这个函数默认接受一个参数dispatch，可以用来提交action。</p>
-<h3 id="什么是-Redux-的中间件"><a href="#什么是-Redux-的中间件" class="headerlink" title="什么是 Redux 的中间件"></a>什么是 Redux 的中间件</h3><p>redux中间件是在action和store之间，<strong>对dispatch方法的封装升级</strong>。使得dispatch既可以接受对象，也可以接受函数。</p>
-<p><img src="../images/redux%20data%20flow.jpg" alt="redux data flow"></p>
-<h3 id="如何使用-React-redux"><a href="#如何使用-React-redux" class="headerlink" title="如何使用 React-redux"></a>如何使用 React-redux</h3><ol>
-<li>npm install react-redux –save</li>
-<li>store/index.js 引入 { createStore } from redux</li>
-<li>引入 reducer.js</li>
-<li>const store = createStore(reducer)</li>
-<li>reducer是一个纯函数 export default (state, action) = &gt; {}</li>
-<li>todoList 组件中引入 conncect 组件连接组件和 store</li>
-<li>index.js 根组件中从react-redux 中引入 Provider</li>
-<li>const app =  ( <provider store="{store}">&lt; todoList /&gt;</provider>)</li>
-<li>todoList 组件通过 connect 组件把store和组件连接起来<br>export default connect(mapStateToPropd,mapDispatchToProps)(TodoList)</li>
-</ol>
-<p>react-redux提供了Provider组件，用来绑定store，Provider内部的所有子组件都能够连接store。   </p>
-<p>Provider的子组件通过react-redux中的connect连接store，写法：<br>connect(mapStateToProps, mapDispatchToProps)(Component)<br>mapStateToProps：store中的数据映射到组件的props中；<br>mapDispatchToProps：把store.dispatch方法挂载到props上；<br>Component：Provider中的子组件本身；</p>
-<p>connect函数返回的是一个容器组件。</p>
-<h3 id="使用immutable库避免state被直接改变"><a href="#使用immutable库避免state被直接改变" class="headerlink" title="使用immutable库避免state被直接改变"></a>使用immutable库避免state被直接改变</h3><ol>
-<li>immutable库提供一个fromJS方法，可以把一个JS对象转换为immutable（不可变）对象；</li>
-<li>使用immutable.js之后，不能用“.”访问store中的对象，要使用get()方法；</li>
-<li>使用immutable.js之后，修改store中的数据时，要使用set方法；</li>
-<li>immutable对象的set方法，会结合之前immutable对象的值和设置的值，返回一个全新的对象，并没有改变原始的state；</li>
-</ol>
 
       
     </div>
@@ -560,7 +424,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/React/" rel="tag"><i class="fa fa-tag"></i> React</a>
+            <a href="/tags/Vue-js/" rel="tag"><i class="fa fa-tag"></i> Vue.js</a>
           
         </div>
       
@@ -573,8 +437,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/25/tools/science-online/" rel="next" title="科学上网">
-                <i class="fa fa-chevron-left"></i> 科学上网
+              <a href="/2018/08/06/distributed-storage/" rel="next" title="分布式存储系统">
+                <i class="fa fa-chevron-left"></i> 分布式存储系统
               </a>
             
           </div>
@@ -582,6 +446,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/20/study-hbase/" rel="prev" title="HBase学习">
+                HBase学习 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -662,7 +530,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -673,7 +541,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -684,7 +552,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -717,7 +585,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#React-高级内容"><span class="nav-number">1.</span> <span class="nav-text">React 高级内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#React-的数据视图更新原理"><span class="nav-number">1.1.</span> <span class="nav-text">React 的数据视图更新原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟-DOM-中的-Diff-算法"><span class="nav-number">1.2.</span> <span class="nav-text">虚拟 DOM 中的 Diff 算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ref-的使用"><span class="nav-number">1.3.</span> <span class="nav-text">Ref 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-的生命周期函数"><span class="nav-number">1.4.</span> <span class="nav-text">React 的生命周期函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-生命周期函数的使用场景"><span class="nav-number">1.5.</span> <span class="nav-text">React 生命周期函数的使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Charles-实现本地数据-mock"><span class="nav-number">1.6.</span> <span class="nav-text">使用 Charles 实现本地数据 mock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React-中实现-CSS-过渡动画"><span class="nav-number">1.7.</span> <span class="nav-text">React 中实现 CSS 过渡动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-react-transition-group-实现动画"><span class="nav-number">1.8.</span> <span class="nav-text">使用 react-transition-group 实现动画</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redux-入门"><span class="nav-number">2.</span> <span class="nav-text">Redux 入门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Redux-的工作流程"><span class="nav-number">2.1.</span> <span class="nav-text">Redux 的工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-Redux-的-Store"><span class="nav-number">2.2.</span> <span class="nav-text">创建 Redux 的 Store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Action-和-Reducer-的编写"><span class="nav-number">2.3.</span> <span class="nav-text">Action 和 Reducer 的编写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Redux-知识点复习补充"><span class="nav-number">2.4.</span> <span class="nav-text">Redux 知识点复习补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redux-进阶"><span class="nav-number">3.</span> <span class="nav-text">Redux 进阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UI组件和容器组件"><span class="nav-number">3.1.</span> <span class="nav-text">UI组件和容器组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无状态组件"><span class="nav-number">3.2.</span> <span class="nav-text">无状态组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Redux-thunk-中间件实现-ajax-数据请求"><span class="nav-number">3.3.</span> <span class="nav-text">使用 Redux-thunk 中间件实现 ajax 数据请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是-Redux-的中间件"><span class="nav-number">3.4.</span> <span class="nav-text">什么是 Redux 的中间件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用-React-redux"><span class="nav-number">3.5.</span> <span class="nav-text">如何使用 React-redux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用immutable库避免state被直接改变"><span class="nav-number">3.6.</span> <span class="nav-text">使用immutable库避免state被直接改变</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Vue-生命周期"><span class="nav-number">1.</span> <span class="nav-text">Vue 生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动画"><span class="nav-number">2.</span> <span class="nav-text">动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他注意要点"><span class="nav-number">3.</span> <span class="nav-text">其他注意要点</span></a></li></ol></div>
             
 
           </div>
