@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="zh">
+    <head>
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.6 -->
+    <script>
+        window.materialVersion = "1.5.6"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0',
+            '1.5.2',
+            '1.5.5'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+
+
+
+
+
+
+
+
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com"/>
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            深入学习Gremlin（0）：准备执行Gremlin的图形化环境 | 
+        
+        Linary
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/img/favicon.png">
+    <link rel="icon" href="/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" itemprop="description" content="但行好事，莫问前程">
+    <meta name="keywords" content=",gremlin">
+    <meta name="theme-color" content="#0097A7">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?NKhlKQkXw/c66TR5p4wO+w==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","/js/jquery.min.js?qcusAULNeBksqffqUM2+Ig==", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Linary">
+    <meta name="msapplication-starturl" content="http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/">
+    <meta name="msapplication-navbutton-color" content="#0097A7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Linary">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="深入学习Gremlin（0）：准备执行Gremlin的图形化环境 | Linary">
+    <meta property="og:image" content="/img/favicon.png">
+    <meta property="og:description" content="但行好事，莫问前程">
+    <meta property="og:article:tag" content="gremlin"> 
+
+    
+        <meta property="article:published_time" content="Fri Sep 07 2018 00:00:00 GMT+0800">
+        <meta property="article:modified_time" content="Mon Oct 01 2018 23:58:16 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/index.html" />
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/index.html",
+    "headline": "深入学习Gremlin（0）：准备执行Gremlin的图形化环境",
+    "datePublished": "Fri Sep 07 2018 00:00:00 GMT+0800",
+    "dateModified": "Mon Oct 01 2018 23:58:16 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "Linary",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/img/avatar.png"
+        },
+        "description": "Hi, nice to meet you"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Linary",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/img/favicon.png"
+        }
+    },
+    "keywords": ",gremlin",
+    "description": "但行好事，莫问前程",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span id="MD-burger-id" class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn"
+        class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#部署HugeGraphServer"><span class="post-toc-number">2.</span> <span class="post-toc-text">部署HugeGraphServer</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#准备安装包"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">准备安装包</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#方式一：源码编译打包"><span class="post-toc-number">2.1.1.</span> <span class="post-toc-text">方式一：源码编译打包</span></a></li><li class="post-toc-item post-toc-level-5"><a class="post-toc-link" href="#方法二：直接下载release包"><span class="post-toc-number">2.1.2.</span> <span class="post-toc-text">方法二：直接下载release包</span></a></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置参数"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">配置参数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#初始化后端"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">初始化后端</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#启动服务"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">启动服务</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#部署HugeGraphStudio"><span class="post-toc-number">3.</span> <span class="post-toc-text">部署HugeGraphStudio</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#准备安装包-1"><span class="post-toc-number">4.</span> <span class="post-toc-text">准备安装包</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#配置参数-1"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">配置参数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#启动服务-1"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">启动服务</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#创建关系图"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">创建关系图</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#图查询"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">图查询</span></a></li></ol></li></ol>
+    </ul>
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                深入学习Gremlin（0）：准备执行Gremlin的图形化环境
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/img/avatar.png" width="44px" height="44px" alt="Author Avatar"/>
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Linary</strong>
+        <span>Sep 07, 2018</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/gremlin/">gremlin</a>
+    </ul>
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=深入学习Gremlin（0）：准备执行Gremlin的图形化环境&url=http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/index.html&pic=http://yoursite.com/img/favicon.png&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=深入学习Gremlin（0）：准备执行Gremlin的图形化环境&url=http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/index.html&via=Linary" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=http://yoursite.com/2018/09/07/hugegraph/深入学习Gremlin（0）：准备执行Gremlin的图形化环境/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                شارك على Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <p><img src="http://upload-images.jianshu.io/upload_images/2968959-857de29f1ab02cef?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>Gremlin是<a href="http://tinkerpop.apache.org/" target="_blank" rel="noopener">Apache TinkerPop</a>框架下实现的图遍历语言，支持OLTP与OLAP，是目前图数据库领域主流的查询语言，可类比SQL语言之于关系型数据库。</p>
+<p><a href="https://github.com/hugegraph/hugegraph" target="_blank" rel="noopener">HugeGraph</a>是国内的一款开源图数据库，完全支持Gremlin语言。本文将讲述如何基于HugeGraph搭建一个执行Gremlin的图形化环境。</p>
+<p>HugeGraph的<a href="https://github.com/hugegraph" target="_blank" rel="noopener">github仓库</a>下有很多子项目，我们这里只需要使用其中的两个：<code>hugegraph</code>和<code>hugegraph-studio</code>。</p>
+<h3 id="部署HugeGraphServer"><a href="#部署HugeGraphServer" class="headerlink" title="部署HugeGraphServer"></a>部署HugeGraphServer</h3><h4 id="准备安装包"><a href="#准备安装包" class="headerlink" title="准备安装包"></a>准备安装包</h4><h5 id="方式一：源码编译打包"><a href="#方式一：源码编译打包" class="headerlink" title="方式一：源码编译打包"></a>方式一：源码编译打包</h5><p>进入hugegraph项目，克隆代码库</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2968959-4ea9512440f66ad2?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>进入终端<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone git@github.com:hugegraph/hugegraph.git</span><br></pre></td></tr></table></figure></p>
+<p>完成后会在当前目录下多出来一个<code>hugegraph</code>的子目录，不过这个目录里面的文件是源代码，我们需要编译打包才能生成可以运行包。</p>
+<p>进入<code>hugegraph</code>目录，执行命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git checkout release-0.7</span><br><span class="line">$ mvn package -DskipTests</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：一定要先切换分支，hugegraph主分支上版本已经升级到<code>0.8.0</code>了，但是studio似乎还没有升级，为避免踩坑我们还是使用已发布版。</p>
+</blockquote>
+<p>经过一长串的控制台输出后，最后如果能看到<code>BUILD SUCCESS</code>表示打包成功。<br><img src="https://upload-images.jianshu.io/upload_images/2968959-3eacdc944836c3cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="打包成功日志"><br>这时会在当前目录下多出来一个子目录<code>hugegraph-0.7.4</code>和一个压缩包<code>hugegraph-0.7.4.tar.gz</code>，这就是我们即将要使用可以运行的包。</p>
+<p>本人有轻微强迫症，不喜欢源代码和二进制包放在一起，容易混淆，所以把<code>hugegraph-0.7.4</code>拷到上一层目录，然后删除源代码目录，这样上层目录又回归清爽了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mv hugegraph-0.7.4 ../hugegraph-0.7.4</span><br><span class="line">$ cd ..</span><br><span class="line">$ rm -rf hugegraph</span><br></pre></td></tr></table></figure></p>
+<p>到这儿安装包就准备好了。不过，这样操作是需要你本地装了<code>jdk</code>、<code>git</code>和<code>maven</code>命令行工具的，如果你没有安装也没关系，我们还可以直接下载<code>hugegraph</code>官方的<code>release</code>包。</p>
+<h5 id="方法二：直接下载release包"><a href="#方法二：直接下载release包" class="headerlink" title="方法二：直接下载release包"></a>方法二：直接下载<code>release</code>包</h5><p>点击<code>github</code>代码的上面的导航<code>releases</code><br><img src="https://upload-images.jianshu.io/upload_images/2968959-161d52cfa4fc0416.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>可以看到hugegraph目前有两个release，点击<code>hugegraph-0.7.4.tar.gz</code>就开始下载了。<br><img src="https://upload-images.jianshu.io/upload_images/2968959-8047b2eeaf3bc9a3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="releases"></p>
+<p>下载完之后解压即可<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar -zxvf hugegraph-0.7.4.tar.gz</span><br></pre></td></tr></table></figure></p>
+<p>解压完之后能看到一个<code>hugegraph-0.7.4</code>目录，这个目录和用源码包打包生成的是一样的。</p>
+<p>下面讲解如何配置参数。</p>
+<h4 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h4><p>虽然标题叫配置参数，但其实<code>hugegraph</code>的默认配置就已经能在大部分环境下直接使用了，不过还是说明一下几个重要的配置项。</p>
+<p>进入<code>hugegraph-0.7.4</code>目录，修改<code>HugeGraphServer</code>提供服务的<code>url (host + port)</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ vim conf/rest-server.properties</span><br><span class="line"># bind url</span><br><span class="line">restserver.url=http://127.0.0.1:8080</span><br><span class="line"></span><br><span class="line"># gremlin url to connect</span><br><span class="line">gremlinserver.url=http://127.0.0.1:8182</span><br><span class="line"></span><br><span class="line"># graphs list with pair NAME:CONF_PATH</span><br><span class="line">graphs=[hugegraph:conf/hugegraph.properties]</span><br><span class="line"></span><br><span class="line"># authentication</span><br><span class="line">#auth.require_authentication=</span><br><span class="line">#auth.admin_token=</span><br><span class="line">#auth.user_tokens=[]</span><br></pre></td></tr></table></figure></p>
+<p><code>restserver.url</code>就是<code>HugeGraphServer</code>对外提供<code>RESTful API</code>服务的地址，<code>host</code>为<code>127.0.0.1</code>时只能在本机访问的，按需要修改其中的<code>host</code>和<code>port</code>部分即可。我这里由于<code>studio</code>也是准备在本地启动，<code>8080</code>端口也没有其他服务占用，所以不修改它。</p>
+<p><code>graphs</code>是可供连接的图名与配置项的键值对列表，<code>hugegraph:conf/hugegraph.properties</code>表示通过<code>HugeGraphServer</code>可以访问到一个名为<code>hugegraph</code>的图实例，该图的配置文件路径为<code>conf/hugegraph.properties</code>。我们可以不用去管图的配置文件，按需要修改图的名字即可。我这里仍然没有修改它。</p>
+<h4 id="初始化后端"><a href="#初始化后端" class="headerlink" title="初始化后端"></a>初始化后端</h4><p><code>hugegraph</code>启动服务之前是需要手动初始化后端的，不过大家也不要看到“手动”两个字就害怕，其实就是调一个命令的事。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ bin/init-store.sh</span><br><span class="line">Initing HugeGraph Store...</span><br><span class="line">2018-09-07 16:02:12 1082  [main] [INFO ] com.baidu.hugegraph.cmd.InitStore [] - Init graph with config file: conf/hugegraph.properties</span><br><span class="line">2018-09-07 16:02:12 1201  [main] [INFO ] com.baidu.hugegraph.HugeGraph [] - Opening backend store &apos;rocksdb&apos; for graph &apos;hugegraph&apos;</span><br><span class="line">2018-09-07 16:02:12 1258  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Opening RocksDB with data path: rocksdb-data/schema</span><br><span class="line">2018-09-07 16:02:12 1417  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Failed to open RocksDB &apos;rocksdb-data/schema&apos; with database &apos;hugegraph&apos;, try to init CF later</span><br><span class="line">2018-09-07 16:02:12 1445  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Opening RocksDB with data path: rocksdb-data/system</span><br><span class="line">2018-09-07 16:02:12 1450  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Failed to open RocksDB &apos;rocksdb-data/system&apos; with database &apos;hugegraph&apos;, try to init CF later</span><br><span class="line">2018-09-07 16:02:12 1456  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Opening RocksDB with data path: rocksdb-data/graph</span><br><span class="line">2018-09-07 16:02:12 1461  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Failed to open RocksDB &apos;rocksdb-data/graph&apos; with database &apos;hugegraph&apos;, try to init CF later</span><br><span class="line">2018-09-07 16:02:12 1491  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Store initialized: schema</span><br><span class="line">2018-09-07 16:02:12 1511  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Store initialized: system</span><br><span class="line">2018-09-07 16:02:12 1543  [main] [INFO ] com.baidu.hugegraph.backend.store.rocksdb.RocksDBStore [] - Store initialized: graph</span><br><span class="line">2018-09-07 16:02:13 1804  [pool-3-thread-1] [INFO ] com.baidu.hugegraph.backend.Transaction [] - Clear cache on event &apos;store.init&apos;</span><br></pre></td></tr></table></figure>
+<p>这里可以看到，<code>hugegraph</code>初始化了<code>rocksdb</code>后端，那为什么是<code>rocksdb</code>而不是别的呢，其实就是上一步说的<code>conf/hugegraph.properties</code>中配置的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">$ vim conf/hugegraph.properties</span><br><span class="line"># gremlin entrence to create graph</span><br><span class="line">gremlin.graph=com.baidu.hugegraph.HugeFactory</span><br><span class="line"></span><br><span class="line"># cache config</span><br><span class="line">#schema.cache_capacity=1048576</span><br><span class="line">#graph.cache_capacity=10485760</span><br><span class="line">#graph.cache_expire=600</span><br><span class="line"></span><br><span class="line"># schema illegal name template</span><br><span class="line">#schema.illegal_name_regex=\s+|~.*</span><br><span class="line"></span><br><span class="line">#vertex.default_label=vertex</span><br><span class="line"></span><br><span class="line">backend=rocksdb</span><br><span class="line">serializer=binary</span><br><span class="line"></span><br><span class="line">store=hugegraph</span><br><span class="line"></span><br><span class="line"># rocksdb backend config</span><br><span class="line">#rocksdb.data_path=/path/to/disk</span><br><span class="line">#rocksdb.wal_path=/path/to/disk</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>其中<code>backend=rocksdb</code>就是设置后端为<code>rocksdb</code>的配置项。</p>
+<p>其他的后端还包括：<code>memory</code>、<code>cassandra</code>、<code>scylladb</code>、<code>hbase</code>、<code>mysql</code>和<code>palo</code>。我们这里不用去管它，用默认的<code>rocksdb</code>即可。</p>
+<p>初始化完成之后，会在当前目录下出现一个<code>rocksdb-data</code>的目录，这就是存放后端数据的地方，没事千万不要随意删它或移动它。</p>
+<blockquote>
+<p>注意：初始化后端这个操作只需要在第一次启动服务前执行一次，不要每次起服务都执行。不过即使执行了也没关系，hugegraph检测到已经初始化过了会跳过。</p>
+</blockquote>
+<h4 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h4><p>终于到了启动服务了，同样也是一条命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ bin/start-hugegraph.sh</span><br><span class="line">Starting HugeGraphServer...</span><br><span class="line">Connecting to HugeGraphServer (http://127.0.0.1:8080/graphs)....OK</span><br></pre></td></tr></table></figure>
+<p>看到上面的<code>OK</code>就表示启动成功了，我们可以<code>jps</code>看一下进程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ jps</span><br><span class="line">...</span><br><span class="line">4101 HugeGraphServer</span><br><span class="line">4233 Jps</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>如果还不放心，我们可以发个<code>HTTP</code>请求试试看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ curl http://127.0.0.1:8080/graphs</span><br><span class="line">&#123;&quot;graphs&quot;:[&quot;hugegraph&quot;]&#125;</span><br></pre></td></tr></table></figure>
+<p>到这里<code>HugeGraphServer</code>的部署就完成了，接下来我们来部署<code>HugeGraphStudio</code>。</p>
+<h3 id="部署HugeGraphStudio"><a href="#部署HugeGraphStudio" class="headerlink" title="部署HugeGraphStudio"></a>部署HugeGraphStudio</h3><p>步骤与部署<code>HugeGraphServer</code>大体类似，我们就不那么啰嗦了。</p>
+<p>记得先返回最上层目录，避免目录嵌套在一起了。</p>
+<h3 id="准备安装包-1"><a href="#准备安装包-1" class="headerlink" title="准备安装包"></a>准备安装包</h3><p>克隆代码库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git clone git@github.com:hugegraph/hugegraph-studio.git</span><br><span class="line">Cloning into &apos;hugegraph-studio&apos;...</span><br><span class="line">mux_client_request_session: read from master failed: Broken pipe</span><br><span class="line">remote: Counting objects: 326, done.</span><br><span class="line">remote: Compressing objects: 100% (189/189), done.</span><br><span class="line">remote: Total 326 (delta 115), reused 324 (delta 113), pack-reused 0</span><br><span class="line">Receiving objects: 100% (326/326), 1.60 MiB | 350.00 KiB/s, done.</span><br><span class="line">Resolving deltas: 100% (115/115), done.</span><br></pre></td></tr></table></figure>
+<p>编译打包</p>
+<blockquote>
+<p><code>studio</code>是一个包含前端的项目，使用<code>react.js</code>实现，自行打包的话需要安装<code>npm</code>、<code>webpack</code>等工具。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd hugegraph-studio</span><br><span class="line">$ mvn package -DskipTests</span><br></pre></td></tr></table></figure>
+<p><code>studio</code>打包的时间会稍长一点。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">[INFO] Reactor Summary:</span><br><span class="line">[INFO]</span><br><span class="line">[INFO] hugegraph-studio ................................... SUCCESS [  0.003 s]</span><br><span class="line">[INFO] studio-api ......................................... SUCCESS [  4.683 s]</span><br><span class="line">[INFO] studio-dist ........................................ SUCCESS [01:42 min]</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 01:47 min</span><br><span class="line">[INFO] Finished at: 2018-09-07T16:32:44+08:00</span><br><span class="line">[INFO] Final Memory: 34M/390M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<p>将打包好的目录拷到上一层，删除源码目录（纯个人喜好）。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mv hugegraph-studio-0.7.0 ../</span><br><span class="line">$ cd ..</span><br><span class="line">$ rm -rf hugegraph-studio</span><br></pre></td></tr></table></figure>
+<p>至此，我的最上层目录就只剩下两个安装包，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls</span><br><span class="line">hugegraph-0.7.4        hugegraph-studio-0.7.0</span><br></pre></td></tr></table></figure>
+<h4 id="配置参数-1"><a href="#配置参数-1" class="headerlink" title="配置参数"></a>配置参数</h4><p>进入<code>hugegraph-studio-0.7.0</code>目录，修改唯一的一个配置文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">$ cd  hugegraph-studio-0.7.0</span><br><span class="line">$ vim conf/hugegraph-studio.properties</span><br><span class="line">studio.server.port=8088</span><br><span class="line">studio.server.host=localhost</span><br><span class="line"></span><br><span class="line">graph.server.host=localhost</span><br><span class="line">graph.server.port=8080</span><br><span class="line">graph.name=hugegraph</span><br><span class="line"></span><br><span class="line"># the directory name released by react</span><br><span class="line">studio.server.ui=ui</span><br><span class="line"># the file location of studio-api.war</span><br><span class="line">studio.server.api.war=war/studio-api.war</span><br><span class="line"># default folder in your home directory, set to a non-empty value to override</span><br><span class="line">data.base_directory=~/.hugegraph-studio</span><br><span class="line"></span><br><span class="line">show.limit.data=250</span><br><span class="line">show.limit.edge.total=1000</span><br><span class="line">show.limit.edge.increment=20</span><br><span class="line"></span><br><span class="line"># separator &apos;,&apos;</span><br><span class="line">gremlin.limit_suffix=[.V(),.E(),.hasLabel(STR),.hasLabel(NUM),.path()]</span><br></pre></td></tr></table></figure>
+<p>需要修改的参数是<code>graph.server.host=localhost</code>、<code>graph.server.port=8080</code>、<code>graph.name=hugegraph</code>。它们与<code>HugeGraphServer</code>的配置文件<code>conf/rest-server.properties</code>中的配置项对应，其中：</p>
+<ul>
+<li><code>graph.server.host=localhost</code>与<code>restserver.url=http://127.0.0.1:8080</code>的<code>host</code>对应；</li>
+<li><code>graph.server.port=8080</code>与的<code>restserver.url=http://127.0.0.1:8080</code>的<code>port</code>对应；</li>
+<li><code>graph.name=hugegraph</code>与<code>graphs=[hugegraph:conf/hugegraph.properties]</code>的图名对应。</li>
+</ul>
+<p>因为我之前并没有修改<code>HugeGraphServer</code>的配置文件<code>conf/rest-server.properties</code>，所以这里也不需要修改<code>HugeGraphStudio</code>的配置文件<code>conf/hugegraph-studio.properties</code>。</p>
+<h4 id="启动服务-1"><a href="#启动服务-1" class="headerlink" title="启动服务"></a>启动服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ bin/hugegraph-studio.sh</span><br></pre></td></tr></table></figure>
+<p><code>studio</code>的启动默认是不会放到后台的，所以我们会在控制台上看到一大串日志，在最底下看到如下日志表示启动成功：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">信息: Starting ProtocolHandler [http-nio-127.0.0.1-8088]</span><br><span class="line">16:56:24.507 [main] INFO  com.baidu.hugegraph.studio.HugeGraphStudio ID:  TS: - HugeGraphStudio is now running on: http://localhost:8088</span><br></pre></td></tr></table></figure>
+<p>然后我们按照提示，在浏览器中输入<code>http://localhost:8088</code>，就进入了<code>studio</code>的界面：</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-af25b458b3fc6d36.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="studio界面"></p>
+<p>图中<code>Gremlin</code>下的框，就是我们输入<code>gremlin</code>语句进而操作<code>hugegraph</code>的入口了，下面我们给出一个例子。</p>
+<h4 id="创建关系图"><a href="#创建关系图" class="headerlink" title="创建关系图"></a>创建关系图</h4><p>以下内容参考CSDN博客<a href="https://blog.csdn.net/javeme/article/details/82385829" target="_blank" rel="noopener">通过Gremlin语言构建关系图并进行图分析</a>。</p>
+<p>在输入框中输入以下代码以创建一个“TinkerPop关系图”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">// PropertyKey</span><br><span class="line">graph.schema().propertyKey(&quot;name&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;age&quot;).asInt().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;addr&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;lang&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;tag&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;weight&quot;).asFloat().ifNotExist().create()</span><br><span class="line"></span><br><span class="line">// VertexLabel</span><br><span class="line">graph.schema().vertexLabel(&quot;person&quot;).properties(&quot;name&quot;, &quot;age&quot;, &quot;addr&quot;, &quot;weight&quot;).useCustomizeStringId().ifNotExist().create()</span><br><span class="line">graph.schema().vertexLabel(&quot;software&quot;).properties(&quot;name&quot;, &quot;lang&quot;, &quot;tag&quot;, &quot;weight&quot;).primaryKeys(&quot;name&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().vertexLabel(&quot;language&quot;).properties(&quot;name&quot;, &quot;lang&quot;, &quot;weight&quot;).primaryKeys(&quot;name&quot;).ifNotExist().create()</span><br><span class="line"></span><br><span class="line">// EdgeLabel</span><br><span class="line">graph.schema().edgeLabel(&quot;knows&quot;).sourceLabel(&quot;person&quot;).targetLabel(&quot;person&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;created&quot;).sourceLabel(&quot;person&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;contains&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;define&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;language&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;implements&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;supports&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;language&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line"></span><br><span class="line">// TinkerPop</span><br><span class="line">okram = graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;okram&quot;, &quot;name&quot;, &quot;Marko A. Rodriguez&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;Santa Fe, New Mexico&quot;, &quot;weight&quot;, 1)</span><br><span class="line">spmallette = graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;spmallette&quot;, &quot;name&quot;, &quot;Stephen Mallette&quot;, &quot;age&quot;, 0, &quot;addr&quot;, &quot;&quot;, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">tinkerpop = graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;TinkerPop&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;Graph computing framework&quot;, &quot;weight&quot;, 1)</span><br><span class="line">tinkergraph = graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;TinkerGraph&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;In-memory property graph&quot;, &quot;weight&quot;, 1)</span><br><span class="line">gremlin = graph.addVertex(T.label, &quot;language&quot;, &quot;name&quot;, &quot;Gremlin&quot;, &quot;lang&quot;, &quot;groovy/python/javascript&quot;, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">okram.addEdge(&quot;created&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br><span class="line">spmallette.addEdge(&quot;created&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">okram.addEdge(&quot;knows&quot;, spmallette, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">tinkerpop.addEdge(&quot;define&quot;, gremlin, &quot;weight&quot;, 1)</span><br><span class="line">tinkerpop.addEdge(&quot;contains&quot;, tinkergraph, &quot;weight&quot;, 1)</span><br><span class="line">tinkergraph.addEdge(&quot;supports&quot;, gremlin, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">// Titan</span><br><span class="line">dalaro = graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;dalaro&quot;, &quot;name&quot;, &quot;Dan LaRocque &quot;, &quot;age&quot;, 0, &quot;addr&quot;, &quot;&quot;, &quot;weight&quot;, 1)</span><br><span class="line">mbroecheler = graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;mbroecheler&quot;, &quot;name&quot;, &quot;Matthias Broecheler&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;San Francisco&quot;, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">titan = graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;Titan&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;Graph Database&quot;, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">dalaro.addEdge(&quot;created&quot;, titan, &quot;weight&quot;, 1)</span><br><span class="line">mbroecheler.addEdge(&quot;created&quot;, titan, &quot;weight&quot;, 1)</span><br><span class="line">okram.addEdge(&quot;created&quot;, titan, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">dalaro.addEdge(&quot;knows&quot;, mbroecheler, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">titan.addEdge(&quot;implements&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br><span class="line">titan.addEdge(&quot;supports&quot;, gremlin, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">// HugeGraph</span><br><span class="line">javeme = graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;javeme&quot;, &quot;name&quot;, &quot;Jermy Li&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;Beijing&quot;, &quot;weight&quot;, 1)</span><br><span class="line">zhoney = graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;zhoney&quot;, &quot;name&quot;, &quot;Zhoney Zhang&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;Beijing&quot;, &quot;weight&quot;, 1)</span><br><span class="line">linary = graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;linary&quot;, &quot;name&quot;, &quot;Linary Li&quot;, &quot;age&quot;, 28, &quot;addr&quot;, &quot;Wuhan. Hubei&quot;, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">hugegraph = graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;HugeGraph&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;Graph Database&quot;, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">javeme.addEdge(&quot;created&quot;, hugegraph, &quot;weight&quot;, 1)</span><br><span class="line">zhoney.addEdge(&quot;created&quot;, hugegraph, &quot;weight&quot;, 1)</span><br><span class="line">linary.addEdge(&quot;created&quot;, hugegraph, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">javeme.addEdge(&quot;knows&quot;, zhoney, &quot;weight&quot;, 1)</span><br><span class="line">javeme.addEdge(&quot;knows&quot;, linary, &quot;weight&quot;, 1)</span><br><span class="line"></span><br><span class="line">hugegraph.addEdge(&quot;implements&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br><span class="line">hugegraph.addEdge(&quot;supports&quot;, gremlin, &quot;weight&quot;, 1)</span><br></pre></td></tr></table></figure>
+<p>点击右上角的三角按钮，这样就创建出了一个图。</p>
+<h4 id="图查询"><a href="#图查询" class="headerlink" title="图查询"></a>图查询</h4><p>在输入框中输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">g.V()</span><br></pre></td></tr></table></figure>
+<p>就能查出上面创建的图的所有顶点和边。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2968959-09487f05494e648f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="TinkerPop关系图"></p>
+<p>至此，执行Gremlin的图形化环境就已经搭建完成，后续就可以做各种各样炫酷的<code>gremlin</code>查询了。</p>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2018/09/14/hugegraph/深入学习Gremlin（4）：图查询返回结果数限制/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            أحدث
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2018/09/06/study-netty/netty/" id="post_nav-older" class="next-content">
+            أقدم
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/img/avatar.png" alt="Linary's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        youremail@email.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="#" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                الرئيسية
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">inbox</i>
+                
+                    أرشيف
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+            <li>
+                <a class="sidebar_archives-link" href="/archives/2019/06/">June 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2019/05/">May 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2019/03/">March 2019<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/archives/2019/01/">January 2019<span class="sidebar_archives-count">2</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/12/">December 2018<span class="sidebar_archives-count">4</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/10/">October 2018<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/09/">September 2018<span class="sidebar_archives-count">10</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/08/">August 2018<span class="sidebar_archives-count">6</span></a></li><li><a class="sidebar_archives-link" href="/archives/2018/07/">July 2018<span class="sidebar_archives-count">9</span></a>
+            </ul>
+        </li>
+        
+    
+
+    <!-- Categories  -->
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+    <a href="https://github.com/viosey/hexo-theme-material"  class="sidebar-footer-text-a" target="_blank">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+            سمة - Material
+            <span class="sidebar-badge badge-circle">i</span>
+        </div>
+    </a>
+
+
+<!-- Help & Support -->
+<!--
+
+-->
+
+<!-- Feedback -->
+<!--
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+        <a href="https://twitter.com/twitter" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-twitter">
+                <span class="visuallyhidden">Twitter</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Facebook -->
+    
+        <a href="https://www.facebook.com/facebook" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-facebook">
+                <span class="visuallyhidden">Facebook</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Google + -->
+    
+        <a href="https://www.google.com/" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-gplus">
+                <span class="visuallyhidden">Google Plus</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+
+    <!-- V2EX -->
+    
+
+    <!-- Segmentfault -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©&nbsp;<span year></span>&nbsp;Linary
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?1BcfzuNXqV+ntF6gq+5X3Q==", true)</script>
+
+
+
+    <script>lsloader.load("js_js","/js/js.min.js?Bn9UzEm8RrBSxqyZB0zPjA==", true)</script>
+
+
+
+    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    var copyrightNow = new Date().getFullYear();
+    var textContent = document.querySelector('span[year]')
+
+    copyrightSince = 0000;
+    if (copyrightSince === copyrightNow||copyrightSince === 0000) {
+        textContent.textContent = copyrightNow
+    } else {
+        textContent.textContent = copyrightSince + ' - ' + copyrightNow
+    }
+
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.6 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
