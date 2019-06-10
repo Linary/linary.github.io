@@ -306,7 +306,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/05/epoch-rpc/epoch-rpc-0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/05/tools/git-operation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -325,7 +325,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/05/epoch-rpc/epoch-rpc-0/" itemprop="url">自己动手实现RPC框架</a></h1>
+                <a class="post-title-link" href="/2018/07/05/tools/git-operation/" itemprop="url">Git常用操作记录</a></h1>
         
 
         <div class="post-meta">
@@ -360,8 +360,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/分布式服务/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式服务</span>
+                  <a href="/categories/开发工具/" itemprop="url" rel="index">
+                    <span itemprop="name">开发工具</span>
                   </a>
                 </span>
 
@@ -399,16 +399,19 @@
       
         
           
-          前言
+          
+获取当前分支名
 
-RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。
-这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。
-主要参考CSDN博客一起写RPC框架开篇说明
-2018-09-
+1git symbolic-ref --short -q HEAD
+
+将本地仓库和github仓库关联起来
+
+12git remote add github git@github.com:liningrui/study-rpc.gitgit pull
+再查看所有分支就可以看到gi
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/05/epoch-rpc/epoch-rpc-0/#more" rel="contents">
+            <a class="btn" href="/2018/07/05/tools/git-operation/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -729,6 +732,156 @@ CPU层次在 CPU 层次，或者说操作系统进行 IO 和任务调度的层�
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/10/hugegraph/记一次 HttpClient 连接半释放导致的问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Linary">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Linary">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/10/hugegraph/记一次 HttpClient 连接半释放导致的问题/" itemprop="url">记一次 HttpClient 连接半释放导致的问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-10T00:00:00+08:00">
+                2018-06-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hugegraph/" itemprop="url" rel="index">
+                    <span itemprop="name">hugegraph</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          问题描述启动 0.9.2 版本的 hugegraph-server 和 hugegraph-studio，随便执行两条查询语句，然后停止 hugegraph-server，再启动，提示 “8080 端口被占用”。
+详细
+问题定位Step 1最开始没仔细想，主要也是因为对 TCP 这块没啥实际经验，乍
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/06/10/hugegraph/记一次 HttpClient 连接半释放导致的问题/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
@@ -783,7 +936,7 @@ CPU层次在 CPU 层次，或者说操作系统进行 IO 和任务调度的层�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -805,7 +958,7 @@ CPU层次在 CPU 层次，或者说操作系统进行 IO 和任务调度的层�
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
