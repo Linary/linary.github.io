@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Netty," />
+  <meta name="keywords" content="并发," />
 
 
 
@@ -79,18 +79,22 @@
 
 
 
-<meta name="description" content="原文：http://svip.iocoder.cn/Netty/build-debugging-environment/ 前言Netty 底层基于 JDK 的 NIO，我们为什么不直接基于 JDK 的 NIO 或者其他 NIO 框架？下面是我总结出来的原因  使用 JDK 自带的 NIO 需要了解太多的概念，编程复杂 Netty 底层 IO 模型随意切换，而这一切只需要做微小的改动 Netty 自">
-<meta name="keywords" content="Netty">
+<meta name="description" content="35 | 两阶段终止模式：如何优雅地终止线程？前面两篇文章我们讲述的内容，从纯技术的角度看，都是启动多线程去执行一个异步任务。既然有启动，那又该如何终止呢？今天咱们就从技术的角度聊聊如何优雅地终止线程，正所谓有始有终。 在《09 | Java 线程（上）：Java 线程的生命周期》中，我曾讲过：线程执行完或者出现异常就会进入终止状态。这样看，终止一个线程看上去很简单啊！一个线程执行完自己的任务，自">
+<meta name="keywords" content="并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Netty源码分析的调试环境准备">
-<meta property="og:url" content="http://yoursite.com/2018/09/27/study-netty/环境准备/index.html">
+<meta property="og:title" content="35 | 两阶段终止模式：如何优雅地终止线程？">
+<meta property="og:url" content="http://yoursite.com/2019/06/12/java/两阶段终止模式：如何优雅地终止线程/index.html">
 <meta property="og:site_name" content="Linary">
-<meta property="og:description" content="原文：http://svip.iocoder.cn/Netty/build-debugging-environment/ 前言Netty 底层基于 JDK 的 NIO，我们为什么不直接基于 JDK 的 NIO 或者其他 NIO 框架？下面是我总结出来的原因  使用 JDK 自带的 NIO 需要了解太多的概念，编程复杂 Netty 底层 IO 模型随意切换，而这一切只需要做微小的改动 Netty 自">
+<meta property="og:description" content="35 | 两阶段终止模式：如何优雅地终止线程？前面两篇文章我们讲述的内容，从纯技术的角度看，都是启动多线程去执行一个异步任务。既然有启动，那又该如何终止呢？今天咱们就从技术的角度聊聊如何优雅地终止线程，正所谓有始有终。 在《09 | Java 线程（上）：Java 线程的生命周期》中，我曾讲过：线程执行完或者出现异常就会进入终止状态。这样看，终止一个线程看上去很简单啊！一个线程执行完自己的任务，自">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-28T07:39:12.624Z">
+<meta property="og:image" content="http://yoursite.com/2019/06/12/java/两阶段终止模式：如何优雅地终止线程/media/15581460794597/15581462016115.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/06/12/java/两阶段终止模式：如何优雅地终止线程/media/15581460794597/15581462151577.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/06/12/java/两阶段终止模式：如何优雅地终止线程/media/15581460794597/15581463519777.jpg">
+<meta property="og:updated_time" content="2019-06-12T09:45:09.380Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Netty源码分析的调试环境准备">
-<meta name="twitter:description" content="原文：http://svip.iocoder.cn/Netty/build-debugging-environment/ 前言Netty 底层基于 JDK 的 NIO，我们为什么不直接基于 JDK 的 NIO 或者其他 NIO 框架？下面是我总结出来的原因  使用 JDK 自带的 NIO 需要了解太多的概念，编程复杂 Netty 底层 IO 模型随意切换，而这一切只需要做微小的改动 Netty 自">
+<meta name="twitter:title" content="35 | 两阶段终止模式：如何优雅地终止线程？">
+<meta name="twitter:description" content="35 | 两阶段终止模式：如何优雅地终止线程？前面两篇文章我们讲述的内容，从纯技术的角度看，都是启动多线程去执行一个异步任务。既然有启动，那又该如何终止呢？今天咱们就从技术的角度聊聊如何优雅地终止线程，正所谓有始有终。 在《09 | Java 线程（上）：Java 线程的生命周期》中，我曾讲过：线程执行完或者出现异常就会进入终止状态。这样看，终止一个线程看上去很简单啊！一个线程执行完自己的任务，自">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/12/java/两阶段终止模式：如何优雅地终止线程/media/15581460794597/15581462016115.jpg">
 
 
 
@@ -120,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/27/study-netty/环境准备/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/12/java/两阶段终止模式：如何优雅地终止线程/"/>
 
 
 
 
 
-  <title>Netty源码分析的调试环境准备 | Linary</title>
+  <title>35 | 两阶段终止模式：如何优雅地终止线程？ | Linary</title>
   
 
 
@@ -307,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/27/study-netty/环境准备/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/java/两阶段终止模式：如何优雅地终止线程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +328,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Netty源码分析的调试环境准备</h1>
+          <h1 class="post-title" itemprop="name headline">35 | 两阶段终止模式：如何优雅地终止线程？</h1>
         
 
         <div class="post-meta">
@@ -336,8 +340,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-27T00:00:00+08:00">
-                2018-09-27
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-12T00:00:00+08:00">
+                2019-06-12
               </time>
             
 
@@ -359,8 +363,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/网络通信/" itemprop="url" rel="index">
-                    <span itemprop="name">网络通信</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -396,25 +400,42 @@
       
 
       
-        <p>原文：<a href="http://svip.iocoder.cn/Netty/build-debugging-environment/" target="_blank" rel="noopener">http://svip.iocoder.cn/Netty/build-debugging-environment/</a></p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Netty 底层基于 JDK 的 NIO，我们为什么不直接基于 JDK 的 NIO 或者其他 NIO 框架？下面是我总结出来的原因</p>
-<ul>
-<li>使用 JDK 自带的 NIO 需要了解太多的概念，编程复杂</li>
-<li>Netty 底层 IO 模型随意切换，而这一切只需要做微小的改动</li>
-<li>Netty 自带的拆包解包，异常检测等机制让你从 NIO 的繁重细节中脱离出来，让你只需要关心业务逻辑</li>
-<li>Netty 解决了 JDK 的很多包括空轮训在内的 bug</li>
-<li>Netty 底层对线程，selector 做了很多细小的优化，精心设计的 reactor 线程做到非常高效的并发处理</li>
-<li>自带各种协议栈让你处理任何一种通用协议都几乎不用亲自动手</li>
-<li>Netty 社区活跃，遇到问题随时邮件列表或者 issue</li>
-<li>Netty 已经历各大 rpc 框架，消息中间件，分布式通信中间件线上的广泛验证，健壮性无比强大</li>
-</ul>
-<h3 id="环境依赖"><a href="#环境依赖" class="headerlink" title="环境依赖"></a>环境依赖</h3><ul>
-<li>JDK</li>
-<li>Git</li>
-<li>Maven</li>
-<li>IntelliJ IDEA</li>
-</ul>
-<p>### </p>
+        <h3 id="35-两阶段终止模式：如何优雅地终止线程？"><a href="#35-两阶段终止模式：如何优雅地终止线程？" class="headerlink" title="35 | 两阶段终止模式：如何优雅地终止线程？"></a>35 | 两阶段终止模式：如何优雅地终止线程？</h3><p>前面两篇文章我们讲述的内容，从纯技术的角度看，都是启动多线程去执行一个异步任务。既然有启动，那又该如何终止呢？今天咱们就从技术的角度聊聊如何优雅地终止线程，正所谓有始有终。</p>
+<p>在《09 | Java 线程（上）：Java 线程的生命周期》中，我曾讲过：线程执行完或者出现异常就会进入终止状态。这样看，终止一个线程看上去很简单啊！一个线程执行完自己的任务，自己进入终止状态，这的确很简单。不过我们今天谈到的“优雅地终止线程”，不是自己终止自己，而是在一个线程 T1 中，终止线程 T2；<strong>这里所谓的“优雅”，指的是给 T2 一个机会料理后事，而不是被一剑封喉</strong>。</p>
+<p>Java 语言的 Thread 类中曾经提供了一个 stop() 方法，用来终止线程，可是早已不建议使用了，原因是这个方法用的就是一剑封喉的做法，被终止的线程没有机会料理后事。</p>
+<p>既然不建议使用 stop() 方法，那在 Java 领域，我们又该如何优雅地终止线程呢？</p>
+<h4 id="如何理解两阶段终止模式"><a href="#如何理解两阶段终止模式" class="headerlink" title="如何理解两阶段终止模式"></a>如何理解两阶段终止模式</h4><p>前辈们经过认真对比分析，已经总结出了一套成熟的方案，叫做两阶段终止模式。顾名思义，就是将终止过程分成两个阶段，<strong>其中第一个阶段主要是线程 T1 向线程 T2 发送终止指令，而第二阶段则是线程 T2 响应终止指令</strong>。</p>
+<blockquote>
+<p>从这里其实就能听出来 T1 向 T2 发送终止指令后 T2 并不是立马就终止的。</p>
+</blockquote>
+<p><img src="media/15581460794597/15581462016115.jpg" alt=""></p>
+<p>那在 Java 语言里，终止指令是什么呢？这个要从 Java 线程的状态转换过程说起。我们在《09 | Java 线程（上）：Java 线程的生命周期》中曾经提到过 Java 线程的状态转换图，如下图所示。</p>
+<p><img src="media/15581460794597/15581462151577.jpg" alt=""></p>
+<p>从这个图里你会发现，<strong>Java 线程进入终止状态的前提是线程进入 RUNNABLE 状态</strong>，而实际上我们想要终止一个线程时其可能处在休眠状态，也就是说，我们要想终止一个线程，首先要把线程的状态从休眠状态转换到 RUNNABLE 状态。如何做到呢？这个要靠 Java Thread 类提供的<strong>interrupt() 方法，它可以将休眠状态的线程转换到 RUNNABLE 状态</strong>。</p>
+<p>线程转换到 RUNNABLE 状态之后，我们如何再将其终止呢？RUNNABLE 状态转换到终止状态，优雅的方式是让 Java 线程自己执行完 run() 方法，所以一般我们采用的方法是<strong>设置一个标志位，然后线程会在合适的时机检查这个标志位</strong>，如果发现符合终止条件，则自动退出 run() 方法。这个过程其实就是我们前面提到的第二阶段：<strong>响应终止指令</strong>。</p>
+<p>综合上面这两点，我们能总结出终止指令，其实包括两方面内容：<strong>interrupt() 方法和线程终止的标志位</strong>。</p>
+<p>理解了两阶段终止模式之后，下面我们看一个实际工作中的案例。</p>
+<h4 id="用两阶段终止模式终止监控操作"><a href="#用两阶段终止模式终止监控操作" class="headerlink" title="用两阶段终止模式终止监控操作"></a>用两阶段终止模式终止监控操作</h4><p>实际工作中，有些监控系统需要动态地采集一些数据，一般都是监控系统发送采集指令给被监控系统的监控代理，监控代理接收到指令之后，从监控目标收集数据，然后回传给监控系统，详细过程如下图所示。出于对性能的考虑（有些监控项对系统性能影响很大，所以不能一直持续监控），动态采集功能一般都会有终止操作。</p>
+<p><img src="media/15581460794597/15581463519777.jpg" alt=""></p>
+<p>下面的示例代码是<strong>监控代理</strong>简化之后的实现，start() 方法会启动一个新的线程 rptThread 来执行监控数据采集和回传的功能，stop() 方法需要优雅地终止线程 rptThread，那 stop() 相关功能该如何实现呢？</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">class Proxy &#123;</span><br><span class="line">  boolean started = false;</span><br><span class="line">  // 采集线程</span><br><span class="line">  Thread rptThread;</span><br><span class="line">  // 启动采集功能</span><br><span class="line">  synchronized void start() &#123;</span><br><span class="line">    // 不允许同时启动多个采集线程</span><br><span class="line">    if (started) &#123;</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line">    started = true;</span><br><span class="line">    rptThread = new Thread(()-&gt;&#123;</span><br><span class="line">      while (true) &#123;</span><br><span class="line">        // 省略采集、回传实现</span><br><span class="line">        report();</span><br><span class="line">        // 每隔两秒钟采集、回传一次数据</span><br><span class="line">        try &#123;</span><br><span class="line">          Thread.sleep(2000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;  </span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      // 执行到此处说明线程马上终止</span><br><span class="line">      started = false;</span><br><span class="line">    &#125;);</span><br><span class="line">    rptThread.start();</span><br><span class="line">  &#125;</span><br><span class="line">  // 终止采集功能</span><br><span class="line">  synchronized void stop()&#123;</span><br><span class="line">    // 如何实现？</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>按照两阶段终止模式，我们首先需要做的就是将线程 rptThread 状态转换到 RUNNABLE，做法很简单，只需要调用 rptThread.interrupt() 就可以了。线程 rptThread 的状态转换到 RUNNABLE 之后，如何优雅地终止呢？下面的示例代码中，我们选择的标志位是线程的中断状态：Thread.currentThread().isInterrupted()，需要注意的是，我们在捕获 Thread.sleep() 的中断异常之后，通过 Thread.currentThread().interrupt() <strong>重新设置了线程的中断状态，因为 JVM 的异常处理会清除线程的中断状态</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">class Proxy &#123;</span><br><span class="line">  boolean started = false;</span><br><span class="line">  // 采集线程</span><br><span class="line">  Thread rptThread;</span><br><span class="line">  // 启动采集功能</span><br><span class="line">  synchronized void start()&#123;</span><br><span class="line">    // 不允许同时启动多个采集线程</span><br><span class="line">    if (started) &#123;</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line">    started = true;</span><br><span class="line">    rptThread = new Thread(()-&gt;&#123;</span><br><span class="line">      while (!Thread.currentThread().isInterrupted()) &#123;</span><br><span class="line">        // 省略采集、回传实现</span><br><span class="line">        report();</span><br><span class="line">        // 每隔两秒钟采集、回传一次数据</span><br><span class="line">        try &#123;</span><br><span class="line">          Thread.sleep(2000);</span><br><span class="line">        &#125; catch (InterruptedException e)&#123;</span><br><span class="line">          // 重新设置线程中断状态</span><br><span class="line">          Thread.currentThread().interrupt();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      // 执行到此处说明线程马上终止</span><br><span class="line">      started = false;</span><br><span class="line">    &#125;);</span><br><span class="line">    rptThread.start();</span><br><span class="line">  &#125;</span><br><span class="line">  // 终止采集功能</span><br><span class="line">  synchronized void stop()&#123;</span><br><span class="line">    rptThread.interrupt();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的示例代码的确能够解决当前的问题，但是建议你在实际工作中谨慎使用。原因在于我们很可能在线程的 run() 方法中调用第三方类库提供的方法，而我们没有办法保证第三方类库正确处理了线程的中断异常，例如第三方类库在捕获到 Thread.sleep() 方法抛出的中断异常后，没有重新设置线程的中断状态，那么就会导致线程不能够正常终止。所以强烈建议你<strong>设置自己的线程终止标志位</strong>，例如在下面的代码中，使用 isTerminated 作为线程终止标志位，此时无论是否正确处理了线程的中断异常，都不会影响线程优雅地终止。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">class Proxy &#123;</span><br><span class="line">  // 线程终止标志位</span><br><span class="line">  volatile boolean terminated = false;</span><br><span class="line">  boolean started = false;</span><br><span class="line">  // 采集线程</span><br><span class="line">  Thread rptThread;</span><br><span class="line">  // 启动采集功能</span><br><span class="line">  synchronized void start()&#123;</span><br><span class="line">    // 不允许同时启动多个采集线程</span><br><span class="line">    if (started) &#123;</span><br><span class="line">      return;</span><br><span class="line">    &#125;</span><br><span class="line">    started = true;</span><br><span class="line">    terminated = false;</span><br><span class="line">    rptThread = new Thread(()-&gt;&#123;</span><br><span class="line">      while (!terminated) &#123;</span><br><span class="line">        // 省略采集、回传实现</span><br><span class="line">        report();</span><br><span class="line">        // 每隔两秒钟采集、回传一次数据</span><br><span class="line">        try &#123;</span><br><span class="line">          Thread.sleep(2000);</span><br><span class="line">        &#125; catch (InterruptedException e) &#123;</span><br><span class="line">          // 重新设置线程中断状态</span><br><span class="line">          Thread.currentThread().interrupt();</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      // 执行到此处说明线程马上终止</span><br><span class="line">      started = false;</span><br><span class="line">    &#125;);</span><br><span class="line">    rptThread.start();</span><br><span class="line">  &#125;</span><br><span class="line">  // 终止采集功能</span><br><span class="line">  synchronized void stop()&#123;</span><br><span class="line">    // 设置中断标志位</span><br><span class="line">    terminated = true;</span><br><span class="line">    // 中断线程 rptThread</span><br><span class="line">    rptThread.interrupt();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="如何优雅地终止线程池"><a href="#如何优雅地终止线程池" class="headerlink" title="如何优雅地终止线程池"></a>如何优雅地终止线程池</h4><p>Java 领域用的最多的还是线程池，而不是手动地创建线程。那我们该如何优雅地终止线程池呢？</p>
+<p>线程池提供了两个方法：<strong>shutdown()</strong>和<strong>shutdownNow()</strong>。这两个方法有什么区别呢？要了解它们的区别，就先需要了解线程池的实现原理。</p>
+<p>我们曾经讲过，Java 线程池是生产者 - 消费者模式的一种实现，提交给线程池的任务，首先是进入一个阻塞队列中，之后线程池中的线程从阻塞队列中取出任务执行。</p>
+<p>shutdown() 方法是一种很保守的关闭线程池的方法。线程池执行 shutdown() 后，就会拒绝接收新的任务，但是会<strong>等待线程池中正在执行的任务和已经进入阻塞队列的任务都执行完之后才最终关闭线程池</strong>。</p>
+<p>而 shutdownNow() 方法，相对就激进一些了，线程池执行 shutdownNow() 后，会拒绝接收新的任务，同时<strong>还会中断线程池中正在执行的任务，已经进入阻塞队列的任务也被剥夺了执行的机会，不过这些被剥夺执行机会的任务会作为 shutdownNow() 方法的返回值返回</strong>。<strong>因为 shutdownNow() 方法会中断正在执行的线程，所以提交到线程池的任务，如果需要优雅地结束，就需要正确地处理线程中断</strong>。</p>
+<p>如果提交到线程池的任务不允许取消，那就不能使用 shutdownNow() 方法终止线程池。不过，如果提交到线程池的任务允许后续以补偿的方式重新执行，也是可以使用 shutdownNow() 方法终止线程池的。《Java 并发编程实战》这本书第 7 章《取消与关闭》的“shutdownNow 的局限性”一节中，提到一种将已提交但尚未开始执行的任务以及已经取消的正在执行的任务保存起来，以便后续重新执行的方案，你可以参考一下，方案很简单，这里就不详细介绍了。</p>
+<p>其实分析完 shutdown() 和 shutdownNow() 方法你会发现，它们实质上使用的也是两阶段终止模式，只是终止指令的范围不同而已，前者只影响阻塞队列接收任务，后者范围扩大到线程池中所有的任务。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>两阶段终止模式是一种应用很广泛的并发设计模式，在 Java 语言中使用两阶段终止模式来优雅地终止线程，需要注意两个关键点：一个是仅检查终止标志位是不够的，因为线程的状态可能处于休眠态；另一个是仅检查线程的中断状态也是不够的，因为我们依赖的第三方类库很可能没有正确处理中断异常。</p>
+<p>当你使用 Java 的线程池来管理线程的时候，需要依赖线程池提供的 shutdown() 和 shutdownNow() 方法来终止线程池。不过在使用时需要注意它们的应用场景，尤其是在使用 shutdownNow() 的时候，一定要谨慎。</p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p>当我们调用线程池的 shutdownNow 时，如果线程正在执行 getTask 方法，则会通过 for 循环进入到 if 语句，于是 getTask 返回 null，从而线程退出。不管线程池里是否有未完成的任务。</p>
+<p>如果线程因为执行提交到线程池里的任务而处于阻塞状态，则会导致报错（如果任务里没有捕获 InterruptedException 异常），否则线程会执行完当前任务，然后通过 getTask 方法返回为null来退出。</p>
+<p>当我们调用线程池的 shuwdown 方法时，如果线程正在执行线程池里的任务，即便任务处于阻塞状态，线程也不会被中断，而是继续执行。</p>
+<p>如果线程池阻塞等待从队列里读取任务，则会被唤醒，但是会继续判断队列是否为空，如果不为空会继续从队列里读取任务，为空则线程退出。</p>
 
       
     </div>
@@ -432,7 +453,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Netty/" rel="tag"><i class="fa fa-tag"></i> Netty</a>
+            <a href="/tags/并发/" rel="tag"><i class="fa fa-tag"></i> 并发</a>
           
         </div>
       
@@ -445,8 +466,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/25/hugegraph/深入学习Gremlin（15）：分支运算/" rel="next" title="深入学习Gremlin（15）：分支运算">
-                <i class="fa fa-chevron-left"></i> 深入学习Gremlin（15）：分支运算
+              <a href="/2019/06/07/mysql/事务到底是隔离的还是不隔离的/" rel="next" title="08 | 事务到底是隔离的还是不隔离的？">
+                <i class="fa fa-chevron-left"></i> 08 | 事务到底是隔离的还是不隔离的？
               </a>
             
           </div>
@@ -454,10 +475,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/28/study-netty/Buffer解析/" rel="prev" title="JAVA NIO 之 Buffer">
-                JAVA NIO 之 Buffer <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -593,7 +610,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境依赖"><span class="nav-number">1.1.</span> <span class="nav-text">环境依赖</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#35-两阶段终止模式：如何优雅地终止线程？"><span class="nav-number">1.</span> <span class="nav-text">35 | 两阶段终止模式：如何优雅地终止线程？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何理解两阶段终止模式"><span class="nav-number">1.1.</span> <span class="nav-text">如何理解两阶段终止模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用两阶段终止模式终止监控操作"><span class="nav-number">1.2.</span> <span class="nav-text">用两阶段终止模式终止监控操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何优雅地终止线程池"><span class="nav-number">1.3.</span> <span class="nav-text">如何优雅地终止线程池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充"><span class="nav-number">1.5.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></div>
             
 
           </div>

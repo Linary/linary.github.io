@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Linary">
 <meta property="og:description" content="获取当前分支名  1git symbolic-ref --short -q HEAD  将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-25T07:45:27.819Z">
+<meta property="og:updated_time" content="2019-06-12T02:58:17.006Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git常用操作记录">
 <meta name="twitter:description" content="获取当前分支名  1git symbolic-ref --short -q HEAD  将本地仓库和github仓库关联起来  12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av  删除github远端的分支  1git">
@@ -444,6 +444,10 @@
 <p>这时 git 会打印 rebasing(progress/total)，中间很有可能会产生冲突，解决好冲突后执行 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git add file</span><br><span class="line">git rebase --continue</span><br></pre></td></tr></table></figure>
 <p>一直往下走，遇到冲突就重复这一步，直到走完全部的提交，这样就实现了修改历史。</p>
+<ul>
+<li>拉取别人的提交到本地</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git fetch github pull/493/head:batch-update</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -558,7 +562,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-count">45</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
