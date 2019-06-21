@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[06 | 用“等待-通知”机制优化循环等待]]></title>
+    <url>%2F2019%2F06%2F21%2Fjava%2F%E7%94%A8%E2%80%9C%E7%AD%89%E5%BE%85-%E9%80%9A%E7%9F%A5%E2%80%9D%E6%9C%BA%E5%88%B6%E4%BC%98%E5%8C%96%E5%BE%AA%E7%8E%AF%E7%AD%89%E5%BE%85%2F</url>
+    <content type="text"><![CDATA[06 | 用“等待-通知”机制优化循环等待由上文可知：在破坏占用且等待条件的时候，如果转出账本和转入账本不满足同时在文件架上这个条件，就用死循环的方式来循环等待，核心代码如下： 123// 一次性申请转出账户和转入账户，直到成功while(!actr.apply(this, target)) ； 这种循环等待的方式极其浪费CPU，如果并发冲突大，可能要循环上万次才能取到锁。 其实在这种场景下，最好的方案应该是：如果线程要求的条件（转出账本和转入账本同在文件架上）不满足，则线程阻塞自己，进入等待状态，当线程要求的条件满足后，通知等待的线程重新执行。其中，使用线程阻塞的方式就能避免循环等待消耗CPU的问题。 下面我们看看Java语言是如何支持等待——通知机制的。 就医流程我们先看一个现实世界里面的就医流程，它有着完善的等待——通知机制，所以对比就医流程，我们可以更好地理解等待——通知机制。 就医流程基本上是这样： 患者先去挂号，然后到就诊门口分诊，等待叫号； 当叫到自己的号时，患者就可以找大夫就诊了； 就诊过程中，大夫可能会让患者去做检查，同时叫下一位患者； 当患者做完检查后，拿检测报告重新分诊，等待叫号； 当大夫再次叫到自己的号时，患者再去找大夫就诊。 这个就诊流程能保证同一时刻大夫只为一个患者服务，而且还能保证大夫和患者的效率，不会让患者在大夫诊室门口傻等。下面我们把Java的等待——通知机制和就诊流程对比起来，并关注一下上面忽视的细节： 患者到就诊室门口分诊，类似于线程要去获取互斥锁；当患者被叫到时，类似线程已经获取到锁了； 大夫让患者去做检查（缺少检测报告不能诊断病因），类似于线程要求的条件没有被满足； 患者去做检查，类似于线程进入等待状态；然后大夫叫下一个患者，这个步骤对应到程序里，本质是线程释放持有的互斥锁； 患者做完检查，类似于线程要求的条件已经满足；患者拿检测报告重新分诊，类似于线程需要重新获取互斥锁。 所以加上这些至关重要的细节，综合一下，就可以得出一个完整的等待——通知机制：线程首先获取互斥锁，当线程要求的条件不满足时，释放互斥锁，进入等待状态；单线程要求的条件满足时，通知等待的线程，重新获取互斥锁。 用 synchronized 实现等待——通知机制在 Java 中，等待——通知机制可以有多种实现方式，比如内置的 synchronized 配合 wait()、notify()、notifyAll() 这三个方法就能轻松实现。 在下面这个图里，左边有一个等待队列，同一时刻，只允许一个线程进入 synchronized 保护的临界区（这个临界区可以看作大夫的诊室），当有一个线程进入临界区后，其他线程就只能进入图中左边的等待队列里等待（相当于患者分诊等待）。这个等待队列和互斥锁是一对一的关系，每个互斥锁都有自己独立的等待队列。 在并发程序中，当一个线程进入临界区后，由于某些条件不满足，需要进入等待状态，Java 对象的 wait() 方法就能够满足这种需求。如上图所示，当调用 wait() 方法后，当前线程就会被阻塞，并且进入到右边的等待队列中，这个等待队列也是互斥锁的等待队列。线程在进入等待队列的同时，会释放持有的互斥锁，线程释放锁后，其他线程就有机会获得锁，并进入临界区了。 那线程要求的条件满足时，该怎么通知这个等待的线程呢？很简单，就是 Java 对象的 notify() 和 notifyAll() 方法。当条件满足时调用 notify()，会通知等待队列（互斥锁的等待队列）中的线程，告诉它条件曾经满足过。 为什么说是曾经满足过呢？因为 notify() 只能保证在通知时间点，条件是满足的。而被通知线程的执行时间点和通知的时间点基本上不会重合，所以当线程执行的时候，很可能条件已经不满足了（保不齐有其他线程插队）。这一点需要格外注意。 除此之外，还有一个需要注意的点，被通知的线程要想重新执行，仍然需要获取到互斥锁（因为曾经获取的锁在调用 wait() 时已经释放了）。 上面我们一直强调 wait()、notify()、notifyAll() 方法操作的等待队列是互斥锁的等待队列，所以如果 synchronized 锁定的是 this，那么对应的一定是 this.wait()、this.notify()、this.notifyAll()；如果 synchronized 锁定的是 target，那么对应的一定是 target.wait()、target.notify()、target.notifyAll()。而且 wait()、notify()、notifyAll() 这三个方法能够被调用的前提是已经获取了相应的互斥锁，所以我们会发现 wait()、notify()、notifyAll() 都是在 synchronized{}内部被调用的。如果在 synchronized{} 外部调用，或者锁定的 this，而用 target.wait() 调用的话，JVM 会抛出一个运行时异常：java.lang.IllegalMonitorStateException。 小试牛刀：一个更好地资源分配器等待 - 通知机制的基本原理搞清楚后，我们就来看看它如何解决一次性申请转出账户和转入账户的问题吧。在这个等待 - 通知机制中，我们需要考虑以下四个要素。 互斥锁：上一篇文章我们提到 Allocator 需要是单例的，所以我们可以用 this 作为互斥锁。 线程要求的条件：转出账户和转入账户都没有被分配过。 何时等待：线程要求的条件不满足就等待。 何时通知：当有线程释放账户时就通知。 将上面几个问题考虑清楚，可以快速完成下面的代码。需要注意的是我们使用了： 123while(条件不满足) &#123; wait();&#125; 利用这种范式可以解决上面提到的条件曾经满足过这个问题。因为当wait() 返回时，有可能条件已经发生变化了，曾经条件满足，但是现在已经不满足了，所以要重新检验条件是否满足。范式，意味着是经典做法，所以没有特殊理由不要尝试换个写法。 123456789101112131415161718192021class Allocator &#123; private List&lt;Object&gt; als; // 一次性申请所有资源 synchronized void apply(Object from, Object to)&#123; // 经典写法 while(als.contains(from) || als.contains(to))&#123; try&#123; wait(); &#125;catch(Exception e)&#123; &#125; &#125; als.add(from); als.add(to); &#125; // 归还资源 synchronized void free(Object from, Object to)&#123; als.remove(from); als.remove(to); notifyAll(); &#125;&#125; 注意：尽量使用 notifyAll()，notify() 是会随机地通知等待队列中的一个线程，而 notifyAll() 会通知等待队列中的所有线程。使用 notify() 也很有风险，它的风险在于可能导致某些线程永远不会被通知到。 课后思考很多面试都会问到，wait() 方法和 sleep() 方法都能让当前线程挂起一段时间，那它们的区别是什么？ wait与sleep区别在于： wait会释放所有锁而sleep不会释放锁资源； wait只能在同步方法和同步块中使用，而sleep任何地方都可以； wait无需捕捉异常，而sleep需要； 两者相同点：都会让渡CPU执行时间，等待再次调度！]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[在 MAC 上使用 Docker 安装 PostgreSQL、Oracle、SQLServer]]></title>
     <url>%2F2019%2F06%2F18%2Fdocker%2F%E5%9C%A8%20MAC%20%E4%B8%8A%E4%BD%BF%E7%94%A8%20Docker%20%E5%AE%89%E8%A3%85%20PostgreSQL%E3%80%81Oracle%E3%80%81SQLServer%2F</url>
     <content type="text"><![CDATA[在 MAC 上使用 Docker 安装 PostgreSQL、Oracle、SQLServer启动 Docker 后续的都是控制台的操作 安装 PostgreSQL参考 https://www.jianshu.com/p/900345a369aa 拉取镜像 123456789101112131415161718&gt; docker pull postgres:9.69.6: Pulling from library/postgresfc7181108d40: Pull complete81cfa12d39e9: Pull complete793d305ca761: Pull complete41e3ced3a2aa: Pull completea300bc9d5405: Pull complete3c6a5c3830ed: Pull completefb8c79b24338: Pull completefcda1144379f: Pull complete1b6bdda9a7d0: Pull complete3f44e35d537d: Pull complete9161ffee7255: Pull completeb6569cb49b8b: Pull complete21e1e65283f8: Pull complete4cbcde26ced5: Pull completeDigest: sha256:de03034bae132f5cc0672f6c1a0a3a5591a0640cad6b21f2b0d00fc0ce15ab15Status: Downloaded newer image for postgres:9.6 创建本地卷 12&gt; docker volume create pgdatapgdata 启动容器 12345678&gt; docker run -it --rm -v pgdata:/var/lib/postgresql/data -p 5432:5432 postgres:9.6The files belonging to this database system will be owned by user &quot;postgres&quot;.This user must also own the server process.The database cluster will be initialized with locale &quot;en_US.utf8&quot;.The default database encoding has accordingly been set to &quot;UTF8&quot;.The default text search configuration will be set to &quot;english&quot;.... 进入容器创建数据 查看该容器 ID 1&gt; docker ps 假设该容器 ID 为 123 ，新开一个 Terminal 进入容器 1&gt; docker exec -it 123 /bin/bash 后续就可以做创建用户，创建表相关的操作了。 使用 Navicat 连接 12345host: localhostport: 5432initial database: postgresusername: postgrespassword: 123456 安装 Oracle参考 https://blog.csdn.net/master_shifu_/article/details/80790218 拉取镜像 1docker pull oracleinanutshell/oracle-xe-11g 启动容器 1docker run -d -p 9090:8080 -p 1521:1521 oracleinanutshell/oracle-xe-11g 命令解释：将容器中的Oracle XE 管理界面的8080端口映射为本机的9090端口,将Oracle XE的1521端口映射为本机的1521端口 使用 Navicat 连接 12345host: localhostport: 1521SID : XEusername: system/syspassword: oracle 安装 SQLServer参考 https://segmentfault.com/a/1190000014232366 拉取镜像 1docker pull microsoft/mssql-server-linux 创建并运行容器 1docker run --name MSSQL_1433 -m 512m -e &apos;ACCEPT_EULA=Y&apos; -e &apos;SA_PASSWORD=YourStrong(!)Password&apos; -p 1433:1433 -d microsoft/mssql-server-linux 替换YourStrong(!)Password成你自己的密码，这个密码需要复杂密码，要有大小写和特殊符号。 登入容器 1docker exec -it MSSQL_1433 /bin/bash 连接到sqlcmd 1/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P &apos;YourStrong(!)Password&apos; 执行SQL语句创建数据库 12CREATE DATABASE test_dbgo 使用 Navicat 连接 12345host: localhostport: 1433initial database: masterusername: SApassword: YourStrong(!)Password]]></content>
@@ -193,9 +204,9 @@
       </categories>
   </entry>
   <entry>
-    <title><![CDATA[深入学习Gremlin（22）：遍历终止操作]]></title>
-    <url>%2F2018%2F10%2F08%2Fhugegraph%2F%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Gremlin%EF%BC%8822%EF%BC%89%EF%BC%9A%E9%81%8D%E5%8E%86%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C%2F</url>
-    <content type="text"><![CDATA[第22期 Gremlin Steps： hasNext()、next()、tryNext()、toList()、toSet()、toBulkSet()、fill()、iterate() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。 上一期：深入学习Gremlin（21）：待添加 说明Gremlin 中有一类特殊的操作，它能够终止遍历器的“遍历”行为，使其执行并返回结果。在这里要强调的一点：原生的 Gremlin 语句通常都是用遍历器连接起来的，但其实这些连接的过程并不会执行 Gremlin 语句，只有走到了terminalStep 时才会执行。这个模式类似于 Spark 中对RDD的map和action操作。 hasNext: 判断遍历器是否含有元素（结果），返回布尔值； next: 不传参数时获取遍历器的下一个元素，也可以传入一个整数 n，则获取后面 n 个元素； tryNext: hasNext和next的结合版，返回一个Optional对象，如果有结果还需要调用get()方法才能拿到； toList: 将所有的元素放到一个List中返回； toSet: 将所有的元素放到一个Set中返回，会去除重复元素； toBulkSet: 将所有的元素放到一个能排序的List中返回，重复元素也会保留； fill: 传入一个集合对象，将所有的元素放入该集合并返回，其实toList、toSet和toBulkSet就是通过fillStep实现的； iterate: 这个 Step 在终止操作里面有点特殊，它并不完全符合终止操作的定义。它会在内部迭代完整个遍历器但是不返回结果。 那肯定有细心的同学要问了，前面我们介绍了那么多的 Step 很多都没有加terminalStep 啊，为什么也能返回结果呢？其实这是 Tinkerpop 的 Gremlin 解析引擎对遍历器对象调用了一个IteratorUtils.asList()方法，又调用了它内部的fill()方法（注意：不是上面讲到的fill()Step）。 实例讲解下面通过实例来深入理解每一个操作。 Step hasNext() 示例1： 12// 判断顶点“linary”是否包含“created”出顶点g.V('linary').out('created').hasNext() 示例2： 12// 判断顶点“linary”是否包含“knows”出顶点g.V('linary').out('knows').hasNext() Step next() 示例1： 12// 获取顶点“javeme”的“knows”出顶点集合的下一个（第1个）g.V('javeme').out('knows').next() g.V(&#39;javeme&#39;).out(&#39;knows&#39;)返回的是一个遍历器（迭代器），每次执行这句话实际上都是获取的迭代器的第一个元素，那如果想获取第二个元素该怎么写呢？很简单，执行两次next()即可，但是这里的前提条件是遍历器中确实存在多个元素。 示例2： 1234// 获取顶点“javeme”的“knows”出顶点集合的下一个（第2个）it = g.V('javeme').out('knows')it.next()it.next() 示例3： 12// 获取顶点“javeme”的“knows”出顶点集合的前两个g.V('javeme').out('knows').next(2) next()与next(n)使用中有一点小小的区别，就是当没有元素或者没有足够多的元素时，执行next()会报错，但是执行next(n)则是返回一个空集合（List）。 Step tryNext() 示例1： 12// 试图获取顶点“javeme”的“created”出顶点集合中的下一个g.V('javeme').out('created').tryNext() 这里细心的读者会发现结果与前面概述中说的有些不同。概述中说的是返回一个Optional对象，要获取Optional对象里的值是需要调用它的get()方法的，怎么这里直接就把值给返回了呢？大家先别着急，我们再看一个例子。 示例2： 12// 试图获取顶点“javeme”的“created”入顶点集合中的下一个g.V('javeme').in('created').tryNext() 这里更加令人费解，没有“created”入顶点时竟然直接报错了，其实这是HugeGraph的实现中关于Optional的序列化所致。HugeGraph序列化Optional对象时会判断该对象内的值是否存在，如果存在则取出来序列化该值，否则填入一个null。详细代码见HugeGraphSONModule.java中关于OptionalSerializer的实现。 本文的重点在于学习Gremlin语法本身，下面给出上述两个示例的预期结果： 12Optional[v[3:HugeGraph]]Optional.empty Step toList() 示例1： 12// 获取所有“person”顶点的“created”出顶点集合，放入List中，允许包含重复结果g.V().hasLabel('person').out('created').toList() 示例2： 12// 获取所有“person”顶点的“created”入顶点集合，放入List中，允许包含重复结果g.V().hasLabel('person').in('created').toList() 结果与next(n)有些类似。 Step toSet() 示例1： 12// 获取所有“person”顶点的“created”出顶点集合，放入Set中，不允许包含重复结果g.V().hasLabel('person').out('created').toSet() 相比于toList，toSet去除了重复元素。 示例2： 12// 获取所有“person”顶点的“created”入顶点集合，放入Set中，不允许包含重复结果g.V().hasLabel('person').in('created').toSet() Step toBulkSet() 示例1： 12// 获取所有“person”顶点的“created”出顶点集合，放入BulkSet中，允许包含重复结果，排序g.V().hasLabel('person').out('created').toBulkSet() 所谓的BulkSet虽然名字上带有”Set”，但还是更像一个List，对比toList的结果，它实际上是把所有元素排了个序。 Step fill() 示例1： 1234// 创建一个List，获取所有“person”顶点的“created”出顶点，并放入该List中results = []g.V().hasLabel('person').out('created').fill(results)results Step iterate() 示例1： 123// 迭代所有“person”顶点it = g.V().hasLabel('person').iterate()it.hasNext() 调用了iterate()后遍历器内部的元素就已经全部迭代过了，所以再调用hasNext()返回false。 下一期：深入学习Gremlin（23）：待添加]]></content>
+    <title><![CDATA[深入学习Gremlin（23）：转换操作]]></title>
+    <url>%2F2018%2F10%2F08%2Fhugegraph%2F%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Gremlin%EF%BC%8823%EF%BC%89%EF%BC%9A%E8%BD%AC%E6%8D%A2%E6%93%8D%E4%BD%9C%2F</url>
+    <content type="text"><![CDATA[第23期 Gremlin Steps： map、flatMap() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。 上一期：深入学习Gremlin（22）：遍历终止操作 转换操作说明 map: 可以接受一个遍历器 Step 或 Lamda 表达式，将遍历器中的元素映射（转换）成另一个类型的某个对象（一对一），以便进行下一步处理； flatMap: 可以接受一个遍历器 Step 或 Lamda 表达式，将遍历器中的元素映射（转换）成另一个类型的某个对象流或迭代器（一对多）。 实例讲解下面通过实例来深入理解每一个操作。 Step map() 示例1： 123// 获取顶点“3:HugeGraph”的入“created”顶点的“name”属性，其实可以理解为顶点对象转化成了属性值对象g.V('3:HugeGraph').in('created').map(values('name'))// g.V('3:HugeGraph').in('created').map &#123;it.get().value('name')&#125; 自己动手将g.V(&#39;3:HugeGraph&#39;).in(&#39;created&#39;).map {it.get().value(&#39;name&#39;)}的注视打开试试效果。 示例2： 12// 先获取顶点“3:HugeGraph”的入“created”顶点，再将每个顶点转化为出边（一条）g.V('3:HugeGraph').in('created').map(outE()) 注意：顶点“javeme”其实是有三条边的，但是这里只打印出了一条。因为mapStep是一对一的转换，要想获取所有的边可以使用flatMap。 Step flatMap() 示例1： 12// 先获取顶点“3:HugeGraph”的入“created”顶点，再将每个顶点转化为出边（多条）g.V('3:HugeGraph').in('created').flatMap(outE()) 注意：这一次就能打印出顶点“javeme”的全部三条边了。 下一期：深入学习Gremlin（24）：待添加]]></content>
       <categories>
         <category>hugegraph</category>
       </categories>
@@ -204,9 +215,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[深入学习Gremlin（23）：转换操作]]></title>
-    <url>%2F2018%2F10%2F08%2Fhugegraph%2F%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Gremlin%EF%BC%8823%EF%BC%89%EF%BC%9A%E8%BD%AC%E6%8D%A2%E6%93%8D%E4%BD%9C%2F</url>
-    <content type="text"><![CDATA[第23期 Gremlin Steps： map、flatMap() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。 上一期：深入学习Gremlin（22）：遍历终止操作 转换操作说明 map: 可以接受一个遍历器 Step 或 Lamda 表达式，将遍历器中的元素映射（转换）成另一个类型的某个对象（一对一），以便进行下一步处理； flatMap: 可以接受一个遍历器 Step 或 Lamda 表达式，将遍历器中的元素映射（转换）成另一个类型的某个对象流或迭代器（一对多）。 实例讲解下面通过实例来深入理解每一个操作。 Step map() 示例1： 123// 获取顶点“3:HugeGraph”的入“created”顶点的“name”属性，其实可以理解为顶点对象转化成了属性值对象g.V('3:HugeGraph').in('created').map(values('name'))// g.V('3:HugeGraph').in('created').map &#123;it.get().value('name')&#125; 自己动手将g.V(&#39;3:HugeGraph&#39;).in(&#39;created&#39;).map {it.get().value(&#39;name&#39;)}的注视打开试试效果。 示例2： 12// 先获取顶点“3:HugeGraph”的入“created”顶点，再将每个顶点转化为出边（一条）g.V('3:HugeGraph').in('created').map(outE()) 注意：顶点“javeme”其实是有三条边的，但是这里只打印出了一条。因为mapStep是一对一的转换，要想获取所有的边可以使用flatMap。 Step flatMap() 示例1： 12// 先获取顶点“3:HugeGraph”的入“created”顶点，再将每个顶点转化为出边（多条）g.V('3:HugeGraph').in('created').flatMap(outE()) 注意：这一次就能打印出顶点“javeme”的全部三条边了。 下一期：深入学习Gremlin（24）：待添加]]></content>
+    <title><![CDATA[深入学习Gremlin（22）：遍历终止操作]]></title>
+    <url>%2F2018%2F10%2F08%2Fhugegraph%2F%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Gremlin%EF%BC%8822%EF%BC%89%EF%BC%9A%E9%81%8D%E5%8E%86%E7%BB%88%E6%AD%A2%E6%93%8D%E4%BD%9C%2F</url>
+    <content type="text"><![CDATA[第22期 Gremlin Steps： hasNext()、next()、tryNext()、toList()、toSet()、toBulkSet()、fill()、iterate() 本系列文章的Gremlin示例均在HugeGraph图数据库上执行，环境搭建可参考准备Gremlin执行环境，本文示例均以其中的“TinkerPop关系图”为初始数据。 上一期：深入学习Gremlin（21）：待添加 说明Gremlin 中有一类特殊的操作，它能够终止遍历器的“遍历”行为，使其执行并返回结果。在这里要强调的一点：原生的 Gremlin 语句通常都是用遍历器连接起来的，但其实这些连接的过程并不会执行 Gremlin 语句，只有走到了terminalStep 时才会执行。这个模式类似于 Spark 中对RDD的map和action操作。 hasNext: 判断遍历器是否含有元素（结果），返回布尔值； next: 不传参数时获取遍历器的下一个元素，也可以传入一个整数 n，则获取后面 n 个元素； tryNext: hasNext和next的结合版，返回一个Optional对象，如果有结果还需要调用get()方法才能拿到； toList: 将所有的元素放到一个List中返回； toSet: 将所有的元素放到一个Set中返回，会去除重复元素； toBulkSet: 将所有的元素放到一个能排序的List中返回，重复元素也会保留； fill: 传入一个集合对象，将所有的元素放入该集合并返回，其实toList、toSet和toBulkSet就是通过fillStep实现的； iterate: 这个 Step 在终止操作里面有点特殊，它并不完全符合终止操作的定义。它会在内部迭代完整个遍历器但是不返回结果。 那肯定有细心的同学要问了，前面我们介绍了那么多的 Step 很多都没有加terminalStep 啊，为什么也能返回结果呢？其实这是 Tinkerpop 的 Gremlin 解析引擎对遍历器对象调用了一个IteratorUtils.asList()方法，又调用了它内部的fill()方法（注意：不是上面讲到的fill()Step）。 实例讲解下面通过实例来深入理解每一个操作。 Step hasNext() 示例1： 12// 判断顶点“linary”是否包含“created”出顶点g.V('linary').out('created').hasNext() 示例2： 12// 判断顶点“linary”是否包含“knows”出顶点g.V('linary').out('knows').hasNext() Step next() 示例1： 12// 获取顶点“javeme”的“knows”出顶点集合的下一个（第1个）g.V('javeme').out('knows').next() g.V(&#39;javeme&#39;).out(&#39;knows&#39;)返回的是一个遍历器（迭代器），每次执行这句话实际上都是获取的迭代器的第一个元素，那如果想获取第二个元素该怎么写呢？很简单，执行两次next()即可，但是这里的前提条件是遍历器中确实存在多个元素。 示例2： 1234// 获取顶点“javeme”的“knows”出顶点集合的下一个（第2个）it = g.V('javeme').out('knows')it.next()it.next() 示例3： 12// 获取顶点“javeme”的“knows”出顶点集合的前两个g.V('javeme').out('knows').next(2) next()与next(n)使用中有一点小小的区别，就是当没有元素或者没有足够多的元素时，执行next()会报错，但是执行next(n)则是返回一个空集合（List）。 Step tryNext() 示例1： 12// 试图获取顶点“javeme”的“created”出顶点集合中的下一个g.V('javeme').out('created').tryNext() 这里细心的读者会发现结果与前面概述中说的有些不同。概述中说的是返回一个Optional对象，要获取Optional对象里的值是需要调用它的get()方法的，怎么这里直接就把值给返回了呢？大家先别着急，我们再看一个例子。 示例2： 12// 试图获取顶点“javeme”的“created”入顶点集合中的下一个g.V('javeme').in('created').tryNext() 这里更加令人费解，没有“created”入顶点时竟然直接报错了，其实这是HugeGraph的实现中关于Optional的序列化所致。HugeGraph序列化Optional对象时会判断该对象内的值是否存在，如果存在则取出来序列化该值，否则填入一个null。详细代码见HugeGraphSONModule.java中关于OptionalSerializer的实现。 本文的重点在于学习Gremlin语法本身，下面给出上述两个示例的预期结果： 12Optional[v[3:HugeGraph]]Optional.empty Step toList() 示例1： 12// 获取所有“person”顶点的“created”出顶点集合，放入List中，允许包含重复结果g.V().hasLabel('person').out('created').toList() 示例2： 12// 获取所有“person”顶点的“created”入顶点集合，放入List中，允许包含重复结果g.V().hasLabel('person').in('created').toList() 结果与next(n)有些类似。 Step toSet() 示例1： 12// 获取所有“person”顶点的“created”出顶点集合，放入Set中，不允许包含重复结果g.V().hasLabel('person').out('created').toSet() 相比于toList，toSet去除了重复元素。 示例2： 12// 获取所有“person”顶点的“created”入顶点集合，放入Set中，不允许包含重复结果g.V().hasLabel('person').in('created').toSet() Step toBulkSet() 示例1： 12// 获取所有“person”顶点的“created”出顶点集合，放入BulkSet中，允许包含重复结果，排序g.V().hasLabel('person').out('created').toBulkSet() 所谓的BulkSet虽然名字上带有”Set”，但还是更像一个List，对比toList的结果，它实际上是把所有元素排了个序。 Step fill() 示例1： 1234// 创建一个List，获取所有“person”顶点的“created”出顶点，并放入该List中results = []g.V().hasLabel('person').out('created').fill(results)results Step iterate() 示例1： 123// 迭代所有“person”顶点it = g.V().hasLabel('person').iterate()it.hasNext() 调用了iterate()后遍历器内部的元素就已经全部迭代过了，所以再调用hasNext()返回false。 下一期：深入学习Gremlin（23）：待添加]]></content>
       <categories>
         <category>hugegraph</category>
       </categories>
@@ -366,6 +377,14 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[分布式存储系统]]></title>
+    <url>%2F2018%2F08%2F06%2Fdistributed-storage%2F</url>
+    <content type="text"><![CDATA[需要调研的分布式存储系统包括但不限于： 谷歌的GFS、BigTable、MegaStore和Spanner，阿里的TFS、Tair和OceanBase，Facebook的Haystack，亚马逊的Dynamo，Oracle的Mysql Sharding，PingCap 的TiDB等。]]></content>
+      <categories>
+        <category>分布式存储系统</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[内存数据库事务]]></title>
     <url>%2F2018%2F08%2F06%2Fmemory-db%2F</url>
     <content type="text"><![CDATA[前言 我们在使用数据库的时候，应该都体验过事务，我们对事务最直观的感受就是：一系列的操作要么全部生效，要么全部不生效，不会最后处于一种中间状态。其实这句话似乎只能体现事务的原子性，那其他几个特性呢？本文会先回顾一下事务的定义和ACID特性，再以一个具体的例子展示如何实现事务的四个特性。 事务定义所谓事务，它是一个操作序列，这些操作要么都执行，要么都不执行，它是一个不可分割的工作单位。 特性 原子性（Atomicity）：事务是一个不可再分割的工作单位，事务中的操作要么都发生，要么都不发生； 一致性（Consistency）：事务开始之前和事务结束以后，数据库的完整性约束没有被破坏。这是说数据库事务不能破坏关系数据的完整性以及业务逻辑上的一致性。 隔离性（Isolation）：多个事务并发访问时，事务之间是隔离的，一个事务不应该影响其它事务运行效果。 持久性（Durability）：事务完成以后，该事务所对数据库所作的更改便持久的保存在数据库之中，并不会被回滚。]]></content>
@@ -375,14 +394,6 @@
       <tags>
         <tag>事务</tag>
       </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[分布式存储系统]]></title>
-    <url>%2F2018%2F08%2F06%2Fdistributed-storage%2F</url>
-    <content type="text"><![CDATA[需要调研的分布式存储系统包括但不限于： 谷歌的GFS、BigTable、MegaStore和Spanner，阿里的TFS、Tair和OceanBase，Facebook的Haystack，亚马逊的Dynamo，Oracle的Mysql Sharding，PingCap 的TiDB等。]]></content>
-      <categories>
-        <category>分布式存储系统</category>
-      </categories>
   </entry>
   <entry>
     <title><![CDATA[自己实现一个轻量级的任务（线程）管理器]]></title>
@@ -440,17 +451,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[Git常用操作记录]]></title>
-    <url>%2F2018%2F07%2F05%2Ftools%2Fgit-operation%2F</url>
-    <content type="text"><![CDATA[获取当前分支名 1git symbolic-ref --short -q HEAD 将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av 删除github远端的分支 1git push github :travis 这样就删除了travis分支 创建orphan分支，名为source 1git checkout --orphan source 注：如果不提交东西，这个分支实际上没有创建 查看某个指定文件的提交历史记录 1git log -p filePath 这样就先显示指定文件的每一次提交及修改信息（diff），但是不能显示文件改名前的修改，要注意第一次提交是不是改文件名 查看某一个分支创建的时间 1git reflog show --date=iso branch 最下面的应该就是该分支的创建时间 修改提交历史 1、找到要修改的commit id及其前一个commit id 1git rebase -i --before-commit-id 弹出来的一堆以 pick 开头的 commit id 和 commit message 的行，将第一行（也允许修改多行）的 pick 修改为 edit，然后保存退出vim，git 会在标记的 commit 停下来，然后我们可以做相应的修改，再执行 12git commit -a --amendgit rebase --continue 这时 git 会打印 rebasing(progress/total)，中间很有可能会产生冲突，解决好冲突后执行 12git add filegit rebase --continue 一直往下走，遇到冲突就重复这一步，直到走完全部的提交，这样就实现了修改历史。 拉取别人的提交到本地 1git fetch github pull/493/head:batch-update]]></content>
-      <categories>
-        <category>开发工具</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[自己动手实现RPC框架]]></title>
     <url>%2F2018%2F07%2F05%2Fepoch-rpc%2Fepoch-rpc-0%2F</url>
     <content type="text"><![CDATA[前言 RPC的文章看了不少，但是始终感觉似懂非懂，古人说的”纸上得来终觉浅，绝知此事要躬行”还是很有道理的。所以我希望通过一个真正的项目，来加深对RPC的认识。 这应该会是一个系列文章，至少在我动笔的这一刻是有非常强烈的意愿完成它的。 主要参考CSDN博客一起写RPC框架开篇说明 2018-09-03续，果不其然，还是因为诸多事情耽搁了。 今天又看了一些RPC的文章，发现黄勇老师的轻量级分布式 RPC 框架写的非常清晰易懂。于是整理出一些关键点出来，方便自己实现。 编写RPC框架的步骤如下： 编写服务接口 编写服务接口的实现类 配置服务端 启动服务器并发布服务 实现服务注册 实现 RPC 服务器 配置客户端 实现服务发现 实现 RPC 代理 发送 RPC 请求 注册中心的职责核心的职责如下： 服务提供者向其发送它提供的服务的一些基本信息，并完成注册 服务消费者订阅服务 服务提供者下线的时候，实时通知服务消费者某个服务下线 除此之外，还有一些锦上添花但在真实的业务中必须得有的功能，比如： 服务审核，这是服务治理最最简单的操作了，因为某个服务提供者上线之后，都是需要审核的，如果不审核，可能会造成很多不必要的麻烦，有可能有些开发小新，不小心把开发环境的服务向线上服务注册，如果不审核，直接通过的话，就会造成线上接口调用线下服务的尴尬局面 负载策略的记录，比如默认是随机加权策略，如果管理者希望改成加权轮询的策略，需要通知服务消费者，访问策略的改变 手动改变某个服务的访问权重，比如某个服务默认负重是50，（最大100）的时候，但是此时这个服务实例所在的机器压力不大的时候，而其他该服务实例压力很大的时候，可以适当的增加该服务的访问权重，所以我们可以在注册中心修改它的负重，然后通知服务消费者，这样就可以动态的修改负重了 一些持久化的操作，因为注册中心是无状态的，假如某个注册中心实例重启之后，以前的一些审核信息，修改的访问策略信息就会消失，这样就会需要用户重新一一审核，这是很麻烦的，所以需要将这些信息落地，持久化到硬盘，然后每次重启注册中心实例的时候，去读取这些信息 基于ZooKeeper的注册中心节点树结构如下： 计划（暂定） 2018-07-08 架构设计，功能（细节）设计 2018-07-15 网络传输模型，序列化部分 2018-07-22 服务端框架 2018-07-29 客户端框架 2018-08-06 负载均衡 2018-08-13 服务降级 2018-08-20 测试与优化]]></content>
@@ -459,6 +459,17 @@
       </categories>
       <tags>
         <tag>rpc</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Git常用操作记录]]></title>
+    <url>%2F2018%2F07%2F05%2Ftools%2Fgit-operation%2F</url>
+    <content type="text"><![CDATA[获取当前分支名 1git symbolic-ref --short -q HEAD 将本地仓库和github仓库关联起来 12git remote add github git@github.com:liningrui/study-rpc.gitgit pull 再查看所有分支就可以看到github远端分支的信息了 1git branch -av 删除github远端的分支 1git push github :travis 这样就删除了travis分支 创建orphan分支，名为source 1git checkout --orphan source 注：如果不提交东西，这个分支实际上没有创建 查看某个指定文件的提交历史记录 1git log -p filePath 这样就先显示指定文件的每一次提交及修改信息（diff），但是不能显示文件改名前的修改，要注意第一次提交是不是改文件名 查看某一个分支创建的时间 1git reflog show --date=iso branch 最下面的应该就是该分支的创建时间 修改提交历史 1、找到要修改的commit id及其前一个commit id 1git rebase -i --before-commit-id 弹出来的一堆以 pick 开头的 commit id 和 commit message 的行，将第一行（也允许修改多行）的 pick 修改为 edit，然后保存退出vim，git 会在标记的 commit 停下来，然后我们可以做相应的修改，再执行 12git commit -a --amendgit rebase --continue 这时 git 会打印 rebasing(progress/total)，中间很有可能会产生冲突，解决好冲突后执行 12git add filegit rebase --continue 一直往下走，遇到冲突就重复这一步，直到走完全部的提交，这样就实现了修改历史。 拉取别人的提交到本地 1git fetch github pull/493/head:batch-update]]></content>
+      <categories>
+        <category>开发工具</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>

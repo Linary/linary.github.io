@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Shell," />
+  <meta name="keywords" content="并发," />
 
 
 
@@ -79,18 +79,21 @@
 
 
 
-<meta name="description" content="修改 Linux 系统 Shell 的编码  123export LANG=&quot;en_US.UTF-8&quot;export LANG=&quot;zh_CN.GBK&quot;export LANG=&quot;zh_CN.UTF-8&quot;  在 Java 代码里面执行 Shell 命令  12345678910111213141516171819202122232425262728293031323334353637383940414">
-<meta name="keywords" content="Shell">
+<meta name="description" content="06 | 用“等待-通知”机制优化循环等待由上文可知：在破坏占用且等待条件的时候，如果转出账本和转入账本不满足同时在文件架上这个条件，就用死循环的方式来循环等待，核心代码如下： 123// 一次性申请转出账户和转入账户，直到成功while(!actr.apply(this, target))  ； 这种循环等待的方式极其浪费CPU，如果并发冲突大，可能要循环上万次才能取到锁。 其实在这种场景下，最">
+<meta name="keywords" content="并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Shell常用操作记录">
-<meta property="og:url" content="http://yoursite.com/2018/12/21/tools/shell-operation/index.html">
+<meta property="og:title" content="06 | 用“等待-通知”机制优化循环等待">
+<meta property="og:url" content="http://yoursite.com/2019/06/21/java/用“等待-通知”机制优化循环等待/index.html">
 <meta property="og:site_name" content="Linary">
-<meta property="og:description" content="修改 Linux 系统 Shell 的编码  123export LANG=&quot;en_US.UTF-8&quot;export LANG=&quot;zh_CN.GBK&quot;export LANG=&quot;zh_CN.UTF-8&quot;  在 Java 代码里面执行 Shell 命令  12345678910111213141516171819202122232425262728293031323334353637383940414">
+<meta property="og:description" content="06 | 用“等待-通知”机制优化循环等待由上文可知：在破坏占用且等待条件的时候，如果转出账本和转入账本不满足同时在文件架上这个条件，就用死循环的方式来循环等待，核心代码如下： 123// 一次性申请转出账户和转入账户，直到成功while(!actr.apply(this, target))  ； 这种循环等待的方式极其浪费CPU，如果并发冲突大，可能要循环上万次才能取到锁。 其实在这种场景下，最">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-08T09:11:13.126Z">
+<meta property="og:image" content="http://yoursite.com/2019/06/21/java/用“等待-通知”机制优化循环等待/media/15530800230679/15530821087486.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/06/21/java/用“等待-通知”机制优化循环等待/media/15530800230679/15530888424566.jpg">
+<meta property="og:updated_time" content="2019-06-21T12:14:05.666Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Shell常用操作记录">
-<meta name="twitter:description" content="修改 Linux 系统 Shell 的编码  123export LANG=&quot;en_US.UTF-8&quot;export LANG=&quot;zh_CN.GBK&quot;export LANG=&quot;zh_CN.UTF-8&quot;  在 Java 代码里面执行 Shell 命令  12345678910111213141516171819202122232425262728293031323334353637383940414">
+<meta name="twitter:title" content="06 | 用“等待-通知”机制优化循环等待">
+<meta name="twitter:description" content="06 | 用“等待-通知”机制优化循环等待由上文可知：在破坏占用且等待条件的时候，如果转出账本和转入账本不满足同时在文件架上这个条件，就用死循环的方式来循环等待，核心代码如下： 123// 一次性申请转出账户和转入账户，直到成功while(!actr.apply(this, target))  ； 这种循环等待的方式极其浪费CPU，如果并发冲突大，可能要循环上万次才能取到锁。 其实在这种场景下，最">
+<meta name="twitter:image" content="http://yoursite.com/2019/06/21/java/用“等待-通知”机制优化循环等待/media/15530800230679/15530821087486.jpg">
 
 
 
@@ -120,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/12/21/tools/shell-operation/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/06/21/java/用“等待-通知”机制优化循环等待/"/>
 
 
 
 
 
-  <title>Shell常用操作记录 | Linary</title>
+  <title>06 | 用“等待-通知”机制优化循环等待 | Linary</title>
   
 
 
@@ -307,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/21/tools/shell-operation/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/21/java/用“等待-通知”机制优化循环等待/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +327,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Shell常用操作记录</h1>
+          <h1 class="post-title" itemprop="name headline">06 | 用“等待-通知”机制优化循环等待</h1>
         
 
         <div class="post-meta">
@@ -336,8 +339,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T00:00:00+08:00">
-                2018-12-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-21T00:00:00+08:00">
+                2019-06-21
               </time>
             
 
@@ -359,8 +362,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/开发工具/" itemprop="url" rel="index">
-                    <span itemprop="name">开发工具</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -396,33 +399,61 @@
       
 
       
-        <ul>
-<li>修改 Linux 系统 Shell 的编码</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> LANG=<span class="string">"en_US.UTF-8"</span></span><br><span class="line"><span class="built_in">export</span> LANG=<span class="string">"zh_CN.GBK"</span></span><br><span class="line"><span class="built_in">export</span> LANG=<span class="string">"zh_CN.UTF-8"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>在 Java 代码里面执行 Shell 命令</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* 执行系统命令, 返回执行结果</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> cmd 需要执行的命令</span></span><br><span class="line"><span class="comment">* <span class="doctag">@param</span> dir 执行命令的子进程的工作目录, null 表示和当前主进程工作目录相同</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">execCmd</span><span class="params">(String cmd, File dir)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">    StringBuilder result = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"></span><br><span class="line">    Process process = <span class="keyword">null</span>;</span><br><span class="line">    BufferedReader bufrIn = <span class="keyword">null</span>;</span><br><span class="line">    BufferedReader bufrError = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        String[] commond = &#123;<span class="string">"/bin/sh"</span>, <span class="string">"-c"</span>, cmd&#125;;</span><br><span class="line">        <span class="comment">// 执行命令, 返回一个子进程对象（命令在子进程中执行）</span></span><br><span class="line">        process = Runtime.getRuntime().exec(commond, <span class="keyword">null</span>, dir);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 方法阻塞, 等待命令执行完成（成功会返回0）</span></span><br><span class="line">        process.waitFor();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 获取命令执行结果, 有两个结果: 正常的输出 和 错误的输出（PS: 子进程的输出就是主进程的输入）</span></span><br><span class="line">        bufrIn = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(process.getInputStream(), <span class="string">"UTF-8"</span>));</span><br><span class="line">        bufrError = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(process.getErrorStream(), <span class="string">"UTF-8"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 读取输出</span></span><br><span class="line">        String line = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">while</span> ((line = bufrIn.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            result.append(line).append(<span class="string">'\n'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> ((line = bufrError.readLine()) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            result.append(line).append(<span class="string">'\n'</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        logger.error(e);</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        closeStream(bufrIn);</span><br><span class="line">        closeStream(bufrError);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 销毁子进程</span></span><br><span class="line">        <span class="keyword">if</span> (process != <span class="keyword">null</span>) &#123;</span><br><span class="line">            process.destroy();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回执行结果</span></span><br><span class="line">    <span class="keyword">return</span> result.toString();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">closeStream</span><span class="params">(Closeable stream)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (stream != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            stream.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            <span class="comment">// nothing</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Shell 中 Map 的使用</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定义一个空map        </span></span><br><span class="line"><span class="built_in">declare</span> -A map=()</span><br><span class="line"><span class="comment"># 定义并初始化map        </span></span><br><span class="line"><span class="built_in">declare</span> -A map=([<span class="string">"100"</span>]=<span class="string">"1"</span> [<span class="string">"200"</span>]=<span class="string">"2"</span>)</span><br><span class="line"><span class="comment"># 输出所有key</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;!map[@]&#125;</span></span><br><span class="line"><span class="comment"># 输出所有value        </span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;map[@]&#125;</span></span><br><span class="line"><span class="comment"># 添加值</span></span><br><span class="line">map[<span class="string">"300"</span>]=<span class="string">"3"</span></span><br><span class="line"><span class="comment"># 输出key对应的值</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;map["100"]&#125;</span></span><br><span class="line"><span class="comment"># 遍历输出map</span></span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> <span class="variable">$&#123;!map[@]&#125;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="variable">$&#123;map[$key]&#125;</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>在 Mac 环境中会出错，因为 Mac OS X 的默认Bash 是 3.x 版本，不支持 map 这种数据结构，<br>有两种解决方案：</p>
+        <h3 id="06-用“等待-通知”机制优化循环等待"><a href="#06-用“等待-通知”机制优化循环等待" class="headerlink" title="06 | 用“等待-通知”机制优化循环等待"></a>06 | 用“等待-通知”机制优化循环等待</h3><p>由上文可知：在<strong>破坏占用且等待条件</strong>的时候，如果转出账本和转入账本不满足同时在文件架上这个条件，就用死循环的方式来循环等待，核心代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// 一次性申请转出账户和转入账户，直到成功</span><br><span class="line">while(!actr.apply(this, target))</span><br><span class="line">  ；</span><br></pre></td></tr></table></figure>
+<p>这种循环等待的方式极其浪费CPU，如果并发冲突大，可能要循环上万次才能取到锁。</p>
+<p>其实在这种场景下，最好的方案应该是：如果线程要求的条件（转出账本和转入账本同在文件架上）不满足，则线程阻塞自己，进入<strong>等待</strong>状态，当线程要求的条件满足后，<strong>通知</strong>等待的线程重新执行。其中，使用线程阻塞的方式就能避免循环等待消耗CPU的问题。</p>
+<p>下面我们看看Java语言是如何支持<strong>等待——通知</strong>机制的。</p>
+<h4 id="就医流程"><a href="#就医流程" class="headerlink" title="就医流程"></a>就医流程</h4><p>我们先看一个现实世界里面的就医流程，它有着完善的等待——通知机制，所以对比就医流程，我们可以更好地理解<strong>等待——通知</strong>机制。</p>
+<p>就医流程基本上是这样：</p>
 <ol>
-<li>升级bash到 4.x 以上版本</li>
-<li>用其他方式:比如 if elif 去到达相同的结果</li>
+<li>患者先去挂号，然后到就诊门口分诊，等待叫号；</li>
+<li>当叫到自己的号时，患者就可以找大夫就诊了；</li>
+<li>就诊过程中，大夫可能会让患者去做检查，同时叫下一位患者；</li>
+<li>当患者做完检查后，拿检测报告重新分诊，等待叫号；</li>
+<li>当大夫再次叫到自己的号时，患者再去找大夫就诊。</li>
 </ol>
+<p>这个就诊流程能保证同一时刻大夫只为一个患者服务，而且还能保证大夫和患者的效率，不会让患者在大夫诊室门口傻等。下面我们把Java的<strong>等待——通知</strong>机制和就诊流程对比起来，并关注一下上面忽视的细节：</p>
+<ol>
+<li>患者到就诊室门口分诊，类似于线程要去获取互斥锁；当患者被叫到时，类似线程已经获取到锁了；</li>
+<li>大夫让患者去做检查（缺少检测报告不能诊断病因），类似于线程要求的条件没有被满足；</li>
+<li>患者去做检查，类似于线程进入等待状态；然后大夫叫下一个患者，这个步骤对应到程序里，<strong>本质是线程释放持有的互斥锁</strong>；</li>
+<li>患者做完检查，类似于线程要求的条件已经满足；患者拿检测报告重新分诊，<strong>类似于线程需要重新获取互斥锁</strong>。</li>
+</ol>
+<p>所以加上这些至关重要的细节，综合一下，就可以得出一个完整的<strong>等待——通知</strong>机制：线程首先获取互斥锁，当线程要求的条件不满足时，释放互斥锁，进入等待状态；单线程要求的条件满足时，通知等待的线程，重新获取互斥锁。</p>
+<h4 id="用-synchronized-实现等待——通知机制"><a href="#用-synchronized-实现等待——通知机制" class="headerlink" title="用 synchronized 实现等待——通知机制"></a>用 synchronized 实现等待——通知机制</h4><p>在 Java 中，等待——通知机制可以有多种实现方式，比如内置的 synchronized 配合 wait()、notify()、notifyAll() 这三个方法就能轻松实现。</p>
+<p>在下面这个图里，左边有一个等待队列，同一时刻，只允许一个线程进入 synchronized 保护的临界区（这个临界区可以看作大夫的诊室），当有一个线程进入临界区后，其他线程就只能进入图中左边的等待队列里等待（相当于患者分诊等待）。<strong>这个等待队列和互斥锁是一对一的关系，每个互斥锁都有自己独立的等待队列。</strong></p>
+<p><img src="media/15530800230679/15530821087486.jpg" alt=""></p>
+<p>在并发程序中，当一个线程进入临界区后，由于某些条件不满足，需要进入等待状态，Java 对象的 wait() 方法就能够满足这种需求。如上图所示，当调用 wait() 方法后，当前线程就会被阻塞，并且进入到右边的等待队列中，这个等待队列也是互斥锁的等待队列。线程在进入等待队列的同时，<strong>会释放持有的互斥锁</strong>，线程释放锁后，其他线程就有机会获得锁，并进入临界区了。</p>
+<p>那线程要求的条件满足时，该怎么通知这个等待的线程呢？很简单，就是 Java 对象的 notify() 和 notifyAll() 方法。当条件满足时调用 notify()，会通知等待队列（<strong>互斥锁的等待队列</strong>）中的线程，告诉它<strong>条件曾经满足过</strong>。</p>
+<p><img src="media/15530800230679/15530888424566.jpg" alt=""></p>
+<p>为什么说是曾经满足过呢？因为 notify() 只能保证<strong>在通知时间点，条件是满足的</strong>。而被通知线程的<strong>执行时间点和通知的时间点</strong>基本上不会重合，所以当线程执行的时候，很可能条件已经不满足了（保不齐有其他线程插队）。这一点需要格外注意。</p>
+<p>除此之外，还有一个需要注意的点，被通知的线程要想重新执行，仍然需要获取到互斥锁（因为曾经获取的锁在调用 wait() 时已经释放了）。</p>
+<blockquote>
+<p>上面我们一直强调 wait()、notify()、notifyAll() 方法操作的等待队列是互斥锁的等待队列，所以如果 synchronized 锁定的是 this，那么对应的一定是 this.wait()、this.notify()、this.notifyAll()；如果 synchronized 锁定的是 target，那么对应的一定是 target.wait()、target.notify()、target.notifyAll()。而且 wait()、notify()、notifyAll() 这三个方法能够被调用的前提是已经获取了相应的互斥锁，所以我们会发现 wait()、notify()、notifyAll() 都是在 synchronized{}内部被调用的。如果在 synchronized{} 外部调用，或者锁定的 this，而用 target.wait() 调用的话，JVM 会抛出一个运行时异常：java.lang.IllegalMonitorStateException。</p>
 </blockquote>
-<ul>
-<li>tcpdump的使用</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo tcpdump -i lo0 dst host 127.0.0.1 and port 8080</span><br></pre></td></tr></table></figure>
-<ul>
-<li>netstat的使用</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -n -p tcp | grep 8080</span><br></pre></td></tr></table></figure>
+<h4 id="小试牛刀：一个更好地资源分配器"><a href="#小试牛刀：一个更好地资源分配器" class="headerlink" title="小试牛刀：一个更好地资源分配器"></a>小试牛刀：一个更好地资源分配器</h4><p>等待 - 通知机制的基本原理搞清楚后，我们就来看看它如何解决一次性申请转出账户和转入账户的问题吧。在这个等待 - 通知机制中，我们需要考虑以下四个要素。</p>
+<ol>
+<li>互斥锁：上一篇文章我们提到 Allocator 需要是单例的，所以我们可以用 this 作为互斥锁。</li>
+<li>线程要求的条件：转出账户和转入账户都没有被分配过。</li>
+<li>何时等待：线程要求的条件不满足就等待。</li>
+<li>何时通知：当有线程释放账户时就通知。</li>
+</ol>
+<p>将上面几个问题考虑清楚，可以快速完成下面的代码。需要注意的是我们使用了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while(条件不满足) &#123;</span><br><span class="line">    wait();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用这种范式可以解决上面提到的条件曾经满足过这个问题。因为当wait() 返回时，有可能条件已经发生变化了，曾经条件满足，但是现在已经不满足了，所以要重新检验条件是否满足。范式，意味着是经典做法，所以没有特殊理由不要尝试换个写法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">class Allocator &#123;</span><br><span class="line">  private List&lt;Object&gt; als;</span><br><span class="line">  // 一次性申请所有资源</span><br><span class="line">  synchronized void apply(Object from, Object to)&#123;</span><br><span class="line">    // 经典写法</span><br><span class="line">    while(als.contains(from) || als.contains(to))&#123;</span><br><span class="line">      try&#123;</span><br><span class="line">        wait();</span><br><span class="line">      &#125;catch(Exception e)&#123;</span><br><span class="line">      &#125;   </span><br><span class="line">    &#125; </span><br><span class="line">    als.add(from);</span><br><span class="line">    als.add(to);  </span><br><span class="line">  &#125;</span><br><span class="line">  // 归还资源</span><br><span class="line">  synchronized void free(Object from, Object to)&#123;</span><br><span class="line">    als.remove(from);</span><br><span class="line">    als.remove(to);</span><br><span class="line">    notifyAll();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：尽量使用 notifyAll()，notify() 是会随机地通知等待队列中的一个线程，而 notifyAll() 会通知等待队列中的所有线程。使用 notify() 也很有风险，它的风险在于可能导致某些线程永远不会被通知到。</p>
+</blockquote>
+<h4 id="课后思考"><a href="#课后思考" class="headerlink" title="课后思考"></a>课后思考</h4><p>很多面试都会问到，wait() 方法和 sleep() 方法都能让当前线程挂起一段时间，那它们的区别是什么？</p>
+<p>wait与sleep区别在于：</p>
+<ol>
+<li>wait会释放所有锁而sleep不会释放锁资源；</li>
+<li>wait只能在同步方法和同步块中使用，而sleep任何地方都可以；</li>
+<li>wait无需捕捉异常，而sleep需要；</li>
+</ol>
+<p>两者相同点：都会让渡CPU执行时间，等待再次调度！</p>
 
       
     </div>
@@ -440,7 +471,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+            <a href="/tags/并发/" rel="tag"><i class="fa fa-tag"></i> 并发</a>
           
         </div>
       
@@ -453,8 +484,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/12/21/tools/maven/" rel="next" title="Maven常用配置">
-                <i class="fa fa-chevron-left"></i> Maven常用配置
+              <a href="/2019/06/18/docker/在 MAC 上使用 Docker 安装 PostgreSQL、Oracle、SQLServer/" rel="next" title="在 MAC 上使用 Docker 安装 PostgreSQL、Oracle、SQLServer">
+                <i class="fa fa-chevron-left"></i> 在 MAC 上使用 Docker 安装 PostgreSQL、Oracle、SQLServer
               </a>
             
           </div>
@@ -462,10 +493,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/12/25/tools/science-online/" rel="prev" title="科学上网">
-                科学上网 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -517,8 +544,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -582,6 +618,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#06-用“等待-通知”机制优化循环等待"><span class="nav-number">1.</span> <span class="nav-text">06 | 用“等待-通知”机制优化循环等待</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#就医流程"><span class="nav-number">1.1.</span> <span class="nav-text">就医流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用-synchronized-实现等待——通知机制"><span class="nav-number">1.2.</span> <span class="nav-text">用 synchronized 实现等待——通知机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小试牛刀：一个更好地资源分配器"><span class="nav-number">1.3.</span> <span class="nav-text">小试牛刀：一个更好地资源分配器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#课后思考"><span class="nav-number">1.4.</span> <span class="nav-text">课后思考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
