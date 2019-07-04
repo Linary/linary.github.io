@@ -79,18 +79,21 @@
 
 
 
-<meta name="description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
+<meta name="description" content="31 | Guarded Suspension模式：等待唤醒机制的规范实现这是一个在业务场景中很常见的消息队列使用方式：  用户通过浏览器发过来一个请求，会被转换成一个异步消息发送给 MQ，等 MQ 返回结果后，再将这个结果返回至浏览器。小灰同学的问题是：给 MQ 发送消息的线程是处理 Web 请求的线程 T1，但消费 MQ 结果的线程并不是线程 T1，那线程 T1 如何等待 MQ 的返回结果呢？">
 <meta name="keywords" content="并发">
 <meta property="og:type" content="article">
-<meta property="og:title" content="并发与高并发">
-<meta property="og:url" content="http://yoursite.com/2018/08/30/java/concurrent/index.html">
+<meta property="og:title" content="31 | Guarded Suspension模式：等待唤醒机制的规范实现">
+<meta property="og:url" content="http://yoursite.com/2019/07/04/java/Guarded Suspension模式：等待唤醒机制的规范实现/index.html">
 <meta property="og:site_name" content="Linary">
-<meta property="og:description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
+<meta property="og:description" content="31 | Guarded Suspension模式：等待唤醒机制的规范实现这是一个在业务场景中很常见的消息队列使用方式：  用户通过浏览器发过来一个请求，会被转换成一个异步消息发送给 MQ，等 MQ 返回结果后，再将这个结果返回至浏览器。小灰同学的问题是：给 MQ 发送消息的线程是处理 Web 请求的线程 T1，但消费 MQ 结果的线程并不是线程 T1，那线程 T1 如何等待 MQ 的返回结果呢？">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-09-01T15:20:18.309Z">
+<meta property="og:image" content="http://yoursite.com/2019/07/04/java/Guarded%20Suspension模式：等待唤醒机制的规范实现/media/15574520005080/15574520529217.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/07/04/java/Guarded%20Suspension模式：等待唤醒机制的规范实现/media/15574520005080/15574523062379.jpg">
+<meta property="og:updated_time" content="2019-07-04T06:07:00.205Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="并发与高并发">
-<meta name="twitter:description" content="并发与高并发的关注点 并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源 高并发：服务能同时处理很多请求，提高程序性能  基础知识CPU多级缓存 为什么需要CPU缓存： 缓存存在的意义：时间一致性，空间一致性 缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂） 乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化  J.U.C 之 AQS 组件Co">
+<meta name="twitter:title" content="31 | Guarded Suspension模式：等待唤醒机制的规范实现">
+<meta name="twitter:description" content="31 | Guarded Suspension模式：等待唤醒机制的规范实现这是一个在业务场景中很常见的消息队列使用方式：  用户通过浏览器发过来一个请求，会被转换成一个异步消息发送给 MQ，等 MQ 返回结果后，再将这个结果返回至浏览器。小灰同学的问题是：给 MQ 发送消息的线程是处理 Web 请求的线程 T1，但消费 MQ 结果的线程并不是线程 T1，那线程 T1 如何等待 MQ 的返回结果呢？">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/04/java/Guarded%20Suspension模式：等待唤醒机制的规范实现/media/15574520005080/15574520529217.jpg">
 
 
 
@@ -120,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/30/java/concurrent/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/07/04/java/Guarded Suspension模式：等待唤醒机制的规范实现/"/>
 
 
 
 
 
-  <title>并发与高并发 | Linary</title>
+  <title>31 | Guarded Suspension模式：等待唤醒机制的规范实现 | Linary</title>
   
 
 
@@ -307,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/30/java/concurrent/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/04/java/Guarded Suspension模式：等待唤醒机制的规范实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -324,7 +327,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">并发与高并发</h1>
+          <h1 class="post-title" itemprop="name headline">31 | Guarded Suspension模式：等待唤醒机制的规范实现</h1>
         
 
         <div class="post-meta">
@@ -336,8 +339,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-30T00:00:00+08:00">
-                2018-08-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-04T00:00:00+08:00">
+                2019-07-04
               </time>
             
 
@@ -359,8 +362,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发/" itemprop="url" rel="index">
-                    <span itemprop="name">并发</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -396,81 +399,28 @@
       
 
       
-        <h3 id="并发与高并发的关注点"><a href="#并发与高并发的关注点" class="headerlink" title="并发与高并发的关注点"></a>并发与高并发的关注点</h3><ul>
-<li>并发：多个线程操作相同的资源，保证程序线程安全，合理使用资源</li>
-<li>高并发：服务能同时处理很多请求，提高程序性能</li>
-</ul>
-<h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><h4 id="CPU多级缓存"><a href="#CPU多级缓存" class="headerlink" title="CPU多级缓存"></a>CPU多级缓存</h4><ul>
-<li>为什么需要CPU缓存：</li>
-<li>缓存存在的意义：时间一致性，空间一致性</li>
-<li>缓存一致性（MESI）：用于保证多个CPU缓存之间缓存共享数据的一致性（没听懂）</li>
-<li>乱序执行优化：处理器为提高运算速度而做出违背代码原有顺序的优化</li>
-</ul>
-<h3 id="J-U-C-之-AQS-组件"><a href="#J-U-C-之-AQS-组件" class="headerlink" title="J.U.C 之 AQS 组件"></a>J.U.C 之 AQS 组件</h3><h4 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h4><p>计数器，能阻塞（await）某些线程直到 CountDownLatch 的值变为 0，其他线程负责将 CountDownLatch 减 1（countDown）。</p>
-<p>计数器只能使用一次。</p>
-<h4 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h4><p>信号量，能控制一定数量线程的并发执行。</p>
-<p>在执行业务代码前，调用<code>acquire()</code>获取一个许可，执行完之后，调用<code>release()</code>释放一个许可。</p>
-<p>还允许尝试获取许可，尝试获取多个许可以及它们的超时版。</p>
-<h4 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h4><p>允许多个线程互相等待，到达全部准备好的状态。就像赛跑时所有人都要在起跑线上准备好，然后再一起开跑。</p>
-<p>可以重置。</p>
-<h4 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h4><p>可重入锁，一个线程进去过一次后还可以再进去一次。</p>
-<p>其实 synchronized 也是可重入锁。</p>
-<p>自从 synchronized 引入了偏向锁，自旋锁之后，性能与 synchronized 差不多了。</p>
-<h4 id="StampedLock"><a href="#StampedLock" class="headerlink" title="StampedLock"></a>StampedLock</h4><p>StampedLock 是 Java8 引入的一种新的所机制，简单的理解，可以认为它是读写锁的一个改进版本。<br>读写锁虽然分离了读和写的功能，使得读与读之间可以完全并发，但是读和写之间依然是冲突的，读锁会完全阻塞写锁，<br>它使用的依然是悲观的锁策略。如果有大量的读线程，他也有可能引起写线程的饥饿。<br>而StampedLock 则提供了一种乐观的读策略，这种乐观策略的锁非常类似于无锁的操作，使得乐观锁完全不会阻塞写线程。</p>
-<h4 id="Fork-Join-框架"><a href="#Fork-Join-框架" class="headerlink" title="Fork/Join 框架"></a>Fork/Join 框架</h4><p>并行流就是把一个内容分成多个数据块，并用不同的线程分别处理每个数据块的流。并行流的底层其实就是ForkJoin框架的一个实现。</p>
-<p>Fork/Join框架：在必要的情况下，将一个大任务，进行拆分（fork） 成若干个子任务（拆到不能再拆，这里就是指我们制定的拆分的临界值），再将一个个小任务的结果进行join汇总。</p>
-<p>Fork/Join采用“工作窃取模式”，当执行新的任务时他可以将其拆分成更小的任务执行，并将小任务加到线程队列中，然后再从一个随即线程中偷一个并把它加入自己的队列中。</p>
-<p>就比如两个CPU上有不同的任务，这时候A已经执行完，B还有任务等待执行，这时候A就会将B队尾的任务偷过来，加入自己的队列中，对于传统的线程，ForkJoin更有效的利用的CPU资源！</p>
-<h4 id="BlockingQueue"><a href="#BlockingQueue" class="headerlink" title="BlockingQueue"></a>BlockingQueue</h4><p>BlockingQueue 通常用于一个线程生产对象，而另外一个线程消费这些对象的场景。一个线程往里边放，另外一个线程从里边取。<br>一个线程将会持续生产新对象并将其插入到队列之中，直到队列达到它所能容纳的临界点。也就是说，它是有限的。<br>如果该阻塞队列到达了其临界点，负责生产的线程将会在往里边插入新对象时发生阻塞。它会一直处于阻塞之中，直到负责消费的线程从队列中拿走一个对象。<br>负责消费的线程将会一直从该阻塞队列中拿出对象。如果消费线程尝试去从一个空的队列中提取对象的话，<br>这个消费线程将会处于阻塞之中，直到一个生产线程把一个对象丢进队列。</p>
-<ul>
-<li>直接提交队列：SynchronousQueue，没有容量，所以提交的任务不能保存，总是将任务交给空闲线程,如果没有空闲线程，就创建线程，一旦达到maximumPoolSize就执行拒绝策略</li>
-<li>有界任务队列：ArrayBlockingQueue,当线程池的数量小于corePoolSize时，当有新的任务时，创建线程，达到corePoolSize后，则将任务存到ArrayBlockingQueue中，直到有界队列容量已满时，才可能会将线程数提升到corePoolSize之上。</li>
-<li>无界队列：LinkedBlockingQueue,除非系统资源耗尽，否则不存在任务队列入队失败的情况，因此当线程数达到corePoolSize之后，就不会增加，有新的任务到来时，都会放到无界队列中。</li>
-<li>优先任务队列：PriorityBlockingQueue是带有优先级的队列，特殊的无界队列,理论上来说不是先入先出的，是根据任务的优先级来确定执行顺序</li>
-<li>DelayQueue：执行定时任务，将任务按延迟时间长短放入队列中，延迟时间最短的最先被执行，存放在队列头部的是延迟期满后保存时间最长的任务</li>
-<li>LinkedTransferQueue：其实和SynchronousQueue类似，当生产者生产出产品后，当先去找是否有消费者，如果有消费者在等待资源，则直接调用transfer()方法将资源给消费者消费，而不会放入队列中。如果没有消费者等待，则当生产者调用transfer()方法时会阻塞，而调用其他的方法，如aput()则不会阻塞，会把资源放到队列中，因为put()方法只有在队列满的时候才会阻塞。适用于游戏服务器中，可以是并发时消息传递的效率更高</li>
-</ul>
-<h3 id="多线程并发最佳实践"><a href="#多线程并发最佳实践" class="headerlink" title="多线程并发最佳实践"></a>多线程并发最佳实践</h3><ul>
-<li>使用本地变量</li>
-<li>使用不可变类</li>
-<li>最小化锁的作用域范围：S=1/(1-a + a/n)</li>
-<li>使用线程池的 Executor，而不是直接 new Thread 执行</li>
-<li>宁可使用同步也不要使用线程 wait 和 notify</li>
-<li>使用 BlockingQueue 实现生产消费模式</li>
-<li>使用并发集合而不是加了锁的同步集合</li>
-<li>使用 Semaphore 创建有界的访问</li>
-<li>宁可使用同步代码块，也不使用同步的方法</li>
-<li>避免使用静态变量</li>
-</ul>
-<h3 id="高并发处理的思路及手段"><a href="#高并发处理的思路及手段" class="headerlink" title="高并发处理的思路及手段"></a>高并发处理的思路及手段</h3><ul>
-<li>扩容：水平扩容、垂直扩容</li>
-<li>缓存：Redis、Memcache、Guava Cache等的介绍与使用</li>
-<li>队列：kafka、RabbitMQ、RocketMQ等</li>
-<li>应用拆分：服务化Dubbo与微服务Spring Cloud</li>
-<li>限流：Guava RateLimiter，常用限流算法</li>
-<li>服务降级与服务熔断：Hystrix</li>
-<li>数据库切库、分库、分表</li>
-<li>高可用：任务调度分布式elastic-job、主备curator的实现、监控报警机制</li>
-</ul>
-<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>浏览器 -&gt; 网络转发 -&gt; 服务 -&gt; 数据库</p>
-<p>其实缓存可以出现在上述的各个环节中。</p>
-<h4 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h4><ul>
-<li>命中率：命中数 /（命中数 + 未命中数）</li>
-<li>最大元素（空间）</li>
-<li>清空策略：FIFO、LFU、LRU、过期时间、随机等</li>
-</ul>
-<h4 id="缓存命中率影响因素"><a href="#缓存命中率影响因素" class="headerlink" title="缓存命中率影响因素"></a>缓存命中率影响因素</h4><ul>
-<li>业务场景和业务需求</li>
-<li>缓存的设计（粒度和策略）</li>
-<li>缓存容量和基础设施</li>
-</ul>
-<h4 id="缓存分类和应用场景"><a href="#缓存分类和应用场景" class="headerlink" title="缓存分类和应用场景"></a>缓存分类和应用场景</h4><ul>
-<li>本地缓存：编程实现（成员变量、局部变量、静态变量）、Guava Cache</li>
-<li>分布式缓存：MemCache、Redis</li>
-</ul>
-<h5 id="Guava-Cache"><a href="#Guava-Cache" class="headerlink" title="Guava Cache"></a>Guava Cache</h5><p>灵感来源于<code>ConcurrentHashMap</code>。</p>
-<h5 id="MemCache"><a href="#MemCache" class="headerlink" title="MemCache"></a>MemCache</h5><p>客户端：采用一致性哈希算法，把某个key的操作映射到固定机器上。</p>
-<h5 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h5><p>远程内存数据库，支持数据持久化。</p>
+        <h3 id="31-Guarded-Suspension模式：等待唤醒机制的规范实现"><a href="#31-Guarded-Suspension模式：等待唤醒机制的规范实现" class="headerlink" title="31 | Guarded Suspension模式：等待唤醒机制的规范实现"></a>31 | Guarded Suspension模式：等待唤醒机制的规范实现</h3><p>这是一个在业务场景中很常见的消息队列使用方式：</p>
+<p><img src="media/15574520005080/15574520529217.jpg" alt=""></p>
+<p>用户通过浏览器发过来一个请求，会被转换成一个异步消息发送给 MQ，等 MQ 返回结果后，再将这个结果返回至浏览器。小灰同学的问题是：给 MQ 发送消息的线程是处理 Web 请求的线程 T1，但消费 MQ 结果的线程并不是线程 T1，那线程 T1 如何等待 MQ 的返回结果呢？为了便于你理解这个场景，我将其代码化了，示例代码如下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">class Message&#123;</span><br><span class="line">  String id;</span><br><span class="line">  String content;</span><br><span class="line">&#125;</span><br><span class="line">// 该方法可以发送消息</span><br><span class="line">void send(Message msg)&#123;</span><br><span class="line">  // 省略相关代码</span><br><span class="line">&#125;</span><br><span class="line">//MQ 消息返回后会调用该方法</span><br><span class="line">// 该方法的执行线程不同于</span><br><span class="line">// 发送消息的线程</span><br><span class="line">void onMessage(Message msg)&#123;</span><br><span class="line">  // 省略相关代码</span><br><span class="line">&#125;</span><br><span class="line">// 处理浏览器发来的请求</span><br><span class="line">Respond handleWebReq()&#123;</span><br><span class="line">  // 创建一消息</span><br><span class="line">  Message msg1 = new </span><br><span class="line">    Message(&quot;1&quot;,&quot;&#123;...&#125;&quot;);</span><br><span class="line">  // 发送消息</span><br><span class="line">  send(msg1);</span><br><span class="line">  // 如何等待 MQ 返回的消息呢？</span><br><span class="line">  String result = ...;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看到这里，相信你一定有点似曾相识的感觉，这不就是前面我们在《15 | Lock 和 Condition（下）：Dubbo 如何用管程实现异步转同步？》中曾介绍过的异步转同步问题吗？仔细分析，的确是这样，不过在那一篇文章中我们只是介绍了最终方案，让你知其然，但是并没有介绍这个方案是如何设计出来的，今天咱们再仔细聊聊这个问题，让你知其所以然，遇到类似问题也能自己设计出方案来。</p>
+<h4 id="Guarded-Suspension-模式"><a href="#Guarded-Suspension-模式" class="headerlink" title="Guarded Suspension 模式"></a>Guarded Suspension 模式</h4><p>上面小灰遇到的问题，在现实世界里比比皆是，只是我们一不小心就忽略了。比如，项目组团建要外出聚餐，我们提前预订了一个包间，然后兴冲冲地奔过去，到那儿后大堂经理看了一眼包间，发现服务员正在收拾，就会告诉我们：“您预订的包间服务员正在收拾，请您稍等片刻。”过了一会，大堂经理发现包间已经收拾完了，于是马上带我们去包间就餐。</p>
+<p>我们等待包间收拾完的这个过程和小灰遇到的等待 MQ 返回消息本质上是一样的，都是等待一个条件满足：就餐需要等待包间收拾完，小灰的程序里要等待 MQ 返回消息。</p>
+<p>那我们来看看现实世界里是如何解决这类问题的呢？现实世界里大堂经理这个角色很重要，我们是否等待，完全是由他来协调的。通过类比，相信你也一定有思路了：我们的程序里，也需要这样一个大堂经理。的确是这样，那程序世界里的大堂经理该如何设计呢？其实设计方案前人早就搞定了，而且还将其总结成了一个设计模式：Guarded Suspension。所谓 Guarded Suspension，直译过来就是“保护性地暂停”。那下面我们就来看看，Guarded Suspension 模式是如何模拟大堂经理进行保护性地暂停的。</p>
+<p>下图就是 Guarded Suspension 模式的结构图，非常简单，一个对象 GuardedObject，内部有一个成员变量——受保护的对象，以及两个成员方法——get(Predicate<t> p)和onChanged(T obj)方法。其中，对象 GuardedObject 就是我们前面提到的大堂经理，受保护对象就是餐厅里面的包间；受保护对象的 get() 方法对应的是我们的就餐，就餐的前提条件是包间已经收拾好了，参数 p 就是用来描述这个前提条件的；受保护对象的 onChanged() 方法对应的是服务员把包间收拾好了，通过 onChanged() 方法可以 fire 一个事件，而这个事件往往能改变前提条件 p 的计算结果。下图中，左侧的绿色线程就是需要就餐的顾客，而右侧的蓝色线程就是收拾包间的服务员。</t></p>
+<p><img src="media/15574520005080/15574523062379.jpg" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class GuardedObject&lt;T&gt;&#123;</span><br><span class="line">  // 受保护的对象</span><br><span class="line">  T obj;</span><br><span class="line">  final Lock lock = </span><br><span class="line">    new ReentrantLock();</span><br><span class="line">  final Condition done =</span><br><span class="line">    lock.newCondition();</span><br><span class="line">  final int timeout=1;</span><br><span class="line">  // 获取受保护对象  </span><br><span class="line">  T get(Predicate&lt;T&gt; p) &#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    try &#123;</span><br><span class="line">      //MESA 管程推荐写法</span><br><span class="line">      while(!p.test(obj))&#123;</span><br><span class="line">        done.await(timeout, </span><br><span class="line">          TimeUnit.SECONDS);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;catch(InterruptedException e)&#123;</span><br><span class="line">      throw new RuntimeException(e);</span><br><span class="line">    &#125;finally&#123;</span><br><span class="line">      lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    // 返回非空的受保护对象</span><br><span class="line">    return obj;</span><br><span class="line">  &#125;</span><br><span class="line">  // 事件通知方法</span><br><span class="line">  void onChanged(T obj) &#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    try &#123;</span><br><span class="line">      this.obj = obj;</span><br><span class="line">      done.signalAll();</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">      lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="扩展-Guarded-Suspension-模式"><a href="#扩展-Guarded-Suspension-模式" class="headerlink" title="扩展 Guarded Suspension 模式"></a>扩展 Guarded Suspension 模式</h4><p>上面我们介绍了 Guarded Suspension 模式及其实现，这个模式能够模拟现实世界里大堂经理的角色，那现在我们再来看看这个“大堂经理”能否解决小灰同学遇到的问题。</p>
+<p>Guarded Suspension 模式里 GuardedObject 有两个核心方法，一个是 get() 方法，一个是 onChanged() 方法。很显然，在处理 Web 请求的方法 handleWebReq() 中，<strong>可以调用 GuardedObject 的 get() 方法来实现等待；在 MQ 消息的消费方法 onMessage() 中，可以调用 GuardedObject 的 onChanged() 方法来实现唤醒</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// 处理浏览器发来的请求</span><br><span class="line">Respond handleWebReq()&#123;</span><br><span class="line">  // 创建一消息</span><br><span class="line">  Message msg1 = new </span><br><span class="line">    Message(&quot;1&quot;,&quot;&#123;...&#125;&quot;);</span><br><span class="line">  // 发送消息</span><br><span class="line">  send(msg1);</span><br><span class="line">  // 利用 GuardedObject 实现等待</span><br><span class="line">  GuardedObject&lt;Message&gt; go</span><br><span class="line">    =new GuardObjec&lt;&gt;();</span><br><span class="line">  Message r = go.get(</span><br><span class="line">    t-&gt;t != null);</span><br><span class="line">&#125;</span><br><span class="line">void onMessage(Message msg)&#123;</span><br><span class="line">  // 如何找到匹配的 go？</span><br><span class="line">  GuardedObject&lt;Message&gt; go=???</span><br><span class="line">  go.onChanged(msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>但是在实现的时候会遇到一个问题，handleWebReq() 里面创建了 GuardedObject 对象的实例 go，并调用其 get() 方等待结果，那在 onMessage() 方法中，如何才能够找到匹配的 GuardedObject 对象呢？这个过程类似服务员告诉大堂经理某某包间已经收拾好了，大堂经理如何根据包间找到就餐的人。现实世界里，大堂经理的头脑中，有包间和就餐人之间的关系图，所以服务员说完之后大堂经理立刻就能把就餐人找出来。</p>
+<p>我们可以参考大堂经理识别就餐人的办法，来扩展一下 Guarded Suspension 模式，从而使它能够很方便地解决小灰同学的问题。在小灰的程序中，每个发送到 MQ 的消息，都有一个唯一性的属性 id，所以我们可以维护一个 MQ 消息 id 和 GuardedObject 对象实例的关系，这个关系可以类比大堂经理大脑里维护的包间和就餐人的关系。</p>
+<p>有了这个关系，我们来看看具体如何实现。下面的示例代码是扩展 Guarded Suspension 模式的实现，扩展后的 GuardedObject 内部维护了一个 Map，其 Key 是 MQ 消息 id，而 Value 是 GuardedObject 对象实例，同时增加了静态方法 create() 和 fireEvent()；create() 方法用来创建一个 GuardedObject 对象实例，并根据 key 值将其加入到 Map 中，而 fireEvent() 方法则是模拟的大堂经理根据包间找就餐人的逻辑。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">class GuardedObject&lt;T&gt;&#123;</span><br><span class="line">  // 受保护的对象</span><br><span class="line">  T obj;</span><br><span class="line">  final Lock lock = </span><br><span class="line">    new ReentrantLock();</span><br><span class="line">  final Condition done =</span><br><span class="line">    lock.newCondition();</span><br><span class="line">  final int timeout=2;</span><br><span class="line">  // 保存所有 GuardedObject</span><br><span class="line">  final static Map&lt;Object, GuardedObject&gt; </span><br><span class="line">  gos=new ConcurrentHashMap&lt;&gt;();</span><br><span class="line">  // 静态方法创建 GuardedObject</span><br><span class="line">  static &lt;K&gt; GuardedObject </span><br><span class="line">      create(K key)&#123;</span><br><span class="line">    GuardedObject go=new GuardedObject();</span><br><span class="line">    gos.put(key, go);</span><br><span class="line">    return go;</span><br><span class="line">  &#125;</span><br><span class="line">  static &lt;K, T&gt; void </span><br><span class="line">      fireEvent(K key, T obj)&#123;</span><br><span class="line">    GuardedObject go=gos.remove(key);</span><br><span class="line">    if (go != null)&#123;</span><br><span class="line">      go.onChanged(obj);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  // 获取受保护对象  </span><br><span class="line">  T get(Predicate&lt;T&gt; p) &#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    try &#123;</span><br><span class="line">      //MESA 管程推荐写法</span><br><span class="line">      while(!p.test(obj))&#123;</span><br><span class="line">        done.await(timeout, </span><br><span class="line">          TimeUnit.SECONDS);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;catch(InterruptedException e)&#123;</span><br><span class="line">      throw new RuntimeException(e);</span><br><span class="line">    &#125;finally&#123;</span><br><span class="line">      lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">    // 返回非空的受保护对象</span><br><span class="line">    return obj;</span><br><span class="line">  &#125;</span><br><span class="line">  // 事件通知方法</span><br><span class="line">  void onChanged(T obj) &#123;</span><br><span class="line">    lock.lock();</span><br><span class="line">    try &#123;</span><br><span class="line">      this.obj = obj;</span><br><span class="line">      done.signalAll();</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">      lock.unlock();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样利用扩展后的 GuardedObject 来解决小灰同学的问题就很简单了，具体代码如下所示。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">// 处理浏览器发来的请求</span><br><span class="line">Respond handleWebReq()&#123;</span><br><span class="line">  int id= 序号生成器.get();</span><br><span class="line">  // 创建一消息</span><br><span class="line">  Message msg1 = new </span><br><span class="line">    Message(id,&quot;&#123;...&#125;&quot;);</span><br><span class="line">  // 创建 GuardedObject 实例</span><br><span class="line">  GuardedObject&lt;Message&gt; go=</span><br><span class="line">    GuardedObject.create(id);  </span><br><span class="line">  // 发送消息</span><br><span class="line">  send(msg1);</span><br><span class="line">  // 等待 MQ 消息</span><br><span class="line">  Message r = go.get(</span><br><span class="line">    t-&gt;t != null);  </span><br><span class="line">&#125;</span><br><span class="line">void onMessage(Message msg)&#123;</span><br><span class="line">  // 唤醒等待的线程</span><br><span class="line">  GuardedObject.fireEvent(</span><br><span class="line">    msg.id, msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>Guarded Suspension 模式本质上是一种等待唤醒机制的实现，只不过 Guarded Suspension 模式将其规范化了。规范化的好处是你无需重头思考如何实现，也无需担心实现程序的可理解性问题，同时也能避免一不小心写出个 Bug 来。但 Guarded Suspension 模式在解决实际问题的时候，往往还是需要扩展的，扩展的方式有很多，本篇文章就直接对 GuardedObject 的功能进行了增强，Dubbo 中 DefaultFuture 这个类也是采用的这种方式，你可以对比着来看，相信对 DefaultFuture 的实现原理会理解得更透彻。当然，你也可以创建新的类来实现对 Guarded Suspension 模式的扩展。</p>
+<p>Guarded Suspension 模式也常被称作 Guarded Wait 模式、Spin Lock 模式（因为使用了 while 循环去等待），这些名字都很形象，不过它还有一个更形象的非官方名字：多线程版本的 if。单线程场景中，if 语句是不需要等待的，因为在只有一个线程的条件下，如果这个线程被阻塞，那就没有其他活动线程了，这意味着 if 判断条件的结果也不会发生变化了。但是多线程场景中，等待就变得有意义了，这种场景下，if 判断条件的结果是可能发生变化的。所以，用“多线程版本的 if”来理解这个模式会更简单。</p>
 
       
     </div>
@@ -501,8 +451,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/22/java/JVM-0/" rel="next" title="基于JDK命令行工具的监控">
-                <i class="fa fa-chevron-left"></i> 基于JDK命令行工具的监控
+              <a href="/2019/06/21/java/用“等待-通知”机制优化循环等待/" rel="next" title="06 | 用“等待-通知”机制优化循环等待">
+                <i class="fa fa-chevron-left"></i> 06 | 用“等待-通知”机制优化循环等待
               </a>
             
           </div>
@@ -510,10 +460,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/06/study-netty/netty/" rel="prev" title="Netty源码剖析">
-                Netty源码剖析 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -649,7 +595,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#并发与高并发的关注点"><span class="nav-number">1.</span> <span class="nav-text">并发与高并发的关注点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础知识"><span class="nav-number">2.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CPU多级缓存"><span class="nav-number">2.1.</span> <span class="nav-text">CPU多级缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#J-U-C-之-AQS-组件"><span class="nav-number">3.</span> <span class="nav-text">J.U.C 之 AQS 组件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">3.1.</span> <span class="nav-text">CountDownLatch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Semaphore"><span class="nav-number">3.2.</span> <span class="nav-text">Semaphore</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CyclicBarrier"><span class="nav-number">3.3.</span> <span class="nav-text">CyclicBarrier</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#synchronized"><span class="nav-number">3.4.</span> <span class="nav-text">synchronized</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#StampedLock"><span class="nav-number">3.5.</span> <span class="nav-text">StampedLock</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fork-Join-框架"><span class="nav-number">3.6.</span> <span class="nav-text">Fork/Join 框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">3.7.</span> <span class="nav-text">BlockingQueue</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多线程并发最佳实践"><span class="nav-number">4.</span> <span class="nav-text">多线程并发最佳实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高并发处理的思路及手段"><span class="nav-number">5.</span> <span class="nav-text">高并发处理的思路及手段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存"><span class="nav-number">6.</span> <span class="nav-text">缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特征"><span class="nav-number">6.1.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存命中率影响因素"><span class="nav-number">6.2.</span> <span class="nav-text">缓存命中率影响因素</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存分类和应用场景"><span class="nav-number">6.3.</span> <span class="nav-text">缓存分类和应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Guava-Cache"><span class="nav-number">6.3.1.</span> <span class="nav-text">Guava Cache</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MemCache"><span class="nav-number">6.3.2.</span> <span class="nav-text">MemCache</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Redis"><span class="nav-number">6.3.3.</span> <span class="nav-text">Redis</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#31-Guarded-Suspension模式：等待唤醒机制的规范实现"><span class="nav-number">1.</span> <span class="nav-text">31 | Guarded Suspension模式：等待唤醒机制的规范实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Guarded-Suspension-模式"><span class="nav-number">1.1.</span> <span class="nav-text">Guarded Suspension 模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展-Guarded-Suspension-模式"><span class="nav-number">1.2.</span> <span class="nav-text">扩展 Guarded Suspension 模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
