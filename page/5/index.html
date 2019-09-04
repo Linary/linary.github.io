@@ -306,7 +306,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/23/epoch-taskmanager/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/23/java/guava-future/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Linary">
@@ -325,7 +325,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/23/epoch-taskmanager/" itemprop="url">自己实现一个轻量级的任务（线程）管理器</a></h1>
+                <a class="post-title-link" href="/2018/07/23/java/guava-future/" itemprop="url">Guava Futures异步回调机制源码解析</a></h1>
         
 
         <div class="post-meta">
@@ -360,8 +360,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/调度管理/" itemprop="url" rel="index">
-                    <span itemprop="name">调度管理</span>
+                  <a href="/categories/网络通信/" itemprop="url" rel="index">
+                    <span itemprop="name">网络通信</span>
                   </a>
                 </span>
 
@@ -399,15 +399,13 @@
       
         
           
-          功能
-允许自定义任务（继承任务基类），比如实时任务，延时任务，周期任务等，实时任务和延时任务都是执行一次，周期任务会反复执行。
-允许定义任务链，依次顺序执行，上游任务失败了下游任务不会执行。但是不提供下游任务失败了上游任务回滚的能力。
-允许提交，暂停（非必须），继续，重做和取消任务。
-允许根据多种方
+          前言
+
+最近本人在实现一个异步任务调度框架，不打算依赖于任何第三方包。在实现任务状态监听时遇到了一些困惑，于是想了解一下Guava中的ListenableFuture的实现方式。ListenableFuture实现非阻塞的方式是其提供了回调机制(机制)，下面将阐述该回调机制的实现，主要对Future
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/07/23/epoch-taskmanager/#more" rel="contents">
+            <a class="btn" href="/2018/07/23/java/guava-future/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
