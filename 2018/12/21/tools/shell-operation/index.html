@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Linary">
 <meta property="og:description" content="修改 Linux 系统 Shell 的编码  123export LANG=&quot;en_US.UTF-8&quot;export LANG=&quot;zh_CN.GBK&quot;export LANG=&quot;zh_CN.UTF-8&quot;  在 Java 代码里面执行 Shell 命令  12345678910111213141516171819202122232425262728293031323334353637383940414">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-08T09:11:13.126Z">
+<meta property="og:updated_time" content="2019-12-23T02:28:44.271Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell常用操作记录">
 <meta name="twitter:description" content="修改 Linux 系统 Shell 的编码  123export LANG=&quot;en_US.UTF-8&quot;export LANG=&quot;zh_CN.GBK&quot;export LANG=&quot;zh_CN.UTF-8&quot;  在 Java 代码里面执行 Shell 命令  12345678910111213141516171819202122232425262728293031323334353637383940414">
@@ -423,6 +423,22 @@
 <li>netstat的使用</li>
 </ul>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -n -p tcp | grep 8080</span><br></pre></td></tr></table></figure>
+<ul>
+<li>统计当前文件夹下文件的个数</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l | grep <span class="string">"^-"</span> | wc -l</span><br></pre></td></tr></table></figure>
+<ul>
+<li>统计当前文件夹下目录的个数</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -l | grep <span class="string">"^d"</span> | wc -l</span><br></pre></td></tr></table></figure>
+<ul>
+<li>统计当前文件夹下文件的个数，包括子文件夹里的</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -lR | grep <span class="string">"^-"</span> | wc -l</span><br></pre></td></tr></table></figure>
+<ul>
+<li>统计文件夹下目录的个数，包括子文件夹里的</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -lR | grep <span class="string">"^d"</span> | wc -l</span><br></pre></td></tr></table></figure>
 
       
     </div>
